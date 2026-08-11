@@ -4,6 +4,7 @@ import About from './components/About'
 import Experience from './components/Experience'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
+import LiveProof from './components/LiveProof'
 import Contact from './components/Contact'
 import Cursor from './components/Cursor'
 import Preloader from './components/Preloader'
@@ -21,6 +22,7 @@ export default function App() {
           <Experience />
           <Projects />
           <Skills />
+          <LiveProof />
           <Contact />
         </main>
         <footer className="py-8 text-center text-xs text-gray-600 border-t border-white/5">
