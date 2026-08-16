@@ -31,7 +31,16 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pt-20 pb-20">
-        <div className="text-center max-w-5xl mx-auto">
+        <div className="relative text-center max-w-5xl mx-auto">
+          {/* Dark backing so text stays legible over the 3D wireframe behind it */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-x-10 -inset-y-8 -z-10 sm:-inset-x-16 sm:-inset-y-12"
+            style={{
+              background:
+                'radial-gradient(ellipse 65% 55% at 50% 45%, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.4) 55%, transparent 80%)',
+            }}
+          />
 
           {/* Role badge */}
           <motion.div {...fadeUp(0.15)}>
@@ -83,7 +92,7 @@ export default function Hero() {
             <a
               href="#contact"
               data-cursor="hover"
-              className="px-8 py-3.5 rounded-xl font-semibold text-sm tracking-wide glass text-cyan-400 border-cyan-400/30 hover:bg-white/10 hover:scale-105 transition-all duration-300"
+              className="px-8 py-3.5 rounded-xl font-semibold text-sm tracking-wide glass text-cyan-300 border-cyan-400/40 hover:bg-white/10 hover:border-cyan-400/60 hover:scale-105 transition-all duration-300"
             >
               Let&apos;s Talk
             </a>
@@ -96,7 +105,7 @@ export default function Hero() {
           >
             {[
               { value: '3+', label: 'Years Experience' },
-              { value: '2', label: 'Featured Projects' },
+              { value: '2', label: 'Flagship Projects' },
               { value: '5+', label: 'Tech Stacks' },
             ].map(({ value, label }) => (
               <div key={label}>

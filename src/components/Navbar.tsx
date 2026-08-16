@@ -106,7 +106,7 @@ export default function Navbar() {
 
         <motion.a
           href="mailto:ndigaderrick6@gmail.com"
-          className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-cyan-500 to-violet-600 text-white shadow-[0_0_18px_rgba(34,211,238,0.22)] hover:shadow-[0_0_30px_rgba(34,211,238,0.38)] transition-all duration-300"
+          className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold text-cyan-300 border border-cyan-400/40 hover:bg-cyan-400/10 hover:border-cyan-400/70 transition-all duration-300"
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
           data-cursor="hover"
