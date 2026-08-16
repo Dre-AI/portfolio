@@ -5,33 +5,25 @@ import Reveal, { RevealItem } from './Reveal'
 const projects = [
   {
     title: 'Lumora',
-    desc: 'Full-stack e-commerce MVP with product catalogue, cart, JWT authentication, and a RESTful order backend. Mobile-first, KES pricing, real persisted data.',
-    stack: ['React', 'TypeScript', 'Node/Express', 'SQLite', 'JWT'],
+    desc: 'A complete full-stack e-commerce storefront with a real backend — not a mock-up. Node/Express + SQLite API with JWT authentication (bcrypt-hashed), server-side per-user cart persistence, and a multi-step checkout (address → delivery → payment → review) that writes confirmed orders to the database. React 18 + TypeScript + Vite frontend with guarded routes, search, category filtering, and order history.',
+    stack: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Node', 'Express', 'SQLite', 'JWT'],
     accent: 'cyan' as const,
     label: 'Full-Stack',
     preview: 'from-cyan-500/30 via-cyan-900/20 to-transparent',
     spotColor: 'rgba(34,211,238',
     repo: 'https://github.com/Dre-AI/Lumora',
+    live: 'https://dre-ai.github.io/Lumora/',
   },
   {
     title: 'InsightForge',
-    desc: 'Privacy-first ML playground. Upload a CSV and it profiles the data, auto-detects the task, trains a model zoo, and shows metrics + feature importance — entirely in-browser.',
-    stack: ['Python', 'pandas', 'scikit-learn', 'Streamlit', 'ML'],
+    desc: 'A privacy-first, browser-based ML playground: upload any CSV and it profiles the data, auto-detects classification vs regression, trains and ranks a zoo of scikit-learn models, and returns metrics, feature importance, and a correlation heatmap — all processed locally, no data leaves the machine. Generates a downloadable self-contained HTML report.',
+    stack: ['Python', 'pandas', 'scikit-learn', 'seaborn', 'Streamlit'],
     accent: 'violet' as const,
     label: 'Python / ML',
     preview: 'from-violet-500/30 via-violet-900/20 to-transparent',
     spotColor: 'rgba(167,139,250',
     repo: 'https://github.com/Dre-AI/insightforge',
-  },
-  {
-    title: 'TaskPilot',
-    desc: 'Python automation engine that discovers job modules, runs web scraping + scheduling, and exposes a FastAPI dashboard to trigger and monitor jobs in real time.',
-    stack: ['Python', 'FastAPI', 'BeautifulSoup', 'Scheduling', 'Automation'],
-    accent: 'fuchsia' as const,
-    label: 'Automation',
-    preview: 'from-fuchsia-500/30 via-fuchsia-900/20 to-transparent',
-    spotColor: 'rgba(232,121,249',
-    repo: 'https://github.com/Dre-AI/taskpilot',
+    live: 'https://insightf0rge.streamlit.app/',
   },
 ]
 
@@ -64,6 +56,7 @@ interface Project {
   preview: string
   spotColor: string
   repo: string
+  live?: string
 }
 
 function ProjectCard({ p, i }: { p: Project; i: number }) {
@@ -144,6 +137,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
           </div>
 
           <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between">
+            <div className="flex items-center gap-4">
             <a
               href={p.repo}
               target="_blank"
@@ -158,6 +152,20 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
               </svg>
               View Code
             </a>
+            {p.live && (
+              <a
+                href={p.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-xs font-semibold ${
+                  p.accent === 'cyan' ? 'text-cyan-400' : p.accent === 'violet' ? 'text-violet-400' : 'text-fuchsia-400'
+                } hover:underline`}
+                data-cursor="hover"
+              >
+                Live Demo ↗
+              </a>
+            )}
+            </div>
             <motion.div
               className={`flex items-center gap-1 text-xs font-semibold ${
                 p.accent === 'cyan' ? 'text-cyan-400' : p.accent === 'violet' ? 'text-violet-400' : 'text-fuchsia-400'

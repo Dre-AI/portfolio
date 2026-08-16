@@ -23,7 +23,7 @@ const roles = [
     title: 'Self-Initiated Developer',
     company: 'Independent Projects',
     period: 'Ongoing',
-    desc: 'Building full-stack web applications, Python automation, and on-device AI (Transformers.js). Maintains 8+ public repositories at github.com/Dre-AI — including Lumora (e-commerce), InsightForge (ML), and TaskPilot (automation) — and is actively building in public. Stack: React, TypeScript, Node, Python, FastAPI, n8n, LLMs.',
+    desc: 'Building full-stack web applications, Python automation, and on-device AI (Transformers.js). Maintains 8+ public repositories at github.com/Dre-AI — including Lumora (e-commerce) and InsightForge (ML) — and is actively building in public. Stack: React, TypeScript, Node, Python, FastAPI, n8n, LLMs.',
     tags: ['React', 'TypeScript', 'Python', 'FastAPI', 'n8n', 'LLM Integration'],
     color: 'cyan' as const,
   },

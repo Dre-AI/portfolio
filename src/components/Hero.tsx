@@ -96,7 +96,7 @@ export default function Hero() {
           >
             {[
               { value: '3+', label: 'Years Experience' },
-              { value: '15+', label: 'Projects Shipped' },
+              { value: '2', label: 'Featured Projects' },
               { value: '5+', label: 'Tech Stacks' },
             ].map(({ value, label }) => (
               <div key={label}>

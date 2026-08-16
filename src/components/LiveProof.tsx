@@ -31,14 +31,11 @@ const STATUS_ENDPOINTS: StatusEndpoint[] = [
   { label: 'Store', url: 'https://dre-ai.github.io/Lumora/' },
   { label: 'InsightForge', url: 'https://insightf0rge.streamlit.app/' },
   { label: 'Lumora API', url: 'https://lumora-api-82c2.onrender.com/api/health' },
-  { label: 'TaskPilot', url: 'https://taskpilot.onrender.com/' },
 ]
 
 const STATUS_POLL_INTERVAL_MS = 30000
 
 const TERMINAL_LINES = [
-  '$ python -m taskpilot --run job_scraper',
-  '> scheduled 12 jobs · 0 failures',
   '$ curl -s lumora-api.onrender.com/api/health',
   '{"ok":true}',
   '$ npm run build && gh deploy',
