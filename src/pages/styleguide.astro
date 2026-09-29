@@ -1,0 +1,164 @@
+---
+// Design system review page (Phase 2). Not linked from the site and not indexed.
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { profile } from '../data/profile';
+import { projects } from '../data/projects';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const themes = ['light', 'dark'] as const;
+const swatches = [
+  { token: '--bg', use: 'Page background' },
+  { token: '--surface', use: 'Cards, controls' },
+  { token: '--fg', use: 'Primary text', against: '--bg' },
+  { token: '--muted', use: 'Secondary text', against: '--bg' },
+  { token: '--line', use: '1px borders' },
+  { token: '--accent', use: 'Links, primary button', against: '--bg' },
+  { token: '--accent-fg', use: 'Text on accent', against: '--accent' },
+];
+const typeScale = [
+  { token: '--step-4', use: 'h1 · hero', tag: 'h1', text: profile.headline },
+  { token: '--step-3', use: 'h2 · section title', tag: 'h2', text: 'How my automations work' },
+  { token: '--step-2', use: 'h3 · card title', tag: 'h3', text: projects[0].title },
+  { token: '--step-1', use: 'Lead paragraph', tag: 'p', cls: 'lead', text: profile.subline },
+  { token: '--step-0', use: 'Body', tag: 'p', text: profile.about },
+  { token: '--step--1', use: 'Label (Geist Mono)', tag: 'p', cls: 'label', text: `${profile.role}, ${profile.location}` },
+];
+const cards = projects.filter((p) => p.flagship).slice(0, 2);
+---
+<Base title={`Style guide: ${profile.name}`} noindex>
+  <header class="wrap sg-top">
+    <a href={base} aria-label={`${profile.name}, home`} style="display:inline-flex">
+      <svg viewBox="34 40 188 176" height="28" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M34.5,40 H102.5 L142.5,160 V40 H162.5 A59,56 0 0 1 221.5,96 V160 A59,56 0 0 1 162.5,216 H114.5 L74.5,96 V216 H34.5 Z" />
+      </svg>
+    </a>
+    <p class="label">Style guide. Cobalt accent, Geist + Geist Mono, light and dark.</p>
+  </header>
+
+  <main id="main">
+    {themes.map((theme) => (
+      <div class="sg-panel" data-theme={theme}>
+        <div class="wrap">
+          <h2 class="sg-title">{theme === 'light' ? 'Light mode' : 'Dark mode'}</h2>
+
+          <section class="sg-block" aria-label={`Colours, ${theme}`}>
+            <h3>Colours</h3>
+            <ul class="sg-swatches">
+              {swatches.map((s) => (
+                <li data-token={s.token} data-against={s.against}>
+                  <span class="sg-chip" style={`background:var(${s.token})`}></span>
+                  <code>{s.token}</code>
+                  <span class="label" data-hex></span>
+                  <span class="muted sg-use">{s.use}</span>
+                  {s.against && <span class="label" data-contrast></span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="sg-block" aria-label={`Type scale, ${theme}`}>
+            <h3>Type scale</h3>
+            <div class="sg-type">
+              {typeScale.map(({ tag: Tag, ...t }) => (
+                <div class="sg-type-row">
+                  <p class="label">{t.token}<br />{t.use}</p>
+                  <Tag class={t.cls} style="margin:0">{t.text}</Tag>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class="sg-block" aria-label={`Buttons, tags and links, ${theme}`}>
+            <h3>Buttons, tags, links</h3>
+            <div class="sg-row">
+              <a class="btn primary" href="#work">See my work</a>
+              <a class="btn" href="#cv">Download CV</a>
+              <button class="btn" type="button" disabled>Disabled</button>
+            </div>
+            <p class="label">Hover, press and Tab through the buttons to check their states.</p>
+            <ul class="tags sg-row">
+              <li>Python</li><li>n8n</li><li>OpenRouter</li>
+              <li class="tag accent">AI &amp; Automation</li>
+            </ul>
+            <p>Inline link: <a class="link" href={profile.links.github} rel="noopener">GitHub profile</a>.</p>
+          </section>
+
+          <section class="sg-block" aria-label={`Project card, ${theme}`}>
+            <h3>Project card</h3>
+            <div class="grid">{cards.map((p) => <ProjectCard project={p} />)}</div>
+          </section>
+
+          <section class="sg-block" aria-label={`Dark section, ${theme}`}>
+            <h3>Dark section (hero)</h3>
+            <p class="muted">Always dark, in both modes, with a scrim so light text passes AA over the brightest nodes.</p>
+            <div class="sg-hero media-scrim" data-theme="dark">
+              <img class="media" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+              <p class="label">{profile.role}, {profile.location}</p>
+              <h1>{profile.headline}</h1>
+              <p class="lead muted">{profile.subline}</p>
+              <p class="sg-row" style="margin:0">
+                <a class="btn primary" href="#work">See my work</a>
+                <a class="btn" href="#cv">Download CV</a>
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+    ))}
+  </main>
+</Base>
+
+<style>
+  .sg-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-m); padding-block: var(--space-l); }
+  .sg-top .label { margin: 0; }
+  .sg-panel { padding-block: var(--space-3xl); border-top: 1px solid var(--line); }
+  .sg-title { margin-bottom: var(--space-xl); }
+  .sg-block { padding-block: var(--space-2xl); border-top: 1px solid var(--line); }
+  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-s); margin-block: var(--space-m); }
+
+  .sg-swatches { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); padding: 0; margin: 0; list-style: none; }
+  .sg-swatches li { display: grid; gap: var(--space-2xs); align-content: start; }
+  .sg-chip { height: 4.5rem; border: 1px solid var(--line); border-radius: var(--radius-control); margin-bottom: var(--space-xs); }
+  .sg-swatches code { font-size: var(--step--1); }
+  .sg-use { font-size: var(--step--1); }
+
+  .sg-type { display: grid; gap: var(--space-xl); }
+  .sg-type-row { display: grid; gap: var(--space-xs); grid-template-columns: 1fr; }
+  .sg-type-row .label { margin: 0; }
+  @media (min-width: 768px) {
+    .sg-type-row { grid-template-columns: 11rem 1fr; gap: var(--space-xl); align-items: baseline; }
+  }
+
+  .sg-hero { display: grid; gap: var(--space-m); align-content: center; min-height: 32rem; padding: var(--space-2xl) var(--space-xl); border-radius: var(--radius-card); overflow: hidden; }
+  .sg-hero > :not(.media) { max-width: 36rem; margin: 0; }
+  .sg-hero h1 { font-size: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem); }
+</style>
+
+<script>
+  // Fill in each swatch's hex value and WCAG contrast from the live tokens, so this page can't drift from global.css.
+  const toRgb = (color: string) => {
+    const ctx = document.createElement('canvas').getContext('2d')!;
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, 1, 1);
+    return Array.from(ctx.getImageData(0, 0, 1, 1).data.slice(0, 3));
+  };
+  const hex = (rgb: number[]) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+  const lum = (rgb: number[]) => {
+    const [r, g, b] = rgb.map((v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const ratio = (a: number[], b: number[]) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+
+  document.querySelectorAll<HTMLElement>('[data-token]').forEach((item) => {
+    const styles = getComputedStyle(item);
+    const rgb = toRgb(styles.getPropertyValue(item.dataset.token!).trim());
+    item.querySelector('[data-hex]')!.textContent = hex(rgb);
+    const against = item.dataset.against;
+    const out = item.querySelector('[data-contrast]');
+    if (against && out) {
+      const r = ratio(rgb, toRgb(styles.getPropertyValue(against).trim()));
+      out.textContent = `${r.toFixed(1)}:1 on ${against} ${r >= 4.5 ? 'AA' : r >= 3 ? 'AA large' : 'fails'}`;
+    }
+  });
+</script>
