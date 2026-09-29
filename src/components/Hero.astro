@@ -1,0 +1,40 @@
+---
+import { profile } from '../data/profile';
+import { cta } from '../data/site';
+import { base, publicFileExists } from '../lib/content';
+
+const hasCv = publicFileExists(profile.cvFile);
+---
+{/* Always dark (dark-section treatment). The poster is the static visual now; Phase 4 draws the
+     frame sequence into #hero-canvas on top of it and keeps the poster for reduced motion / Save-Data. */}
+<section id="hero" class="hero media-scrim" data-section="hero" data-theme="dark">
+  <img class="media" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
+  <canvas id="hero-canvas" class="media" aria-hidden="true" hidden></canvas>
+  <div class="wrap">
+    <p class="label">{profile.role}, {profile.location}</p>
+    <h1>{profile.headline}</h1>
+    <p class="lead muted">{profile.subline}</p>
+    <p class="actions">
+      <a class="btn primary" href="#work">{cta.work}</a>
+      {hasCv && <a class="btn" href={`${base}${profile.cvFile}`} download>{cta.cv}</a>}
+    </p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    align-items: center;
+    min-height: max(34rem, calc(100dvh - 4.5rem));
+    padding-block: var(--space-3xl) var(--space-3xl);
+    border-top: 0;
+  }
+  .wrap > * { max-width: 38rem; }
+  .wrap > h1 { max-width: 60rem; } /* two balanced lines on desktop */
+  .label { margin: 0 0 var(--space-l); }
+  h1 { margin-bottom: var(--space-l); }
+  .lead { margin: 0 0 var(--space-xl); max-width: 34rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0; }
+  /* The poster's grid sits low in the frame; anchor it to the bottom so it stays visible behind the copy. */
+  .media { object-position: 50% 100%; }
+</style>

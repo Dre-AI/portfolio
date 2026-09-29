@@ -1,0 +1,16 @@
+---
+import Monogram from './Monogram.astro';
+import { profile } from '../data/profile';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <Monogram height={18} />
+    <p class="label">© {new Date().getFullYear()} {profile.name}</p>
+  </div>
+</footer>
+
+<style>
+  footer { border-top: 1px solid var(--line); }
+  .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-m); padding-block: var(--space-xl); color: var(--muted); }
+  p { margin: 0; }
+</style>

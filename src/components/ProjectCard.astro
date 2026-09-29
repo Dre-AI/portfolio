@@ -1,34 +1,56 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import type { Project } from '../data/projects';
+import { cta } from '../data/site';
+import { base, isReady, publicFileExists } from '../lib/content';
 
 interface Props { project: Project }
 const { project: p } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-// Never publish placeholders (CLAUDE.md): drop any field that still has [brackets] or TODO.
-const ready = (text?: string) => !!text && !/\[|\]|TODO/.test(text);
-const hasImage = !!p.image && existsSync(join(process.cwd(), 'public', p.image));
+// Screenshots slot in when public/work/<slug>.webp exists; until then the card is text-led, with no empty frame.
+const image = publicFileExists(p.image) ? p.image : undefined;
 const details = [
   { term: 'Problem', text: p.problem },
   { term: 'What I built', text: p.built },
   { term: 'Result', text: p.result },
-].filter((d) => ready(d.text));
+].filter((d) => isReady(d.text));
+const stack = p.stack.filter((s) => isReady(s));
+const host = p.link ? new URL(p.link).host.replace(/^www\./, '') : undefined;
 ---
-<article class="card" data-card>
-  {hasImage && (
+<article class="card case" data-card>
+  {image && (
     <div class="card-media">
-      <img src={`${base}${p.image}`} alt={`Screenshot of ${p.title}`} width="1280" height="800" loading="lazy" decoding="async" />
+      <img src={`${base}${image}`} alt={`Screenshot of ${p.title}`} width="1600" height="1000" loading="lazy" decoding="async" />
     </div>
   )}
-  <h3>{p.title}</h3>
-  <p class="muted">{p.summary}</p>
-  {details.length > 0 && (
-    <dl>
-      {details.map((d) => (<div><dt>{d.term}</dt><dd>{d.text}</dd></div>))}
-    </dl>
-  )}
-  <ul class="tags">{p.stack.map((s) => <li>{s}</li>)}</ul>
-  {p.link && <a class="link" href={p.link} rel="noopener">View live</a>}
+  <div class="case-body">
+    <div class="case-head">
+      <h3>{p.title}</h3>
+      <p class="muted">{p.summary}</p>
+      {stack.length > 0 && <ul class="tags">{stack.map((s) => <li>{s}</li>)}</ul>}
+      {p.link && (
+        <a class="link live" href={p.link} rel="noopener">
+          {cta.live}<span class="visually-hidden">: {p.title}</span> <span class="label host">{host}</span>
+        </a>
+      )}
+    </div>
+    {details.length > 0 && (
+      <dl>{details.map((d) => (<div><dt>{d.term}</dt><dd>{d.text}</dd></div>))}</dl>
+    )}
+  </div>
 </article>
+
+<style>
+  .case { container-type: inline-size; }
+  .case-body { display: grid; gap: var(--space-l); }
+  .case-head { display: grid; gap: var(--space-s); align-content: start; }
+  .case-head > * { margin: 0; }
+  h3 { margin: 0; }
+  .live { display: inline-flex; align-items: center; gap: var(--space-xs); justify-self: start; min-height: 2.75rem; }
+  .host { color: var(--muted); text-decoration: none; }
+  dl { padding-top: var(--space-l); border-top: 1px solid var(--line); }
+
+  @container (min-width: 44rem) {
+    .case-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-2xl); }
+    dl { padding-top: 0; padding-left: var(--space-2xl); border-top: 0; border-left: 1px solid var(--line); }
+  }
+</style>

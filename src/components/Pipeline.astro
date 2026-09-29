@@ -1,0 +1,62 @@
+---
+import { pipeline } from '../data/site';
+---
+{/* Phase 4 turns [data-pipeline] into a pinned, scroll-scrubbed diagram. Static, it already reads as a flow. */}
+<section id="how" data-section="pipeline">
+  <div class="wrap">
+    <h2>{pipeline.heading}</h2>
+    <p class="muted">{pipeline.intro}</p>
+    <ol data-pipeline>
+      {pipeline.steps.map((step) => (
+        <li data-step>
+          <span class="node" aria-hidden="true"></span>
+          <h3>{step.title}</h3>
+          <p class="muted">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  ol {
+    --node: 0.75rem;
+    position: relative;
+    display: grid;
+    gap: var(--space-xl);
+    margin: var(--space-2xl) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* The connecting rail: vertical on phones, horizontal from tablet up. */
+  ol::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--node) / 2);
+    bottom: calc(var(--node) / 2);
+    left: calc(var(--node) / 2 - 0.5px);
+    width: 1px;
+    background: var(--line);
+  }
+  li { position: relative; padding-left: calc(var(--node) + var(--space-l)); }
+  .node {
+    position: absolute;
+    top: 0.3rem;
+    left: 0;
+    width: var(--node);
+    height: var(--node);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+  }
+  li:last-child .node { background: var(--accent); }
+  h3 { font-size: var(--step-1); margin-bottom: var(--space-xs); }
+  li p { margin: 0; font-size: 0.9375rem; }
+
+  @media (min-width: 768px) {
+    ol { grid-template-columns: repeat(4, 1fr); gap: var(--space-l); }
+    ol::before { top: calc(var(--node) / 2 - 0.5px); bottom: auto; left: 0; right: 0; width: auto; height: 1px; }
+    li { padding: calc(var(--node) + var(--space-l)) 0 0; }
+    .node { top: 0; }
+  }
+</style>

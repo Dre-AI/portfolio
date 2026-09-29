@@ -1,0 +1,34 @@
+---
+import Monogram from './Monogram.astro';
+import { profile } from '../data/profile';
+import { nav } from '../data/site';
+import { base } from '../lib/content';
+---
+{/* Same dark band as the hero, so the page opens as one dark surface in both modes. */}
+<header class="site-header" data-theme="dark">
+  <div class="wrap">
+    <a class="home" href={base} aria-label={`${profile.name}, home`}><Monogram /></a>
+    <nav aria-label="Primary">
+      <ul>{nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}</ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 4.5rem; }
+  .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); }
+  ul { display: flex; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: var(--space-s);
+    border-radius: var(--radius-control);
+    color: var(--muted);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  nav a:hover { color: var(--fg); }
+  @media (max-width: 380px) { nav a { padding-inline: var(--space-xs); } }
+</style>

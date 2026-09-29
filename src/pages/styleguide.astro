@@ -1,6 +1,7 @@
 ---
 // Design system review page (Phase 2). Not linked from the site and not indexed.
 import Base from '../layouts/Base.astro';
+import Monogram from '../components/Monogram.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
@@ -28,11 +29,7 @@ const cards = projects.filter((p) => p.flagship).slice(0, 2);
 ---
 <Base title={`Style guide: ${profile.name}`} noindex>
   <header class="wrap sg-top">
-    <a href={base} aria-label={`${profile.name}, home`} style="display:inline-flex">
-      <svg viewBox="34 40 188 176" height="28" aria-hidden="true" focusable="false">
-        <path fill="currentColor" d="M34.5,40 H102.5 L142.5,160 V40 H162.5 A59,56 0 0 1 221.5,96 V160 A59,56 0 0 1 162.5,216 H114.5 L74.5,96 V216 H34.5 Z" />
-      </svg>
-    </a>
+    <a href={base} aria-label={`${profile.name}, home`} style="display:inline-flex"><Monogram /></a>
     <p class="label">Style guide. Cobalt accent, Geist + Geist Mono, light and dark.</p>
   </header>
 

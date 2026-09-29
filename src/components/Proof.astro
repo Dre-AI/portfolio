@@ -1,0 +1,29 @@
+---
+import { metrics } from '../data/profile';
+import { sections } from '../data/site';
+import { isReady } from '../lib/content';
+
+// Only real numbers ship. A strip of one number reads as filler, so it stays hidden until there are two.
+const live = metrics.filter((m) => isReady(m.value));
+const MIN_METRICS = 2;
+---
+{live.length >= MIN_METRICS && (
+  <section id="proof" data-section="proof" aria-label={sections.proof}>
+    <dl class="wrap">
+      {live.map((m) => (
+        <div>
+          <dt class="muted">{m.label}</dt>
+          <dd data-count={m.value}>{m.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+)}
+
+<style>
+  section { padding-block: var(--space-2xl); }
+  dl { display: grid; gap: var(--space-xl); grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); margin-block: 0; }
+  div { display: flex; flex-direction: column-reverse; gap: var(--space-xs); }
+  dd { margin: 0; font-size: var(--step-3); font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  dt { font-size: var(--step--1); max-width: 22ch; }
+</style>

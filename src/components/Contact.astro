@@ -1,0 +1,29 @@
+---
+import { profile } from '../data/profile';
+import { sections, cta } from '../data/site';
+import { base, publicFileExists } from '../lib/content';
+
+const hasCv = publicFileExists(profile.cvFile);
+---
+<section id="contact" data-section="contact">
+  <div class="wrap">
+    <h2>{sections.contact.heading}</h2>
+    <p class="lead muted">{sections.contact.intro}</p>
+    <p class="actions">
+      <a class="btn primary" href={`mailto:${profile.email}`}>{cta.email}</a>
+      <a class="btn" href={profile.links.linkedin} rel="noopener">{cta.linkedin}</a>
+      <a class="btn" href={profile.links.github} rel="noopener">{cta.githubProfile}</a>
+      {hasCv && <a class="btn" href={`${base}${profile.cvFile}`} download>{cta.cv}</a>}
+    </p>
+    <p class="label"><a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+  </div>
+</section>
+
+<style>
+  h2 { font-size: var(--step-4); line-height: 1.02; letter-spacing: -0.04em; max-width: 14ch; margin-bottom: var(--space-l); }
+  .lead { margin: 0 0 var(--space-xl); }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0 0 var(--space-l); }
+  .label { margin: 0; }
+  .label a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; } /* 44px target */
+  .label a:hover { text-decoration: underline; }
+</style>
