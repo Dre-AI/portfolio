@@ -40,6 +40,17 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Motion gate, before first paint. .motion: animations allowed. .motion-hero: also scrub the hero frames
+         (not on Save-Data or 2g, where the poster stays). Without JS neither class exists and the page is static. */}
+    <script is:inline>
+      (function () {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var root = document.documentElement, c = navigator.connection;
+        var slow = c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''));
+        root.classList.add('motion');
+        if (!slow) root.classList.add('motion-hero');
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

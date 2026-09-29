@@ -23,3 +23,13 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
 </Base>
+
+<script>
+  // The motion layer is progressive enhancement: fetch it only after the page has loaded, so it never
+  // competes with the content (and never loads at all under reduced motion).
+  if (document.documentElement.classList.contains('motion')) {
+    const start = () => import('../scripts/motion/index.ts');
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  }
+</script>

@@ -50,6 +50,11 @@ import { pipeline } from '../data/site';
     background: var(--bg);
   }
   li:last-child .node { background: var(--accent); }
+  h3, .node { transition: color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); }
+  /* Motion only (src/scripts/motion/pipeline.ts): steps wait in muted text until the connector reaches them. */
+  ol.is-dim li:not(.is-on) h3 { color: var(--muted); }
+  ol.is-dim li:not(.is-on) .node { background: var(--bg); border-color: color-mix(in srgb, var(--fg) 30%, var(--line)); }
+  ol.is-dim li.is-on .node { background: var(--accent); }
   h3 { font-size: var(--step-1); margin-bottom: var(--space-xs); }
   li p { margin: 0; font-size: 0.9375rem; }
 

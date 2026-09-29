@@ -2,15 +2,20 @@
 import { profile } from '../data/profile';
 import { cta } from '../data/site';
 import { base, publicFileExists } from '../lib/content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const hasCv = publicFileExists(profile.cvFile);
+// Frame counts, sizes and breakpoint for the scrubber, written by scripts/extract-frames.sh.
+const frames = readFileSync(join(process.cwd(), 'public/hero/frames.json'), 'utf8');
 ---
-{/* Always dark (dark-section treatment). The poster is the static visual now; Phase 4 draws the
-     frame sequence into #hero-canvas on top of it and keeps the poster for reduced motion / Save-Data. */}
-<section id="hero" class="hero media-scrim" data-section="hero" data-theme="dark">
-  <img class="media" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
-  <canvas id="hero-canvas" class="media" aria-hidden="true" hidden></canvas>
-  <div class="wrap">
+{/* Always dark (dark-section treatment). src/scripts/motion/hero.ts scrubs the frame sequence into
+     #hero-canvas; the poster (final frame) is what reduced motion, Save-Data, 2g and no-JS visitors see. */}
+<section id="hero" class="hero media-scrim" data-section="hero" data-theme="dark"
+  style={`--start-desktop:url(${base}hero/desktop/0001.webp);--start-mobile:url(${base}hero/mobile/0001.webp)`}>
+  <img class="media poster" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
+  <canvas id="hero-canvas" class="media" aria-hidden="true" hidden data-base={`${base}hero/`} data-frames={frames}></canvas>
+  <div class="wrap" data-hero-copy>
     <p class="label">{profile.role}, {profile.location}</p>
     <h1>{profile.headline}</h1>
     <p class="lead muted">{profile.subline}</p>
@@ -43,6 +48,17 @@ const hasCv = publicFileExists(profile.cvFile);
   h1 { margin-bottom: var(--space-l); }
   .lead { margin: 0 0 var(--space-xl); max-width: 34rem; }
   .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0; }
+  /* Scrubbing visitors see frame 1 (the canvas's starting frame) instead of the poster, so there's no swap
+     when the canvas takes over. Fallback visitors (reduced motion, Save-Data, 2g, no JS) never fetch it. */
+  :global(.motion-hero) .hero { background: var(--bg) var(--start-desktop) 50% 100% / cover no-repeat; }
+  :global(.motion-hero) .poster { opacity: 0; }
+  @media (max-width: 767px) { :global(.motion-hero) .hero { background-image: var(--start-mobile); } }
+  /* Pinned for the scrub, the hero fills the screen so the next section never peeks in below it.
+     Short landscape screens keep the compact hero; the pin spacer's dark fill covers the gap there. */
+  @media (min-height: 501px) { :global(.motion-hero) .hero { min-height: 100dvh; } }
+  :global(.pin-spacer:has(> #hero)) { background: #020617; }
+  /* The copy fades as the sequence resolves; keyboard focus always brings it back. */
+  [data-hero-copy]:focus-within { opacity: 1 !important; }
   /* The poster's grid sits low in the frame; anchor it to the bottom so it stays visible behind the copy. */
   .media { object-position: 50% 100%; }
 </style>

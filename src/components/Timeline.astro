@@ -63,6 +63,18 @@ import { sections } from '../data/site';
     border: 1px solid color-mix(in srgb, var(--fg) 40%, var(--line));
   }
   li:first-child::before { background: var(--accent); border-color: var(--accent); }
+  /* Motion only (src/scripts/motion/timeline.ts): the accent line draws down and fills each dot it passes. */
+  ol :global(.tl-fill) {
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: calc(var(--dot) / 2 - 0.5px);
+    width: 1px;
+    background: var(--accent);
+    transform-origin: top;
+  }
+  li::before { transition: background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); z-index: 1; }
+  li.is-passed::before { background: var(--accent); border-color: var(--accent); }
   li p, h3 { margin: 0; }
   h3 { font-size: var(--step-1); line-height: 1.35; }
   .org { font-weight: 400; color: var(--muted); }
