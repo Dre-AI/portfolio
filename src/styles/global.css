@@ -1,0 +1,42 @@
+/*
+  PHASE 1 SKELETON STYLES. These are intentionally plain.
+  Phase 2 (Taste Skill) replaces the tokens and type below with the real design system.
+  Keep the token names so components don't need rewriting.
+*/
+:root {
+  --bg: #ffffff;
+  --fg: #16181d;
+  --muted: #5b616e;
+  --line: #e4e6eb;
+  --accent: #2f5bea;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --measure: 68ch;
+  --space: clamp(4rem, 10vw, 9rem);
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1115; --fg: #eceef2; --muted: #9aa1ad; --line: #262a33; --accent: #7d9bff; }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 1.0625rem/1.6 var(--font-sans); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: 0.2em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 1rem; top: 1rem; background: var(--bg); padding: 0.5rem 1rem; z-index: 10; }
+.wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
+section { padding-block: var(--space); border-top: 1px solid var(--line); }
+h1, h2, h3 { line-height: 1.1; margin: 0 0 1rem; }
+h1 { font-size: clamp(2.5rem, 7vw, 5.5rem); letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.75rem, 4vw, 2.75rem); letter-spacing: -0.02em; }
+p { max-width: var(--measure); }
+.muted { color: var(--muted); }
+.grid { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0; list-style: none; }
+.tags li { border: 1px solid var(--line); border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.9rem; }
+.btn { display: inline-block; padding: 0.75rem 1.25rem; border-radius: 0.5rem; border: 1px solid var(--fg); text-decoration: none; }
+.btn.primary { background: var(--fg); color: var(--bg); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

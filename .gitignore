@@ -1,5 +1,7 @@
 node_modules/
 dist/
-.env
+.astro/
+hero-src/*.mp4
 .DS_Store
 .qwen/
+.env

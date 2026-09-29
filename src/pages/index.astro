@@ -1,0 +1,132 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, metrics } from '../data/profile';
+import { projects } from '../data/projects';
+import { experience, education, capabilities } from '../data/experience';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const flagship = projects.filter((p) => p.flagship);
+const more = projects.filter((p) => !p.flagship);
+// Hide metrics that still say TODO so a placeholder never ships.
+const liveMetrics = metrics.filter((m) => m.value !== 'TODO');
+---
+<Base>
+  <header class="wrap" style="display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem">
+    <a href={base} aria-label={`${profile.name}, home`} style="display:inline-flex;color:inherit">
+      <svg viewBox="34 40 188 176" height="28" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M34.5,40 H102.5 L142.5,160 V40 H162.5 A59,56 0 0 1 221.5,96 V160 A59,56 0 0 1 162.5,216 H114.5 L74.5,96 V216 H34.5 Z" />
+      </svg>
+    </a>
+    <nav aria-label="Primary" style="display:flex;gap:1.5rem">
+      <a href="#work">Work</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- HERO. Phase 5 mounts the Flow frame sequence into #hero-canvas. -->
+    <section id="hero" data-section="hero" style="border-top:0;position:relative">
+      <canvas id="hero-canvas" aria-hidden="true" hidden></canvas>
+      <div class="wrap">
+        <p class="muted">{profile.role} · {profile.location}</p>
+        <h1>{profile.headline}</h1>
+        <p class="muted">{profile.subline}</p>
+        <p style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a class="btn primary" href="#work">See my work</a>
+          <a class="btn" href={`${base}${profile.cvFile}`} download>Download CV</a>
+        </p>
+      </div>
+    </section>
+
+    {liveMetrics.length > 0 && (
+      <section id="proof" data-section="proof" aria-label="Results">
+        <div class="wrap grid">
+          {liveMetrics.map((m) => (
+            <div><p style="font-size:2.5rem;margin:0" data-count={m.value}>{m.value}</p><p class="muted">{m.label}</p></div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- PINNED PIPELINE. Phase 4 turns these steps into a scroll-scrubbed SVG diagram. -->
+    <section id="how" data-section="pipeline">
+      <div class="wrap">
+        <h2>How my automations work</h2>
+        <p class="muted">The email triage bot, one message at a time.</p>
+        <ol data-pipeline>
+          <li data-step><strong>Email arrives.</strong> The bot picks up new mail as it lands.</li>
+          <li data-step><strong>An LLM reads it.</strong> It classifies intent and urgency, and filters spam and phishing.</li>
+          <li data-step><strong>It routes and drafts.</strong> The message goes to the right person with a suggested reply.</li>
+          <li data-step><strong>A human approves.</strong> People stay in control of what gets sent.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="work" data-section="work">
+      <div class="wrap">
+        <h2>Selected work</h2>
+        {flagship.map((p) => (
+          <article data-card style="padding-block:2.5rem;border-bottom:1px solid var(--line)">
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+            <dl>
+              <dt class="muted">Problem</dt><dd>{p.problem}</dd>
+              <dt class="muted">What I built</dt><dd>{p.built}</dd>
+              <dt class="muted">Result</dt><dd>{p.result}</dd>
+            </dl>
+            <ul class="tags">{p.stack.map((s) => <li>{s}</li>)}</ul>
+            {p.link && <p><a href={p.link} rel="noopener">View live</a></p>}
+          </article>
+        ))}
+        <h3 style="margin-top:3rem">More builds</h3>
+        <div class="grid">
+          {more.map((p) => (
+            <article><h4>{p.title}</h4><p class="muted">{p.summary}</p><ul class="tags">{p.stack.map((s) => <li>{s}</li>)}</ul></article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="about" data-section="about">
+      <div class="wrap">
+        <h2>About</h2>
+        <p>{profile.about}</p>
+        <div class="grid" style="margin-top:2rem">
+          {capabilities.map((c) => (
+            <div><h3 style="font-size:1.1rem">{c.group}</h3><ul class="tags">{c.items.map((i) => <li>{i}</li>)}</ul></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" data-section="timeline">
+      <div class="wrap">
+        <h2>Experience</h2>
+        <ol data-timeline style="list-style:none;padding:0">
+          {experience.map((e) => (
+            <li style="padding-block:1.25rem;border-bottom:1px solid var(--line)">
+              <p class="muted" style="margin:0">{e.period}</p>
+              <h3 style="font-size:1.2rem;margin:0.25rem 0">{e.role}, {e.org}</h3>
+              <p style="margin:0">{e.note}</p>
+            </li>
+          ))}
+        </ol>
+        <h3 style="margin-top:3rem">Education</h3>
+        {education.map((ed) => <p><strong>{ed.award}</strong><br /><span class="muted">{ed.school}, {ed.period}</span></p>)}
+      </div>
+    </section>
+
+    <section id="contact" data-section="contact">
+      <div class="wrap">
+        <h2>Have work that should run itself?</h2>
+        <p class="muted">I'm open to AI and automation roles, remote or in Nairobi.</p>
+        <p style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a class="btn primary" href={`mailto:${profile.email}`}>Email me</a>
+          <a class="btn" href={profile.links.linkedin} rel="noopener">LinkedIn</a>
+          <a class="btn" href={profile.links.github} rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap muted" style="padding-block:2rem">© {new Date().getFullYear()} {profile.name}</footer>
+</Base>
