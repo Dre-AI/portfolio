@@ -41,12 +41,12 @@ const host = p.link ? new URL(p.link).host.replace(/^www\./, '') : undefined;
 
 <style>
   .case { container-type: inline-size; }
-  .case-body { display: grid; gap: var(--space-l); }
+  .case-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-l); }
   .case-head { display: grid; gap: var(--space-s); align-content: start; }
   .case-head > * { margin: 0; }
   h3 { margin: 0; }
-  .live { display: inline-flex; align-items: center; gap: var(--space-xs); justify-self: start; min-height: 2.75rem; }
-  .host { color: var(--muted); text-decoration: none; }
+  .live { display: inline-flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-xs); justify-self: start; min-height: 2.75rem; }
+  .host { color: var(--muted); text-decoration: none; overflow-wrap: anywhere; }
   dl { padding-top: var(--space-l); border-top: 1px solid var(--line); }
 
   @container (min-width: 44rem) {

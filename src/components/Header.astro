@@ -15,9 +15,10 @@ import { base } from '../lib/content';
 </header>
 
 <style>
-  .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 4.5rem; }
+  /* Wraps rather than overflowing when text is enlarged (WCAG 1.4.10 reflow). */
+  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-m); min-height: 4.5rem; }
   .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); }
-  ul { display: flex; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
+  ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
   nav a {
     display: inline-flex;
     align-items: center;

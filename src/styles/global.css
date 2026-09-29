@@ -104,7 +104,8 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
 .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
 section { padding-block: var(--space); border-top: 1px solid var(--line); }
 
-h1, h2, h3, h4 { margin: 0 0 var(--space-m); font-weight: 600; text-wrap: balance; }
+/* overflow-wrap: long words break only when they can't fit (e.g. 200% text on a phone). */
+h1, h2, h3, h4 { margin: 0 0 var(--space-m); font-weight: 600; text-wrap: balance; overflow-wrap: anywhere; }
 h1 { font-size: var(--step-4); line-height: 1.02; letter-spacing: -0.04em; }
 h2 { font-size: var(--step-3); line-height: 1.1; letter-spacing: -0.03em; }
 h3 { font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.02em; }

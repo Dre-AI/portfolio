@@ -24,6 +24,6 @@ const hasCv = publicFileExists(profile.cvFile);
   .lead { margin: 0 0 var(--space-xl); }
   .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0 0 var(--space-l); }
   .label { margin: 0; }
-  .label a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; } /* 44px target */
+  .label a { display: inline-flex; align-items: center; min-height: 2.75rem; max-width: 100%; overflow-wrap: anywhere; text-decoration: none; } /* 44px target; long address can wrap */
   .label a:hover { text-decoration: underline; }
 </style>
