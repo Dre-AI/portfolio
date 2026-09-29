@@ -6,7 +6,7 @@ export const profile = {
   headline: 'I build AI automations that do the work.',
   subline:
     'LLM agents, n8n workflows and full-stack apps that run in production, not just in demos.',
-  email: 'd9812705@gmail.com',
+  email: 'ndigaderrick6@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/derrick-ndiga-76a119311/',
     github: 'https://github.com/Dre-AI',
