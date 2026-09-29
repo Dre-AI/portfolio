@@ -91,9 +91,15 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
         <a
           href="#home"
-          className="text-xl font-black tracking-tight gradient-text select-none"
+          aria-label="Derrick Ndiga, home"
+          className="text-slate-50 hover:text-cyan-300 transition-colors duration-300 select-none"
         >
-          DN
+          <svg viewBox="34 40 188 176" className="h-7 w-auto" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M34.5,40 H102.5 L142.5,160 V40 H162.5 A59,56 0 0 1 221.5,96 V160 A59,56 0 0 1 162.5,216 H114.5 L74.5,96 V216 H34.5 Z"
+            />
+          </svg>
         </a>
 
         <ul className="hidden md:flex items-center gap-8">
