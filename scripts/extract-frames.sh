@@ -1,25 +1,91 @@
 #!/usr/bin/env bash
-# Turn hero-src/{a,b,c}.mp4 into scroll-scrub WebP frame sets.
-# Needs ffmpeg with libwebp. Usage: bash scripts/extract-frames.sh [fps] [crop]
-# Example with a bottom-right watermark trimmed: bash scripts/extract-frames.sh 24 "crop=iw*0.94:ih*0.94:0:0"
+# Turn Flow clips into scroll-scrub WebP frame sets in public/hero/.
+# Needs ffmpeg + ffprobe with libwebp.
+#
+# Usage: bash scripts/extract-frames.sh [-f desktop_fps] [-m mobile_fps] [-c crop] clip [clip ...]
+# Example: bash scripts/extract-frames.sh -f 20 -m 12 hero-src/1.mp4 hero-src/2.mp4
+# Watermark trim: add -c "crop=iw*0.94:ih*0.94:0:0"
+#
+# Clips are joined in the order given. They should share end/start frames, so one frame
+# repeats at each joint (invisible when scrubbing).
 set -euo pipefail
-FPS="${1:-24}"
-CROP="${2:-}"
-SRC=hero-src
+
+DESKTOP_FPS=20
+MOBILE_FPS=12
+CROP=""
+while getopts "f:m:c:" opt; do
+  case "$opt" in
+    f) DESKTOP_FPS="$OPTARG" ;;
+    m) MOBILE_FPS="$OPTARG" ;;
+    c) CROP="$OPTARG" ;;
+    *) echo "Usage: $0 [-f desktop_fps] [-m mobile_fps] [-c crop] clip [clip ...]" >&2; exit 2 ;;
+  esac
+done
+shift $((OPTIND - 1))
+[ "$#" -ge 1 ] || { echo "Give at least one clip, e.g. hero-src/1.mp4 hero-src/2.mp4" >&2; exit 2; }
+
+DESKTOP_WIDTH=1280
+MOBILE_WIDTH=800
+BUDGET_DESKTOP_KB=6144 # 6 MB
+BUDGET_MOBILE_KB=2560  # 2.5 MB
 OUT=public/hero
-mkdir -p "$OUT/desktop" "$OUT/mobile"
+TMP=hero-src/.tmp # git-ignored; relative paths keep native Windows ffmpeg happy
 
-# Join clips. They share end/start frames, so one frame repeats at each joint (invisible when scrubbing).
-printf "file '%s'\n" "$PWD/$SRC/a.mp4" "$PWD/$SRC/b.mp4" "$PWD/$SRC/c.mp4" > /tmp/hero-list.txt
-ffmpeg -y -loglevel error -f concat -safe 0 -i /tmp/hero-list.txt -an -c:v libx264 -crf 12 /tmp/hero-joined.mp4
+rm -rf "$OUT/desktop" "$OUT/mobile" "$TMP"
+mkdir -p "$OUT/desktop" "$OUT/mobile" "$TMP"
+trap 'rm -rf "$TMP"' EXIT
 
-VF="fps=${FPS}"
-[ -n "$CROP" ] && VF="${CROP},${VF}"
+# concat resolves entries relative to the list file, which lives two levels below the repo root.
+for clip in "$@"; do
+  [ -f "$clip" ] || { echo "Missing clip: $clip" >&2; exit 1; }
+  printf "file '../../%s'\n" "$clip"
+done > "$TMP/list.txt"
+ffmpeg -y -loglevel error -f concat -safe 0 -i "$TMP/list.txt" -an -c:v libx264 -crf 12 "$TMP/joined.mp4"
 
-ffmpeg -y -loglevel error -i /tmp/hero-joined.mp4 -vf "${VF},scale=1600:-2" -c:v libwebp -quality 72 "$OUT/desktop/%04d.webp"
-ffmpeg -y -loglevel error -i /tmp/hero-joined.mp4 -vf "${VF},fps=$((FPS/2)),scale=800:-2" -c:v libwebp -quality 68 "$OUT/mobile/%04d.webp"
-cp "$OUT/desktop/0001.webp" "$OUT/poster.webp"
+# Never upscale: cap each width at the (cropped) source width.
+PROBE="$TMP/joined.mp4"
+if [ -n "$CROP" ]; then
+  ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "$CROP" -frames:v 1 "$TMP/cropped.png"
+  PROBE="$TMP/cropped.png"
+fi
+SRC_WIDTH=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$PROBE")
+cap() { [ "$1" -lt "$SRC_WIDTH" ] && echo "$1" || echo "$SRC_WIDTH"; }
+DW=$(cap "$DESKTOP_WIDTH")
+MW=$(cap "$MOBILE_WIDTH")
 
-echo "desktop: $(ls $OUT/desktop | wc -l) frames, $(du -sh $OUT/desktop | cut -f1)"
-echo "mobile:  $(ls $OUT/mobile | wc -l) frames, $(du -sh $OUT/mobile | cut -f1)"
-echo "Budget: desktop ≤ 6 MB, mobile ≤ 2.5 MB. Over budget? Lower fps or quality."
+PRE=""
+[ -n "$CROP" ] && PRE="${CROP},"
+ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${DESKTOP_FPS},scale=${DW}:-2" -c:v libwebp -quality 72 "$OUT/desktop/%04d.webp"
+ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${MOBILE_FPS},scale=${MW}:-2" -c:v libwebp -quality 68 "$OUT/mobile/%04d.webp"
+
+# Poster = the final desktop frame, i.e. the state the sequence resolves to.
+LAST=$(ls "$OUT/desktop" | sort | tail -n 1)
+cp "$OUT/desktop/$LAST" "$OUT/poster.webp"
+
+count() { ls "$1" | wc -l | tr -d ' '; }
+height() { ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$1/0001.webp"; }
+kb() { du -sk "$1" | cut -f1; }
+DC=$(count "$OUT/desktop"); MC=$(count "$OUT/mobile")
+DKB=$(kb "$OUT/desktop"); MKB=$(kb "$OUT/mobile")
+
+cat > "$OUT/frames.json" <<EOF
+{
+  "desktop": { "count": $DC, "fps": $DESKTOP_FPS, "width": $DW, "height": $(height "$OUT/desktop"), "pattern": "desktop/{n}.webp", "kb": $DKB },
+  "mobile": { "count": $MC, "fps": $MOBILE_FPS, "width": $MW, "height": $(height "$OUT/mobile"), "pattern": "mobile/{n}.webp", "kb": $MKB },
+  "pad": 4,
+  "poster": "poster.webp",
+  "breakpoint": 768
+}
+EOF
+
+report() { # name kb budget_kb
+  awk -v n="$1" -v k="$2" -v b="$3" 'BEGIN { printf "%-8s %6.2f MB of %.1f MB budget  %s\n", n, k/1024, b/1024, (k <= b ? "OK" : "OVER BUDGET") }'
+}
+echo "desktop: $DC frames at ${DW}px/${DESKTOP_FPS}fps"
+echo "mobile:  $MC frames at ${MW}px/${MOBILE_FPS}fps"
+report desktop "$DKB" "$BUDGET_DESKTOP_KB"
+report mobile "$MKB" "$BUDGET_MOBILE_KB"
+if [ "$DKB" -gt "$BUDGET_DESKTOP_KB" ] || [ "$MKB" -gt "$BUDGET_MOBILE_KB" ]; then
+  echo "Over budget: lower fps (-f / -m) or quality." >&2
+  exit 1
+fi

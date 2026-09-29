@@ -5,3 +5,4 @@ hero-src/*.mp4
 .DS_Store
 .qwen/
 .env
+hero-src/.tmp/

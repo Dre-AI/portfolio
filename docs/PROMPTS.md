@@ -65,10 +65,16 @@ Read CLAUDE.md. Using the design system from Phase 2, design and build the full 
 Read CLAUDE.md and the motion rules in docs/BRIEF.md §6. Add GSAP + ScrollTrigger and Lenis. Build: (1) the pinned "How my automations work" section: turn [data-pipeline] into an SVG flow diagram whose steps light up and connect as you scroll; (2) the experience timeline line drawing on scroll; (3) metric counters in #proof; (4) restrained reveal on project cards — one orchestrated moment per section, not fade-up on everything. Reduced motion = static final states. On mobile, no pin longer than one screen. Look at references/ for timing inspiration. Show me the plan first.
 ```
 
+> **Also in Phase 4: the hero scrubber** (moved from Phase 5 so GSAP is installed once for the whole motion layer). The frames already exist in `public/hero/`; read counts, sizes and the breakpoint from `public/hero/frames.json` instead of hard-coding them. Build: (5) a canvas scrubber on `#hero-canvas`: pin the hero with ScrollTrigger, preload the first ~10 frames immediately and the rest in the background, draw the frame that matches scroll progress (show the nearest loaded frame while loading), handle devicePixelRatio and resize, and use the mobile set under 768px; (6) a static poster fallback (`public/hero/poster.webp`, the final frame) in the markup for reduced motion, Save-Data and no-JS, where the canvas never starts; (7) the headline fading as the sequence resolves, with no fade under reduced motion and CTAs always reachable.
+
 ## Phase 5 — Hero sequence (Google Flow)
+**Frames: done.** Clips 1 + 2 (`hero-src/3.mp4` is an unused alternate take) were extracted with:
+```bash
+bash scripts/extract-frames.sh -f 20 -m 12 hero-src/1.mp4 hero-src/2.mp4
 ```
-Read CLAUDE.md and docs/BRIEF.md §10. The Flow clips are in hero-src/. Run scripts/extract-frames.sh to produce desktop and mobile WebP frame sets in public/hero/. Build a canvas scrubber on #hero-canvas: preload the first ~10 frames immediately and the rest in the background, draw the frame that matches scroll progress through the hero, handle devicePixelRatio and resize, pick the mobile set under 768px, and show a static poster frame for reduced-motion or when Save-Data is on. The headline fades as the sequence resolves. Check total frame weight against the budget.
-```
+Desktop: 320 frames at 1280px/20fps, 4.7 MB. Mobile: 192 frames at 800px/12fps, 1.6 MB. Budgets are 6 MB and 2.5 MB. The script exits non-zero if a set goes over budget. Re-run it only if you regenerate the clips.
+
+The scrubber, poster fallback and headline fade moved into Phase 4 (see the note above).
 
 ## Phase 6 — Polish & ship
 ```

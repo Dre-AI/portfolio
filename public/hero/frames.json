@@ -1,0 +1,7 @@
+{
+  "desktop": { "count": 320, "fps": 20, "width": 1280, "height": 720, "pattern": "desktop/{n}.webp", "kb": 5624 },
+  "mobile": { "count": 192, "fps": 12, "width": 800, "height": 450, "pattern": "mobile/{n}.webp", "kb": 2172 },
+  "pad": 4,
+  "poster": "poster.webp",
+  "breakpoint": 768
+}
