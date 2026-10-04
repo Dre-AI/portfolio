@@ -12,6 +12,7 @@ test('studio name and tag are exact', () => {
   assert.equal(studio.tag, LONG_LIVE_TAG);
   assert.ok(studio.heroLabels.includes(LONG_LIVE_TAG));
   assert.ok(studio.manifesto.endsWith(LONG_LIVE_TAG));
+  assert.ok(studio.manifesto.includes('machine\u2019s'));
 });
 
 test('founder line matches the spec', () => {

@@ -12,7 +12,7 @@ export const studio = {
     'Websites, brands and growth for ambitious businesses. Designed by people, built faster with AI.',
   heroLabels: ['Nairobi', 'AI-native studio', '#longliveAI'],
   manifesto:
-    'Taste is human. Speed is the machine\'s. On every project, AI drafts, explores and checks, so our hours go into the decisions that make the work good. You see real options sooner, launch sooner and skip the shortcuts. #longliveAI',
+    'Taste is human. Speed is the machine’s. On every project, AI drafts, explores and checks, so our hours go into the decisions that make the work good. You see real options sooner, launch sooner and skip the shortcuts. #longliveAI',
   footerNote: 'Designed and built in Nairobi with people and AI. #longliveAI',
 };
 
@@ -28,7 +28,7 @@ export const aiBenefits = [
   },
   {
     title: 'Fewer rounds of fixes',
-    text: 'Automated checks for accessibility, performance and SEO catch problems before you ever see them.',
+    text: 'Automated checks for accessibility, performance and SEO catch problems before launch.',
   },
   {
     title: 'People stay in charge',

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { featuredWork, moreBuilds, publicView } from '../src/data/work.ts';
+import { services } from '../src/data/services.ts';
 import { findContentIssues } from '../src/lib/guards.ts';
 
 test('featured lineup and order match the spec', () => {
@@ -11,6 +12,15 @@ test('slugs are unique and URL-safe', () => {
   const slugs = featuredWork.map((w) => w.slug);
   assert.equal(new Set(slugs).size, slugs.length);
   assert.ok(slugs.every((s) => /^[a-z0-9-]+$/.test(s)));
+});
+
+test('work items reference real service slugs', () => {
+  const slugs = new Set(services.map((s) => s.slug));
+  for (const item of featuredWork) {
+    for (const slug of item.services) {
+      assert.ok(slugs.has(slug), `${item.slug} references unknown service ${slug}`);
+    }
+  }
 });
 
 test('work copy passes the copy guard', () => {

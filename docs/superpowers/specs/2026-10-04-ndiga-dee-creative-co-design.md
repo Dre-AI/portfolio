@@ -54,7 +54,7 @@ Speed claims must be framed as process benefits ("first designs in days, not wee
 | 3 | InsightForge: privacy-first ML playground | Studio build | https://insightf0rge.streamlit.app/ | github.com/Dre-AI/insightforge | AI / engineering depth |
 | 4 | Bazaar Cleaning & Car Wash: 3D scroll site | Concept / proposal | https://bazaar-cleaning-website.vercel.app | private | Brand & Creative, scroll craft |
 
-- **Bazaar rule:** the client hasn't approved the proposal yet. Until they do, the client name and logo stay off the site, the card is labelled "Concept: cleaning & car-wash brand", and it doesn't link to the live URL. It moves to "Client" (with name and link) only once Derrick confirms approval. This is a single flag in `src/data/projects.ts`.
+- **Bazaar rule:** the client hasn't approved the proposal yet. Until they do, the client name and logo stay off the site, the card is labelled "Concept: cleaning & car-wash brand", and it doesn't link to the live URL. It moves to "Client" (with name and link) only once Derrick confirms approval. This is the `clientApproved` flag in `src/data/work.ts`; pages render work only through `publicView()`.
 - **More builds** (grid tiles, no separate pages): LLM email triage bot, company intranet, TaskPilot, Industrial Attachment Management System (IAMS), FundiLink. Each tile links to code only where the repo is public.
 - **Screenshots:** Claude captures them from the live URLs in Phase 3 and saves them as WebP in `public/work/`. Derrick supplies images for private-only items.
 - **Results:** use a real metric where Derrick has one. Otherwise use a qualitative outcome (e.g. "Live, mobile-first, ranks for X"), never a placeholder.
@@ -72,9 +72,9 @@ Built from three Flow clips of ~8s each, chained frames-to-video so each clip's 
 
 | Clip | What happens |
 |---|---|
-| A | Derrick's real portrait in dark studio light with a chrome rim light. The camera begins a slow orbit. |
-| B | A holographic wireframe scan sweeps across him, leaving half of him chrome and mesh. The orbit continues. |
-| C | He dissolves into points of light that resolve into the **existing DN monogram** as the camera pulls back into darkness. |
+| A | Derrick's real portrait in dark studio light with a chrome rim light. A slow orbit begins and a thin holographic scan line starts to sweep across him. |
+| B | The orbit continues; the chrome and wireframe spread until he is almost fully digital, edges breaking into points of light. |
+| C | He dissolves into points of light that gather into one small glowing cluster as the camera pulls back into darkness. The **existing DN monogram** is faded in over the final frames by the website (UI overlay), not drawn by the video model. |
 
 - **Input:** 1–2 high-res photos (3/4 angle, plain background). Prompts go in `docs/FLOW_PROMPTS.md`, rewritten in Phase 1.
 - **Pipeline:** `scripts/extract-frames.sh` → WebP frames (desktop and mobile sets) → the existing canvas scrubber in `src/scripts/motion/hero.ts`.

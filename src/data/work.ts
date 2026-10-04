@@ -108,7 +108,7 @@ export const moreBuilds: BuildTile[] = [
   },
   {
     title: 'Company intranet',
-    summary: 'One place for every company document, so finding a file takes seconds.',
+    summary: 'One place for every company document, instead of files scattered across inboxes and personal drives.',
     stack: ['Web app', 'Document management'],
   },
   {

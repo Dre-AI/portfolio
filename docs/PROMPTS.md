@@ -37,7 +37,6 @@ Then, inside Claude Code:
 ```
 Restart Claude Code and run `/plugin list` to confirm everything is enabled.
 
-
 ## Phases (Ndiga Dee Creative Co. rebuild)
 
 Each phase starts from a written plan in `docs/superpowers/plans/`. Run one phase per session, review it, then commit.
