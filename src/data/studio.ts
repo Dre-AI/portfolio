@@ -89,6 +89,15 @@ export const contactCopy = {
   error: 'Something went wrong sending that. Please email ndigaderrick6@gmail.com instead.',
 };
 
+// Section headings for the home page.
+export const sections = {
+  services: 'What I make',
+  work: 'Selected work',
+  moreBuilds: 'More builds',
+  about: 'Who you work with',
+  contact: contactCopy.heading,
+};
+
 // Header navigation. Hrefs are relative to the site base.
 export const nav = [
   { label: 'Work', href: '#work' },

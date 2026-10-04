@@ -1,0 +1,32 @@
+---
+import { studio } from '../data/studio';
+
+// The tag is rendered separately (in .label + accent), so split it off the end of the statement.
+const body = studio.manifesto.endsWith(studio.tag)
+  ? studio.manifesto.slice(0, -studio.tag.length).trimEnd()
+  : studio.manifesto;
+// One span per word (Phase 4 animates them). Spaces stay as real text between spans, so it reads normally.
+const words = body.split(/\s+/).filter(Boolean);
+---
+<section id="manifesto" data-section="manifesto">
+  <div class="wrap">
+    <p class="display statement">
+      {words.map((word, i) => (<><span data-word>{word}</span>{i < words.length - 1 ? ' ' : ''}</>))}
+    </p>
+    <p class="label tag-line">{studio.tag}</p>
+  </div>
+</section>
+
+<style>
+  .statement {
+    font-size: var(--step-3);
+    line-height: 1.08;
+    max-width: 22ch;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .tag-line { margin: var(--space-xl) 0 0; color: var(--accent); }
+  @media (min-width: 48rem) {
+    .statement { max-width: 22ch; }
+  }
+</style>

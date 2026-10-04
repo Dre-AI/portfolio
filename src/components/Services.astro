@@ -1,0 +1,52 @@
+---
+import { services } from '../data/services';
+import { sections } from '../data/studio';
+
+// Phosphor icons (regular weight), inlined at build time so they take the current colour.
+const iconFiles = import.meta.glob('/node_modules/@phosphor-icons/core/assets/regular/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+const icon = (name: string) =>
+  (iconFiles[`/node_modules/@phosphor-icons/core/assets/regular/${name}.svg`] ?? '').replace(
+    '<svg ',
+    '<svg aria-hidden="true" focusable="false" fill="currentColor" ',
+  );
+const [lead, ...rest] = services;
+---
+<section id="services" data-section="services">
+  <div class="wrap">
+    <h2>{sections.services}</h2>
+    <div class="layout">
+      {[lead, ...rest].map((service, i) => (
+        <article class:list={['card', 'service', { lead: i === 0 }]} data-card>
+          <span class="icon" set:html={icon(service.icon)} />
+          <h3>{service.title}</h3>
+          <p class={i === 0 ? 'lead-copy' : 'muted'}>{service.summary}</p>
+          <ul class="tags">
+            {service.deliverables.map((d) => <li>{d}</li>)}
+          </ul>
+          <p class="label ai"><span class="mark" aria-hidden="true"></span>{service.aiAngle}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout { display: grid; gap: var(--space-l); margin-top: var(--space-2xl); }
+  .service { align-items: flex-start; }
+  .icon { display: inline-flex; width: 2.25rem; height: 2.25rem; color: var(--accent); }
+  .icon :global(svg) { width: 100%; height: 100%; }
+  .ai { display: flex; gap: var(--space-s); align-items: baseline; margin-top: auto; padding-top: var(--space-s); }
+  .mark { flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent); transform: translateY(-0.05em); }
+  .lead-copy { font-size: var(--step-1); line-height: 1.5; }
+  @media (min-width: 48rem) {
+    .layout { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
+    .lead { grid-row: 1 / span 2; padding: var(--space-2xl); gap: var(--space-l); justify-content: flex-end;
+      background: linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent 70%), var(--surface); }
+    .lead .icon { width: 4.5rem; height: 4.5rem; margin-bottom: auto; }
+    .lead h3 { font-size: var(--step-3); line-height: 1.05; }
+  }
+</style>
