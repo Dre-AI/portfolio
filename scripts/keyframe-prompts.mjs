@@ -28,9 +28,9 @@ export const keyframes = {
   K2: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: the exact same man as in both attached photos, same suit, same charcoal studio backdrop. The camera has orbited about 30 degrees around him, so we now see him at a three-quarter angle with his face turned slightly towards the empty left side of the frame, and it has moved slightly closer, framed from upper chest up. He stays in the right half of the frame.',
-      'He is subtly otherworldly: very fine, faint lines of soft pale-cyan bioluminescent light have just begun to appear under his skin at his temples and along the top of his cheekbones, thin and elegant like a delicate natural pattern, glowing gently. His irises catch a faint iridescent shimmer. Everything else is unchanged: real human skin with pores and natural texture, same face, same hair, same beard.',
-      'Calm, confident slight smile, lips relaxed.',
+      'Continue from the last attached image: the exact same man as in both attached photos, same suit, same charcoal studio backdrop. The camera has clearly orbited around him: this is a true three-quarter view, with his head and shoulders turned about 35 degrees so his face points towards the empty left side of the frame. His far ear is hidden and we see more of his near cheek and jaw. The camera is slightly closer, framed from upper chest up, and he stays in the right half of the frame.',
+      'He is subtly otherworldly: very fine, faint lines of soft pale-cyan bioluminescent light have just begun to appear under his skin at his temples and along the top of his cheekbones, thin and elegant like a delicate natural pattern, glowing gently. His eyes keep their natural dark brown colour, with only a tiny cyan glint in the catchlight. Everything else is unchanged: real human skin with pores and natural texture, same face, same hair, same beard.',
+      'His big smile has relaxed into a calm, confident, closed-mouth slight smile; no teeth showing.',
       LIGHT,
       `${REALISM} The glow must be subtle and photographic, not makeup, not paint, not a costume, not CGI.`,
       NEGATIVE.replace('no colour accents other than silver and cool white', 'no colour accents other than silver, cool white and the soft pale-cyan glow'),
@@ -41,7 +41,7 @@ export const keyframes = {
     usesPrevious: true,
     prompt: [
       'Continue from the last attached image: same man, same suit, same backdrop, same light direction and rim light. The camera has orbited about 30 degrees further in the same direction, so he is now close to a side profile facing the left side of the frame, framed from upper chest up and still in the right half of the frame.',
-      'The soft pale-cyan bioluminescent lines under his skin have spread: they now trace his temple, cheekbone, jawline and down the side of his neck in fine, elegant, symmetrical lines like a quiet constellation, glowing softly from beneath real skin. His visible eye has a gentle iridescent shimmer. He is still unmistakably the same real person, with real skin texture and pores.',
+      'The soft pale-cyan bioluminescent lines under his skin have spread: they now trace his temple, cheekbone, jawline and down the side of his neck in fine, elegant, symmetrical lines like a quiet constellation, glowing softly from beneath real skin. His eye keeps its natural dark brown colour with only a tiny cyan glint in the catchlight. He is still unmistakably the same real person, with real skin texture and pores.',
       'Calm, confident slight smile, lips relaxed, same as the last attached image.',
       LIGHT,
       `${REALISM} The glow must be subtle and photographic, not makeup, not paint, not a costume, not CGI.`,
