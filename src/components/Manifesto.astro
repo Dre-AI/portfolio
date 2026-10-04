@@ -5,28 +5,33 @@ import { studio } from '../data/studio';
 const body = studio.manifesto.endsWith(studio.tag)
   ? studio.manifesto.slice(0, -studio.tag.length).trimEnd()
   : studio.manifesto;
+// First two sentences are the statement; the rest is supporting copy.
+const sentences = body.split(/(?<=\.)\s+/);
+const statement = sentences.slice(0, 2).join(' ');
+const rest = sentences.slice(2).join(' ');
 // One span per word (Phase 4 animates them). Spaces stay as real text between spans, so it reads normally.
-const words = body.split(/\s+/).filter(Boolean);
+const words = (text: string) => text.split(/\s+/).filter(Boolean);
 ---
 <section id="manifesto" data-section="manifesto">
-  <div class="wrap">
+  <div class="wrap layout">
     <p class="display statement">
-      {words.map((word, i) => (<><span data-word>{word}</span>{i < words.length - 1 ? ' ' : ''}</>))}
+      {words(statement).map((word, i, all) => (<><span data-word>{word}</span>{i < all.length - 1 ? ' ' : ''}</>))}
     </p>
-    <p class="label tag-line">{studio.tag}</p>
+    <div class="rest">
+      <p class="lead">
+        {words(rest).map((word, i, all) => (<><span data-word>{word}</span>{i < all.length - 1 ? ' ' : ''}</>))}
+      </p>
+      <p class="label tag-line">{studio.tag}</p>
+    </div>
   </div>
 </section>
 
 <style>
-  .statement {
-    font-size: var(--step-3);
-    line-height: 1.08;
-    max-width: 22ch;
-    margin: 0;
-    text-wrap: balance;
-  }
-  .tag-line { margin: var(--space-xl) 0 0; color: var(--accent); }
+  .layout { display: grid; gap: var(--space-xl); }
+  .statement { font-size: var(--step-4); line-height: 1.02; max-width: 14ch; margin: 0; text-wrap: balance; }
+  .rest > * { margin: 0; }
+  .rest .tag-line { margin-top: var(--space-l); color: var(--accent); }
   @media (min-width: 48rem) {
-    .statement { max-width: 22ch; }
+    .layout { grid-template-columns: 1.4fr 1fr; gap: var(--space-2xl); align-items: end; }
   }
 </style>
