@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { featuredWork, moreBuilds, publicView } from '../src/data/work.ts';
+import { featuredWork, moreBuilds, publicView, labelText } from '../src/data/work.ts';
 import { services } from '../src/data/services.ts';
 import { findContentIssues } from '../src/lib/guards.ts';
 
@@ -56,4 +56,9 @@ test('studio builds are labelled studio and link public code', () => {
     assert.equal(item.label, 'studio');
     assert.match(item.repoUrl ?? '', /^https:\/\/github\.com\/Dre-AI\//);
   }
+});
+
+test('Keton is labelled built-for', () => {
+  assert.equal(featuredWork.find((w) => w.slug === 'keton-consulting')!.label, 'built-for');
+  assert.equal(labelText('built-for'), 'Built for');
 });

@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { studio, aiBenefits, founder, ctas, contactCopy, heroBeats } from '../src/data/studio.ts';
+import { services } from '../src/data/services.ts';
+import { processSection } from '../src/data/process.ts';
 import { findContentIssues, LONG_LIVE_TAG } from '../src/lib/guards.ts';
 
 test('studio copy passes the copy guard', () => {
@@ -16,7 +18,7 @@ test('studio name and tag are exact', () => {
 });
 
 test('founder line matches the spec', () => {
-  assert.equal(`${founder.name}, ${founder.role}`, 'Derrick Ndiga, Founder · Full-Stack & AI Engineer');
+  assert.equal(`${founder.name}, ${founder.role}`, 'Derrick Ndiga, Freelance Full-Stack & AI Developer');
 });
 
 test('AI benefits are about time saved and contain no invented numbers', () => {
@@ -35,4 +37,15 @@ test('hero has four beats in scroll order, ending on the studio name', () => {
 
 test('beat headings stay short enough for the beat size', () => {
   for (const b of heroBeats.slice(1)) assert.ok(b.heading.split(' ').length <= 5, b.heading);
+});
+
+test('copy speaks in the first person, never as a team', () => {
+  const all = JSON.stringify({ studio, heroBeats, aiBenefits, founder, ctas, contactCopy, services, processSection });
+  assert.doesNotMatch(all, /\b(we|our|ours|us|we're|we'll|the team)\b/i);
+});
+
+test('first AI benefit promises early options and better results, without a hard deadline', () => {
+  assert.doesNotMatch(aiBenefits[0].text, /first week/i);
+  assert.match(aiBenefits[0].text, /early/i);
+  assert.match(aiBenefits[0].text, /better/i);
 });

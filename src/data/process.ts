@@ -1,14 +1,14 @@
-// The pinned "why AI is faster" section. Each step contrasts the usual way with ours. Qualitative only: no invented numbers.
+// The pinned "why AI is faster" section. Each step contrasts the usual way with mine. Qualitative only: no invented numbers.
 export type ProcessStep = { title: string; usual: string; withAI: string; icon: string };
 
 export const processSection = {
-  heading: 'Why we finish sooner',
+  heading: 'Why I finish sooner',
   intro: 'Same craft, less waiting. Here is where AI takes time out of a project.',
   steps: [
     {
       title: 'Discover',
       usual: 'Weeks of back-and-forth before anyone sees a plan.',
-      withAI: 'AI-assisted research and competitor scans give us a clear brief in the first conversations.',
+      withAI: 'AI-assisted research and competitor scans give me a clear brief in the first conversations.',
       icon: 'magnifying-glass',
     },
     {
@@ -20,7 +20,7 @@ export const processSection = {
     {
       title: 'Build with AI',
       usual: 'Routine code written slowly by hand.',
-      withAI: 'AI handles scaffolding and first drafts; we review every line and engineer the hard parts.',
+      withAI: 'AI handles scaffolding and first drafts; I review every line and engineer the hard parts.',
       icon: 'code',
     },
     {

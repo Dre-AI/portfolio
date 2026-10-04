@@ -3,7 +3,7 @@
 // Results stay qualitative until Derrick supplies a real metric. aiNote is optional and is
 // added in Phase 3 only from Derrick's own account of where AI saved time.
 
-export type WorkLabel = 'client' | 'studio' | 'concept';
+export type WorkLabel = 'client' | 'studio' | 'concept' | 'built-for';
 
 export type WorkItem = {
   slug: string;
@@ -28,7 +28,7 @@ export type PublicWorkItem = Omit<WorkItem, 'conceptTitle' | 'clientApproved'>;
 
 export type BuildTile = { title: string; summary: string; stack: string[]; repoUrl?: string };
 
-const LABEL_TEXT: Record<WorkLabel, string> = { client: 'Client', studio: 'Studio build', concept: 'Concept' };
+const LABEL_TEXT: Record<WorkLabel, string> = { client: 'Client', studio: 'Studio build', concept: 'Concept', 'built-for': 'Built for' };
 export const labelText = (label: WorkLabel): string => LABEL_TEXT[label];
 
 export function publicView(item: WorkItem): PublicWorkItem {
@@ -40,7 +40,7 @@ export function publicView(item: WorkItem): PublicWorkItem {
 export const featuredWork: WorkItem[] = [
   {
     slug: 'keton-consulting',
-    label: 'client',
+    label: 'built-for',
     title: 'Keton Consulting',
     services: ['websites', 'growth'],
     summary: 'A fast, findable website for a clinical lab-equipment distributor.',

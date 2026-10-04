@@ -1,4 +1,4 @@
-// The three services the studio sells. AI is how we work, so it shows up as each service's aiAngle, never as its own service.
+// The three services I sell. AI is how I work, so it shows up as each service's aiAngle, never as its own service.
 export type Service = {
   slug: string;
   title: string;
@@ -22,7 +22,7 @@ export const services: Service[] = [
     title: 'Brand & Creative',
     summary: 'Identity, visuals and motion that make a business look as good as it is.',
     deliverables: ['Logo & identity refresh', 'Social content', 'AI-assisted visuals', 'Motion & video', 'Brand guidelines'],
-    aiAngle: 'We explore many visual directions in hours, then refine the best one by hand.',
+    aiAngle: 'I explore many visual directions in hours, then refine the best one by hand.',
     icon: 'pen-nib',
   },
   {
