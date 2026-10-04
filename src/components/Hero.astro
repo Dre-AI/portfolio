@@ -56,6 +56,7 @@ const last = rest[rest.length - 1];
   /* ─── Static layout (reduced motion, Save-Data, 2g, no JS): poster plus every beat, stacked ─── */
   .hero {
     --handoff: 0;
+    --frame-shift: 0px; /* how far right the film moves on wide screens; mirrors frameShift() in heroMath.ts */
     display: grid;
     align-content: start;
     min-height: max(34rem, 100dvh);
@@ -102,30 +103,54 @@ const last = rest[rest.length - 1];
     pointer-events: none;
   }
 
-  /* The film: Derrick sits centre-right, so cover keeps the right edge on desktop. hero.ts reads this
-     object-position to draw the canvas the same way and to find the light cluster for the last beat. */
-  .media { object-position: 100% 30%; }
+  /* The film: cover keeps the right edge on desktop, and from 1024px the frame also moves right (up to 18% of
+     the width at 1440px) so Derrick's face clears the copy column. hero.ts reads the anchor percentages from
+     this object-position and draws the canvas, and places the cluster, with the same maths. */
+  .media { object-position: calc(100% + var(--frame-shift)) 30%; }
   @media (max-width: 767px) { .media { object-position: 55% 30%; } }
+  /* The canvas already draws the crop and shift itself (its bitmap matches its box), so it must not shift again. */
+  .hero canvas.media { object-position: 0 0; }
+  @media (min-width: 1024px) {
+    .hero { --frame-shift: clamp(0px, (100vw - 1024px) * 0.6231, 18vw); }
+    /* Before the canvas takes over, a gradient hides the join where the shifted frame starts (hero.ts paints
+       the same fade on the canvas). The second layer is the standard .media-scrim gradient. */
+    .hero:not(.is-live)::before {
+      background-image:
+        linear-gradient(90deg, var(--bg) var(--frame-shift), rgb(10 11 13 / 0) calc(var(--frame-shift) * 1.85)),
+        linear-gradient(90deg, rgb(10 11 13 / 0.74) 0%, rgb(10 11 13 / 0.66) 55%, rgb(10 11 13 / 0.1) 90%);
+    }
+  }
+
+  /* Static: the poster covers the first screen only and fades out; the stacked beats below sit on --bg. */
+  :global(html:not(.motion-hero)) .poster {
+    bottom: auto;
+    height: max(34rem, 100svh);
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  }
 
   /* ─── Scrubbing (.motion-hero): one screen, one beat at a time ─── */
   :global(.motion-hero) .hero {
     align-content: center;
-    background: var(--bg) var(--start-desktop) 100% 30% / cover no-repeat;
+    background: var(--bg) var(--start-desktop) calc(100% + var(--frame-shift)) 30% / cover no-repeat;
     padding-block: calc(4.5rem + var(--space-l)) var(--space-2xl);
   }
   :global(.motion-hero) .poster { opacity: 0; }
   /* Once the canvas is live, frame 1 must not show through while the hand-off dims the canvas. */
   :global(.motion-hero) .hero.is-live { background-image: none; }
   :global(.motion-hero) .copy { grid-template-rows: auto auto; }
+  /* Inactive beats are only transparent: they stay in the accessibility tree, and a keyboard user who tabs
+     into one (beat 0's CTAs) sees it. hero.ts takes the lockup's duplicate CTA out of the tab order. */
   :global(.motion-hero) .beat-slide {
     grid-area: 2 / 1;
     min-height: 0;
     margin: 0;
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 400ms var(--ease-out), visibility 0s linear 400ms;
+    pointer-events: none;
+    transition: opacity 400ms var(--ease-out);
   }
-  :global(.motion-hero) .beat-slide.is-active { opacity: 1; visibility: visible; transition: opacity 400ms var(--ease-out); }
+  :global(.motion-hero) .beat-slide.is-active,
+  :global(.motion-hero) .beat-slide:focus-within { opacity: 1; pointer-events: auto; }
   :global(.motion-hero) [data-beat='0'] { justify-content: start; }
   /* The label row already carries the tag; the closing lockup repeats it, so the row steps aside. */
   :global(.motion-hero) .labels { transition: opacity 400ms var(--ease-out); }
@@ -150,7 +175,7 @@ const last = rest[rest.length - 1];
 
   /* Hand-off: over the last 8% of the pin the film dims and the scrim deepens (--handoff 0 to 1 from hero.ts). */
   :global(.motion-hero) .hero::before { background-color: rgb(10 11 13 / calc(var(--handoff) * 0.5)); }
-  :global(.motion-hero) .media { opacity: calc(1 - var(--handoff) * 0.6); }
+  :global(.motion-hero) canvas.media { opacity: calc(1 - var(--handoff) * 0.6); }
 
   @media (max-width: 767px) {
     :global(.motion-hero) .hero { align-content: end; background-image: var(--start-mobile); background-position: 55% 30%; }

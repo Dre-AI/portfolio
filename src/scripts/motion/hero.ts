@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { frameAt, beatAt, coverRect } from './heroMath';
+import { frameAt, beatAt, coverRect, frameShift } from './heroMath';
 
 interface FrameSet { count: number; width: number; height: number; pattern: string }
 interface FramesManifest { desktop: FrameSet; mobile: FrameSet; pad: number; breakpoint: number }
@@ -12,6 +12,7 @@ const PIN_SCREENS = { desktop: 3, mobile: 1 }; // mobile: never pin longer than 
 const FILM_END = 0.88; // the film reaches its last frame here and holds for the closing beat
 const HANDOFF_FROM = 0.92; // the last 8% of the pin dims the film into the next section
 const CLUSTER = { x: 0.508, y: 0.602 }; // centre of the light cluster in the last frame (both frame sets)
+const JOIN = 0.15; // share of the drawn frame width that fades in from --bg where a shifted frame starts
 
 /** object-position of the poster as 0..1 anchors, so the canvas crops exactly like the CSS. */
 function anchors(el: HTMLElement): { ax: number; ay: number } {
@@ -40,11 +41,21 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
 
   const slides = Array.from(copy.querySelectorAll<HTMLElement>('.beat-slide'));
   const starts = JSON.parse(copy.dataset.starts ?? '[0]') as number[];
+  // The closing lockup repeats beat 0's CTA, so its link leaves the tab order until the lockup is showing.
+  const lockup = slides[slides.length - 1];
+  const setActive = (slide: HTMLElement | undefined, on: boolean) => {
+    if (!slide) return;
+    slide.classList.toggle('is-active', on);
+    if (slide === lockup && slide !== slides[0]) {
+      slide.querySelectorAll('a').forEach((a) => (on ? a.removeAttribute('tabindex') : a.setAttribute('tabindex', '-1')));
+    }
+  };
   let beat = 0;
+  slides.forEach((slide, i) => setActive(slide, i === beat));
   const showBeat = (next: number) => {
     if (next === beat) return;
-    slides[beat]?.classList.remove('is-active');
-    slides[next]?.classList.add('is-active');
+    setActive(slides[beat], false);
+    setActive(slides[next], true);
     beat = next;
   };
 
@@ -56,6 +67,9 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
   let drawn = -1;
   let cancelled = false;
   let anchor = anchors(poster);
+  let shift = frameShift(hero.clientWidth);
+  const bg = getComputedStyle(hero).getPropertyValue('--bg').trim() || '#0a0b0d';
+  const bgClear = /^#[\da-f]{6}$/i.test(bg) ? `${bg}00` : 'transparent'; // same colour, zero alpha
 
   // The first batch is decoded up front so it draws instantly. Background frames only download; the browser
   // decodes each one when it is drawn, which keeps CPU and memory low while the rest stream in.
@@ -81,15 +95,26 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     const i = nearest(current);
     const img = images[i];
     if (!img || i === drawn) return;
-    const { x, y, w, h } = coverRect(canvas.width, canvas.height, img.naturalWidth, img.naturalHeight, anchor.ax, anchor.ay);
-    ctx.drawImage(img, x, y, w, h); // cover, cropped like the poster's object-position
+    const { x, y, w, h } = coverRect(canvas.width, canvas.height, img.naturalWidth, img.naturalHeight, anchor.ax, anchor.ay, shift);
+    ctx.drawImage(img, x, y, w, h); // cover, cropped and shifted like the poster's object-position
+    if (x > 0) {
+      // Wide screens: the frame is shifted right, clear of the copy. Fill the strip on its left with the
+      // page colour and fade the frame's left edge into it so the join can't be seen.
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, Math.ceil(x), canvas.height);
+      const join = ctx.createLinearGradient(x, 0, x + w * JOIN, 0);
+      join.addColorStop(0, bg);
+      join.addColorStop(1, bgClear);
+      ctx.fillStyle = join;
+      ctx.fillRect(x, 0, w * JOIN, canvas.height);
+    }
     drawn = i;
   };
 
   // Where the light cluster lands on screen (CSS px; the canvas fills the hero), so the closing beat's
   // monogram sits on it.
   const placeCluster = () => {
-    const r = coverRect(hero.clientWidth, hero.clientHeight, set.width, set.height, anchor.ax, anchor.ay);
+    const r = coverRect(hero.clientWidth, hero.clientHeight, set.width, set.height, anchor.ax, anchor.ay, shift);
     hero.style.setProperty('--cluster-x', `${Math.round(r.x + r.w * CLUSTER.x)}px`);
     hero.style.setProperty('--cluster-y', `${Math.round(r.y + r.h * CLUSTER.y)}px`);
   };
@@ -100,6 +125,7 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     canvas.width = Math.round(canvas.clientWidth * dpr);
     canvas.height = Math.round(canvas.clientHeight * dpr);
     anchor = anchors(poster);
+    shift = frameShift(hero.clientWidth);
     placeCluster();
     drawn = -1;
     draw();
@@ -163,5 +189,6 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     canvas.hidden = true;
     ['--handoff', '--cluster-x', '--cluster-y'].forEach((p) => hero.style.removeProperty(p));
     slides.forEach((slide, i) => slide.classList.toggle('is-active', i === 0));
+    lockup?.querySelectorAll('a').forEach((a) => a.removeAttribute('tabindex'));
   };
 }
