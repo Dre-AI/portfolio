@@ -44,7 +44,20 @@ Speed claims must be framed as process benefits ("first designs in days, not wee
 8. **Contact:** brief form + booking link + email.
 
 ### Other pages
-- **`/work/[slug]`:** one per case study, covering problem, approach (including where AI saved time), stack, result, screenshots and link. Initial set: Keton website + SEO, company intranet, React + Django app, Laravel Internship Management System, plus creative pieces Derrick supplies.
+- **`/work/[slug]`:** one page per featured project. Layout: cover → brief → approach → where AI saved time → stack → result → gallery → next project. Buttons: "Visit live site" and, for public repos, "View code".
+
+### Work lineup
+| # | Project | Label | Live | Code | Proves |
+|---|---|---|---|---|---|
+| 1 | Keton Consulting website & SEO | Client | https://ketonconsulting.com | private | Websites + Growth |
+| 2 | Lumora: full-stack e-commerce MVP | Studio build | https://dre-ai.github.io/Lumora/ | github.com/Dre-AI/Lumora | Web apps |
+| 3 | InsightForge: privacy-first ML playground | Studio build | https://insightf0rge.streamlit.app/ | github.com/Dre-AI/insightforge | AI / engineering depth |
+| 4 | Bazaar Cleaning & Car Wash: 3D scroll site | Concept / proposal | https://bazaar-cleaning-website.vercel.app | private | Brand & Creative, scroll craft |
+
+- **Bazaar rule:** the client hasn't approved the proposal yet. Until they do, the client name and logo stay off the site, the card is labelled "Concept: cleaning & car-wash brand", and it doesn't link to the live URL. It moves to "Client" (with name and link) only once Derrick confirms approval. This is a single flag in `src/data/projects.ts`.
+- **More builds** (grid tiles, no separate pages): LLM email triage bot, company intranet, TaskPilot, Industrial Attachment Management System (IAMS), FundiLink. Each tile links to code only where the repo is public.
+- **Screenshots:** Claude captures them from the live URLs in Phase 3 and saves them as WebP in `public/work/`. Derrick supplies images for private-only items.
+- **Results:** use a real metric where Derrick has one. Otherwise use a qualitative outcome (e.g. "Live, mobile-first, ranks for X"), never a placeholder.
 - **`/about`:** founder story, experience timeline (reuses the timeline component), education, stack.
 - **`404`:** on-brand.
 
