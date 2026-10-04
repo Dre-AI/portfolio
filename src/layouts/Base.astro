@@ -6,13 +6,12 @@ import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal
 import geistMonoLatin from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import '../styles/global.css';
-import { profile } from '../data/profile';
-import { education, capabilities } from '../data/experience';
+import { studio, founder } from '../data/studio';
 
 interface Props { title?: string; description?: string; noindex?: boolean }
 const {
-  title = `${profile.name}: ${profile.role}`,
-  description = `${profile.role} in ${profile.location}. ${profile.subline}`,
+  title = `${studio.name}: ${founder.role}`,
+  description = studio.subline,
   noindex = false,
 } = Astro.props;
 
@@ -20,22 +19,31 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const home = new URL(base, Astro.site);
 const ogImage = new URL(`${base}og.png`, Astro.site);
-const ogAlt = `${profile.name}, ${profile.role}: ${profile.headline}`;
+const logo = new URL(`${base}icon-512.png`, Astro.site);
+const ogAlt = `${studio.name}: ${studio.headline}`;
+const sameAs = Object.values(founder.links);
 
-const jsonLd = {
-  '@context': 'https://schema.org',
+const person = {
   '@type': 'Person',
-  name: profile.name,
-  jobTitle: profile.role,
-  address: { '@type': 'PostalAddress', addressLocality: 'Nairobi', addressCountry: 'KE' },
-  description: profile.subline,
-  email: `mailto:${profile.email}`,
-  url: home.href, // the person's home page, whichever page this is
-  image: ogImage.href,
-  alumniOf: education.map((ed) => ({ '@type': 'CollegeOrUniversity', name: ed.school })),
-  knowsAbout: capabilities.flatMap((c) => c.items),
-  sameAs: [profile.links.linkedin, profile.links.github],
+  name: founder.name,
+  jobTitle: founder.role,
+  email: `mailto:${founder.email}`,
+  url: home.href,
+  sameAs,
 };
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: studio.name,
+    description: studio.subline,
+    url: home.href,
+    logo: logo.href,
+    address: { '@type': 'PostalAddress', addressLocality: 'Nairobi', addressCountry: 'KE' },
+    founder: person,
+  },
+  { '@context': 'https://schema.org', ...person },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -73,7 +81,7 @@ const jsonLd = {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogAlt} />
-    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:site_name" content={studio.name} />
     <meta property="og:locale" content="en_KE" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image:alt" content={ogAlt} />

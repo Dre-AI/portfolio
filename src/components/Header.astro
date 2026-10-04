@@ -1,21 +1,25 @@
 ---
 import Monogram from './Monogram.astro';
-import { profile } from '../data/profile';
-import { nav } from '../data/site';
+import { studio, nav, ctas } from '../data/studio';
 import { base } from '../lib/content';
 
-// The last item (Contact) is the call to action and gets the lit pill.
-const lastIndex = nav.length - 1;
+// '#anchor' links only exist on the home page; elsewhere they point back to it. Other hrefs are base-relative.
+const isHome = Astro.url.pathname === base || Astro.url.pathname === base.replace(/\/$/, '');
+const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${base}${href}`) : `${base}${href}`);
 ---
-{/* Fixed glass bar over the page; it firms up as you scroll (CSS scroll-driven, no JS). */}
+{/* Fixed bar over the page; it firms up as you scroll (CSS scroll-driven, no JS). */}
 <header class="site-header">
   <div class="wrap">
-    <a class="home" href={base} aria-label={`${profile.name}, home`}><Monogram /></a>
+    <a class="home" href={base} aria-label={studio.name}>
+      <Monogram height={26} />
+      <span class="display wordmark" aria-hidden="true">{studio.name}</span>
+    </a>
     <nav aria-label="Primary">
       <ul>
-        {nav.map((item, i) => (
-          <li><a class={i === lastIndex ? 'cta' : undefined} href={item.href}>{item.label}</a></li>
+        {nav.map((item) => (
+          <li><a href={resolve(item.href)}>{item.label}</a></li>
         ))}
+        <li><a class="btn primary" href={resolve('#contact')}>{ctas.startProject}</a></li>
       </ul>
     </nav>
   </div>
@@ -25,25 +29,24 @@ const lastIndex = nav.length - 1;
   .site-header {
     position: fixed;
     inset: 0 0 auto;
-    z-index: 50;
+    z-index: var(--z-nav);
     background: rgb(10 11 13 / 0.35);
     backdrop-filter: blur(14px) saturate(150%);
     -webkit-backdrop-filter: blur(14px) saturate(150%);
-    border-bottom: 1px solid rgb(var(--glow-1) / 0.12);
+    border-bottom: 1px solid var(--line);
   }
   @supports (animation-timeline: scroll()) {
     .site-header { animation: firm-up linear both; animation-timeline: scroll(); animation-range: 0 240px; }
-    @keyframes firm-up { to { background: rgb(10 11 13 / 0.8); border-bottom-color: rgb(var(--glow-1) / 0.24); } }
+    @keyframes firm-up { to { background: rgb(10 11 13 / 0.85); border-bottom-color: var(--line-strong); } }
   }
   @media (prefers-reduced-transparency: reduce) { .site-header { background: rgb(10 11 13 / 0.96); } }
 
-  /* Wraps rather than overflowing when text is enlarged (WCAG 1.4.10 reflow). */
+  /* One line on desktop; wraps only when text is enlarged (WCAG 1.4.10 reflow). */
   .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-m); min-height: 4.5rem; }
-  .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); color: var(--fg); }
-  .home:hover { filter: drop-shadow(0 0 10px rgb(var(--glow-2) / 0.6)); }
+  .home { display: inline-flex; align-items: center; gap: var(--space-s); padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); color: var(--fg); text-decoration: none; }
+  .wordmark { font-size: var(--step-0); white-space: nowrap; }
   ul { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
-  nav a {
-    position: relative;
+  nav a:not(.btn) {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
@@ -54,28 +57,8 @@ const lastIndex = nav.length - 1;
     text-decoration: none;
     transition: color var(--dur-fast) var(--ease-out);
   }
-  nav a:not(.cta)::after {
-    content: '';
-    position: absolute;
-    inset: auto var(--space-s) 0.55rem;
-    height: 1px;
-    background: var(--gradient);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform var(--dur) var(--ease-out);
-  }
-  nav a:hover { color: var(--fg); }
-  nav a:hover::after { transform: scaleX(1); }
-  .cta {
-    margin-left: var(--space-xs);
-    padding-inline: var(--space-m);
-    border: 1px solid transparent;
-    border-radius: var(--radius-pill);
-    background: linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box, var(--gradient) border-box;
-    color: var(--fg);
-    box-shadow: 0 0 22px -8px rgb(var(--glow-2) / 0.7);
-    transition: box-shadow var(--dur) var(--ease-out);
-  }
-  .cta:hover { box-shadow: 0 0 30px -6px rgb(var(--glow-2) / 0.9); }
-  @media (max-width: 380px) { nav a { padding-inline: var(--space-xs); } .cta { padding-inline: var(--space-s); } }
+  nav a:not(.btn):hover { color: var(--fg); }
+  nav .btn { margin-left: var(--space-xs); min-height: 2.75rem; }
+  @media (max-width: 480px) { .wordmark { display: none; } }
+  @media (max-width: 380px) { nav a:not(.btn) { padding-inline: var(--space-xs); } }
 </style>
