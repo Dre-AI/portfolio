@@ -37,7 +37,7 @@ Speed claims must be framed as process benefits ("first designs in days, not wee
 1. **Hero (pinned, ~300vh):** scroll-scrubbed Flow sequence (§6). The copy changes with the film in four beats, so scrolling tells the manifesto while Derrick transforms:
    | Scroll | Film | Copy |
    |---|---|---|
-   | 0–30% | Real Derrick, smiling | Headline "Creative work, engineered with AI.", subline, CTAs ("Start a project", "See the work"), label row `Nairobi · AI-native studio · #longliveAI` |
+   | 0–30% | Real Derrick, smiling | Headline "Creative work, engineered with AI.", subline, CTAs ("Start a project", "See the work"), label row `AI-native studio · #longliveAI` (Nairobi appears in the footer and contact section, not the hero) |
    | 30–60% | Glow wakes | "Taste is human." + "Every design and decision is made by people who care how it lands." |
    | 60–85% | Glow spreads, near profile | "Speed is the machine's." + "AI drafts, explores and checks, so you see real options sooner and launch sooner." |
    | 85–100% | Light cluster, DN monogram fades in | "Ndiga Dee Creative Co." + `#longliveAI` + "Start a project" |

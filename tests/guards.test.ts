@@ -31,3 +31,14 @@ test('flags any misspelling of the tag', () => {
   assert.equal(findContentIssues({ a: '#longliveai' }).length, 1);
   assert.deepEqual(findContentIssues({ a: `Built with care. ${LONG_LIVE_TAG}` }), []);
 });
+
+test('flags em and en dashes', () => {
+  assert.equal(findContentIssues({ a: 'fast — and good' }).length, 1);
+  assert.equal(findContentIssues({ a: '1–3 months' }).length, 1);
+  assert.deepEqual(findContentIssues({ a: '1-3 months' }), []);
+});
+
+test('flags more than one middle dot in a string', () => {
+  assert.equal(findContentIssues({ a: 'A · B · C' }).length, 1);
+  assert.deepEqual(findContentIssues({ a: 'Founder · Full-Stack & AI Engineer' }), []);
+});

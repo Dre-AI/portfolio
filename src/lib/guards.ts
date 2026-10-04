@@ -25,6 +25,8 @@ function issuesFor({ path, text }: FoundString): string[] {
   if (PHONE.test(withoutUrls)) issues.push(`${path}: phone number`);
   const tags = withoutUrls.match(TAG_LIKE) ?? [];
   if (tags.some((tag) => tag !== LONG_LIVE_TAG)) issues.push(`${path}: tag must be ${LONG_LIVE_TAG}`);
+  if (/[–—]/.test(withoutUrls)) issues.push(`${path}: em or en dash (use a hyphen)`);
+  if ((withoutUrls.match(/·/g) ?? []).length > 1) issues.push(`${path}: more than one middle dot`);
   return issues;
 }
 

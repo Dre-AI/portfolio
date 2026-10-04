@@ -10,11 +10,19 @@ export const studio = {
   headline: 'Creative work, engineered with AI.',
   subline:
     'Websites, brands and growth for ambitious businesses. Designed by people, built faster with AI.',
-  heroLabels: ['Nairobi', 'AI-native studio', '#longliveAI'],
+  heroLabels: ['AI-native studio', '#longliveAI'],
   manifesto:
     'Taste is human. Speed is the machine’s. On every project, AI drafts, explores and checks, so our hours go into the decisions that make the work good. You see real options sooner, launch sooner and skip the shortcuts. #longliveAI',
   footerNote: 'Designed and built in Nairobi with people and AI. #longliveAI',
 };
+
+// Hero copy that changes with the film as you scroll (spec §5). `at` = scroll progress where the beat starts.
+export const heroBeats: { at: number; heading: string; text?: string; cta?: 'startProject' | 'seeWork' }[] = [
+  { at: 0, heading: studio.headline, text: studio.subline, cta: 'startProject' },
+  { at: 0.3, heading: 'Taste is human.', text: 'Every design and decision is made by people who care how it lands.' },
+  { at: 0.6, heading: 'Speed is the machine’s.', text: 'AI drafts, explores and checks, so you see real options sooner and launch sooner.' },
+  { at: 0.85, heading: studio.name, text: studio.tag, cta: 'startProject' },
+];
 
 // The core promise: AI shortens the time to finished work. Qualitative on purpose: no invented numbers.
 export const aiBenefits = [
@@ -70,8 +78,8 @@ export const contactCopy = {
     message: 'Tell us about the project',
     submit: 'Send the brief',
   },
-  budgets: ['Under KES 100k', 'KES 100k – 300k', 'KES 300k – 750k', 'KES 750k+', 'Not sure yet'],
-  timelines: ['As soon as possible', 'Within 1 month', '1–3 months', 'Just exploring'],
+  budgets: ['Under KES 100k', 'KES 100k-300k', 'KES 300k-750k', 'KES 750k+', 'Not sure yet'],
+  timelines: ['As soon as possible', 'Within 1 month', '1-3 months', 'Just exploring'],
   success: 'Thanks, your brief is in. We will reply within two working days.',
   error: 'Something went wrong sending that. Please email ndigaderrick6@gmail.com instead.',
 };
