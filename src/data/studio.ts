@@ -80,6 +80,8 @@ export const contactCopy = {
   },
   budgets: ['Under KES 100k', 'KES 100k-300k', 'KES 300k-750k', 'KES 750k+', 'Not sure yet'],
   timelines: ['As soon as possible', 'Within 1 month', '1-3 months', 'Just exploring'],
+  nameHelp: 'So we know who to reply to.',
+  emailError: 'Enter an email like name@example.com',
   success: 'Thanks, your brief is in. We will reply within two working days.',
   error: 'Something went wrong sending that. Please email ndigaderrick6@gmail.com instead.',
 };

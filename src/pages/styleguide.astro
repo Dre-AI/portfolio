@@ -1,161 +1,166 @@
 ---
 // Design system review page (Phase 2). Not linked from the site and not indexed.
+// Copy comes from src/data. Token names and hex values below are documentation, not site copy.
 import Base from '../layouts/Base.astro';
 import Monogram from '../components/Monogram.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { profile } from '../data/profile';
-import { projects } from '../data/projects';
+import { studio, heroBeats, aiBenefits, founder, ctas, contactCopy } from '../data/studio';
+import { services } from '../data/services';
+import { featuredWork, publicView, labelText } from '../data/work';
 
-const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const themes = ['light', 'dark'] as const;
 const swatches = [
-  { token: '--bg', use: 'Page background' },
-  { token: '--surface', use: 'Cards, controls' },
-  { token: '--fg', use: 'Primary text', against: '--bg' },
-  { token: '--muted', use: 'Secondary text', against: '--bg' },
-  { token: '--line', use: '1px borders' },
-  { token: '--accent', use: 'Links, primary button', against: '--bg' },
-  { token: '--accent-fg', use: 'Text on accent', against: '--accent' },
+  { token: '--bg', hex: '#0A0B0D', use: 'Page background' },
+  { token: '--bg-raised', hex: '#111317', use: 'Raised panels, cards' },
+  { token: '--surface', hex: '#16191E', use: 'Inputs, controls' },
+  { token: '--fg', hex: '#EEF1F4', use: 'Primary text' },
+  { token: '--muted', hex: '#9AA3AD', use: 'Secondary text' },
+  { token: '--line', hex: '#2A2F36', use: 'Decorative hairlines' },
+  { token: '--line-strong', hex: '#656D77', use: 'Input and control borders' },
+  { token: '--accent', hex: '#7DE3F0', use: 'Links, primary button' },
+  { token: '--accent-fg', hex: '#06171A', use: 'Text on accent' },
 ];
-const typeScale = [
-  { token: '--step-4', use: 'h1 · hero', tag: 'h1', text: profile.headline },
-  { token: '--step-3', use: 'h2 · section title', tag: 'h2', text: 'How my automations work' },
-  { token: '--step-2', use: 'h3 · card title', tag: 'h3', text: projects[0].title },
-  { token: '--step-1', use: 'Lead paragraph', tag: 'p', cls: 'lead', text: profile.subline },
-  { token: '--step-0', use: 'Body', tag: 'p', text: profile.about },
-  { token: '--step--1', use: 'Label (Geist Mono)', tag: 'p', cls: 'label', text: `${profile.role}, ${profile.location}` },
-];
-const cards = projects.filter((p) => p.flagship).slice(0, 2);
+const lastBeat = heroBeats.length - 1;
+const firstService = services[0];
+const work = publicView(featuredWork[0]);
+const labels = contactCopy.formLabels;
 ---
-<Base title={`Style guide: ${profile.name}`} noindex>
-  <header class="wrap sg-top">
-    <a href={base} aria-label={`${profile.name}, home`} style="display:inline-flex"><Monogram /></a>
-    <p class="label">Style guide. Cobalt accent, Geist + Geist Mono, light and dark.</p>
-  </header>
+<Base title={`Style guide: ${studio.name}`} noindex>
+  <main id="main" class="sg">
+    <section class="wrap" aria-labelledby="sg-colour">
+      <h2 id="sg-colour">Colour</h2>
+      <ul class="sg-swatches">
+        {swatches.map((s) => (
+          <li>
+            <span class="sg-chip" style={`background:var(${s.token})`}></span>
+            <code>{s.token}</code>
+            <span class="label">{s.hex}</span>
+            <span class="muted sg-use">{s.use}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="sg-chrome" aria-hidden="true"></div>
+      <p class="label"><code>--chrome</code></p>
+    </section>
 
-  <main id="main">
-    {themes.map((theme) => (
-      <div class="sg-panel" data-theme={theme}>
-        <div class="wrap">
-          <h2 class="sg-title">{theme === 'light' ? 'Light mode' : 'Dark mode'}</h2>
-
-          <section class="sg-block" aria-label={`Colours, ${theme}`}>
-            <h3>Colours</h3>
-            <ul class="sg-swatches">
-              {swatches.map((s) => (
-                <li data-token={s.token} data-against={s.against}>
-                  <span class="sg-chip" style={`background:var(${s.token})`}></span>
-                  <code>{s.token}</code>
-                  <span class="label" data-hex></span>
-                  <span class="muted sg-use">{s.use}</span>
-                  {s.against && <span class="label" data-contrast></span>}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section class="sg-block" aria-label={`Type scale, ${theme}`}>
-            <h3>Type scale</h3>
-            <div class="sg-type">
-              {typeScale.map(({ tag: Tag, ...t }) => (
-                <div class="sg-type-row">
-                  <p class="label">{t.token}<br />{t.use}</p>
-                  <Tag class={t.cls} style="margin:0">{t.text}</Tag>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section class="sg-block" aria-label={`Buttons, tags and links, ${theme}`}>
-            <h3>Buttons, tags, links</h3>
-            <div class="sg-row">
-              <a class="btn primary" href="#work">See my work</a>
-              <a class="btn" href="#cv">Download CV</a>
-              <button class="btn" type="button" disabled>Disabled</button>
-            </div>
-            <p class="label">Hover, press and Tab through the buttons to check their states.</p>
-            <ul class="tags sg-row">
-              <li>Python</li><li>n8n</li><li>OpenRouter</li>
-              <li class="tag accent">AI &amp; Automation</li>
-            </ul>
-            <p>Inline link: <a class="link" href={profile.links.github} rel="noopener">GitHub profile</a>.</p>
-          </section>
-
-          <section class="sg-block" aria-label={`Project card, ${theme}`}>
-            <h3>Project card</h3>
-            <div class="grid">{cards.map((p) => <ProjectCard project={p} />)}</div>
-          </section>
-
-          <section class="sg-block" aria-label={`Dark section, ${theme}`}>
-            <h3>Dark section (hero)</h3>
-            <p class="muted">Always dark, in both modes, with a scrim so light text passes AA over the brightest nodes.</p>
-            <div class="sg-hero media-scrim" data-theme="dark">
-              <img class="media" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" loading="lazy" decoding="async" />
-              <p class="label">{profile.role}, {profile.location}</p>
-              <h1>{profile.headline}</h1>
-              <p class="lead muted">{profile.subline}</p>
-              <p class="sg-row" style="margin:0">
-                <a class="btn primary" href="#work">See my work</a>
-                <a class="btn" href="#cv">Download CV</a>
-              </p>
-            </div>
-          </section>
-        </div>
+    <section class="wrap" aria-labelledby="sg-type">
+      <h2 id="sg-type">Type</h2>
+      <div class="sg-stack">
+        <p class="beat">{heroBeats[1].heading}</p>
+        <h1>{studio.headline}</h1>
+        <h2>{firstService.title}</h2>
+        <h3>{firstService.summary}</h3>
+        <p class="lead">{studio.subline}</p>
+        <p>{founder.bio}</p>
+        <p class="label">{studio.heroLabels.join(' · ')}</p>
       </div>
-    ))}
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-beats">
+      <h2 id="sg-beats">Hero beats</h2>
+      <div class="sg-stack">
+        {heroBeats.map((beat, i) => (
+          <div class="sg-beat">
+            <p class={`display sg-beat-heading${i === lastBeat ? ' chrome-text' : ''}`}>{beat.heading}</p>
+            {beat.text && <p class="lead muted">{beat.text}</p>}
+            {beat.cta && <p><a class="btn primary" href="#sg-beats">{ctas[beat.cta]}</a></p>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-buttons">
+      <h2 id="sg-buttons">Buttons</h2>
+      <div class="sg-row">
+        <a class="btn primary" href="#sg-buttons">{ctas.startProject}</a>
+        <a class="btn ghost" href="#sg-buttons">{ctas.seeWork}</a>
+        <button class="btn primary" type="button" disabled>{ctas.startProject}</button>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-tags">
+      <h2 id="sg-tags">Tags</h2>
+      <ul class="tags">
+        {firstService.deliverables.map((d) => <li>{d}</li>)}
+        <li class="tag accent">{studio.tag}</li>
+      </ul>
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-cards">
+      <h2 id="sg-cards">Card</h2>
+      <div class="grid">
+        {aiBenefits.slice(0, 2).map((b) => (
+          <article class="card">
+            <h3>{b.title}</h3>
+            <p class="muted">{b.text}</p>
+          </article>
+        ))}
+        <article class="card">
+          <p class="label">{labelText(work.label)}</p>
+          <h3>{work.title}</h3>
+          <p class="muted">{work.summary}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-form">
+      <h2 id="sg-form">Form</h2>
+      <form class="sg-stack" onsubmit="return false" novalidate>
+        <div class="field">
+          <label for="sg-name">{labels.name}</label>
+          <input id="sg-name" type="text" aria-describedby="sg-name-help" />
+          <p class="help" id="sg-name-help">{contactCopy.nameHelp}</p>
+        </div>
+        <div class="field">
+          <label for="sg-email">{labels.email}</label>
+          <input id="sg-email" type="email" value="name@" aria-invalid="true" aria-describedby="sg-email-error" />
+          <p class="error" id="sg-email-error">{contactCopy.emailError}</p>
+        </div>
+        <div class="field">
+          <label for="sg-service">{labels.service}</label>
+          <select id="sg-service">
+            {services.map((s) => <option value={s.slug}>{s.title}</option>)}
+          </select>
+        </div>
+        <div><button class="btn primary" type="submit" disabled>{labels.submit}</button></div>
+      </form>
+    </section>
+
+    <section class="wrap" aria-labelledby="sg-brand">
+      <h2 id="sg-brand">Brand</h2>
+      <div class="sg-brand-row">
+        <div class="sg-mono sg-on-bg"><Monogram height={32} /></div>
+        <div class="sg-mono sg-on-bg"><Monogram height={72} /></div>
+        <div class="sg-mono sg-on-surface"><Monogram height={32} /></div>
+        <div class="sg-mono sg-on-surface"><Monogram height={72} /></div>
+      </div>
+      <p class="display chrome-text sg-wordmark">{studio.name}</p>
+    </section>
   </main>
 </Base>
 
 <style>
-  .sg-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-m); padding-block: var(--space-l); }
-  .sg-top .label { margin: 0; }
-  .sg-panel { padding-block: var(--space-3xl); border-top: 1px solid var(--line); }
-  .sg-title { margin-bottom: var(--space-xl); }
-  .sg-block { padding-block: var(--space-2xl); border-top: 1px solid var(--line); }
-  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-s); margin-block: var(--space-m); }
+  .sg-stack { display: grid; gap: var(--space-l); }
+  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-s); }
 
-  .sg-swatches { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); padding: 0; margin: 0; list-style: none; }
+  .sg-swatches { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); padding: 0; margin: 0 0 var(--space-xl); list-style: none; }
   .sg-swatches li { display: grid; gap: var(--space-2xs); align-content: start; }
-  .sg-chip { height: 4.5rem; border: 1px solid var(--line); border-radius: var(--radius-control); margin-bottom: var(--space-xs); }
+  .sg-chip { height: 4.5rem; border: 1px solid var(--line-strong); border-radius: var(--radius-card); margin-bottom: var(--space-xs); }
   .sg-swatches code { font-size: var(--step--1); }
   .sg-use { font-size: var(--step--1); }
+  .sg-chrome { height: 5rem; border-radius: var(--radius-card); background: var(--chrome); }
 
-  .sg-type { display: grid; gap: var(--space-xl); }
-  .sg-type-row { display: grid; gap: var(--space-xs); grid-template-columns: 1fr; }
-  .sg-type-row .label { margin: 0; }
-  @media (min-width: 768px) {
-    .sg-type-row { grid-template-columns: 11rem 1fr; gap: var(--space-xl); align-items: baseline; }
+  .sg-stack h1, .sg-stack h2, .sg-stack h3, .sg-stack p { margin: 0; }
+  .sg-beat { display: grid; gap: var(--space-m); padding-block: var(--space-l); border-top: 1px solid var(--line); }
+  .sg-beat:first-child { border-top: 0; }
+  .sg-beat > * { margin: 0; }
+  .sg-beat-heading { font-size: var(--step-4); line-height: 0.95; }
+
+  .sg-brand-row { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin-bottom: var(--space-xl); }
+  .sg-mono { display: grid; place-items: center; min-height: 9rem; border: 1px solid var(--line); border-radius: var(--radius-card); color: var(--fg); }
+  .sg-on-bg { background: var(--bg); }
+  .sg-on-surface { background: var(--surface); }
+  .sg-wordmark { font-size: var(--step-4); line-height: 1; margin: 0; }
+
+  @media (max-width: 767px) {
+    .sg-brand-row { grid-template-columns: 1fr; }
   }
-
-  .sg-hero { display: grid; gap: var(--space-m); align-content: center; min-height: 32rem; padding: var(--space-2xl) var(--space-xl); border-radius: var(--radius-card); overflow: hidden; }
-  .sg-hero > :not(.media) { max-width: 36rem; margin: 0; }
-  .sg-hero h1 { font-size: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem); }
 </style>
-
-<script>
-  // Fill in each swatch's hex value and WCAG contrast from the live tokens, so this page can't drift from global.css.
-  const toRgb = (color: string) => {
-    const ctx = document.createElement('canvas').getContext('2d')!;
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, 1, 1);
-    return Array.from(ctx.getImageData(0, 0, 1, 1).data.slice(0, 3));
-  };
-  const hex = (rgb: number[]) => '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase();
-  const lum = (rgb: number[]) => {
-    const [r, g, b] = rgb.map((v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  };
-  const ratio = (a: number[], b: number[]) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
-
-  document.querySelectorAll<HTMLElement>('[data-token]').forEach((item) => {
-    const styles = getComputedStyle(item);
-    const rgb = toRgb(styles.getPropertyValue(item.dataset.token!).trim());
-    item.querySelector('[data-hex]')!.textContent = hex(rgb);
-    const against = item.dataset.against;
-    const out = item.querySelector('[data-contrast]');
-    if (against && out) {
-      const r = ratio(rgb, toRgb(styles.getPropertyValue(against).trim()));
-      out.textContent = `${r.toFixed(1)}:1 on ${against} ${r >= 4.5 ? 'AA' : r >= 3 ? 'AA large' : 'fails'}`;
-    }
-  });
-</script>
