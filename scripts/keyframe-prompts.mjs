@@ -18,14 +18,11 @@ export const keyframes = {
   K1: {
     usesPrevious: false,
     prompt: [
-      'A real, unretouched photograph of the exact man in the reference photo. Same person: identical face shape, eyes, nose, lips, ears, hairline, short coily hair, beard line and skin tone. Do not idealise, slim or restyle his face; it must be instantly recognisable as him.',
-      'Natural three-quarter portrait at eye level, framed from mid-chest up, placed in the right half of the frame with plain dark space on the left.',
-      'He has a relaxed, natural expression with a slight, genuine smile, as if caught between two sentences, looking towards the camera.',
-      'He wears a dark navy suit jacket and a white open-collar shirt, natural fabric creases.',
-      'Plain charcoal-grey backdrop. Soft natural light from a large window to his left, gentle shadows, with a faint cool highlight on the edge of his hair and shoulder.',
-      'Real skin with pores, small marks and natural texture, no smoothing, no airbrushing, no beauty filter, no HDR, no plastic look.',
-      'No text, no logos, no extra people.',
-      'Looks like an editorial portrait taken on a Sony A7IV with an 85mm lens at f/2, true-to-life colour, light film grain.',
+      'Edit the attached photograph. Keep the man exactly as he is: do not change his face, smile, teeth, eyes, skin, skin tone, hair, beard, ears, head size, pose, suit or shirt in any way. Every facial detail must stay identical to the original photo.',
+      'Change only two things. First, replace the bright blurred office background with a plain, deep charcoal-grey studio backdrop that falls off to near-black at the edges, with a subtle smooth gradient and no objects.',
+      'Second, widen the composition: extend the backdrop on the left so he sits in the right half of a 16:9 frame, with calm empty dark space filling the left half. Keep his framing from mid-chest up and do not crop his head.',
+      'Relight gently to match the new backdrop: keep the soft frontal light on his face as in the original, and add a faint cool silver rim light along the edge of his hair and shoulders from behind on the right.',
+      'Real photograph, true-to-life colour, natural skin texture, no smoothing, no beauty filter, no HDR, light film grain. No text, no logos.',
     ].join(' '),
   },
   K2: {

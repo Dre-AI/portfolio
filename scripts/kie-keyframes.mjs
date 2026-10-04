@@ -17,8 +17,8 @@ const MODELS = {
 };
 const POLL_MS = 5000;
 const TIMEOUT_MS = 6 * 60 * 1000;
-// Face close-up only: the back view adds nothing to likeness and the sheet's front panel is headless.
-const REFS = ['hero-src/refs/face.png'];
+// Derrick's real photo is the identity reference for every keyframe (K1 is an edit of it).
+const REFS = ['hero-src/refs/photo.png'];
 const OUT_DIR = 'hero-src/keyframes';
 
 const key = process.env.KIE_API_KEY;
