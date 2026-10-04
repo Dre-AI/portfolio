@@ -215,7 +215,7 @@ body::after {
 }
 ```
 
-- [ ] **Step 4: Remove the remaining hard-coded old colours.** Run `grep -rn -i "#c7d0ff\|#7b8cff\|#22d3ee\|#a78bfa\|#000\|#fff" src`. In `src/styles/global.css` change `.grad-text` to `background: var(--chrome-text);` (keep the clip lines). Fix any other hit by swapping in `var(--accent)` or `var(--chrome-text)`.
+- [ ] **Step 4: Remove the remaining hard-coded old colours.** Run `grep -rn -i "#c7d0ff\|#7b8cff\|#22d3ee\|#a78bfa\|#000\|#fff" src`. In `src/styles/global.css` change `.grad-text` to `background: var(--chrome-text);` (keep the clip lines). Fix any other hit by swapping in `var(--accent)` or `var(--chrome-text)`.
 - [ ] **Step 5:** `npm test` → PASS. `npm run build` → `Complete!`.
 - [ ] **Step 6: Commit** `git add src/styles/global.css tests/tokens.test.ts src && git commit -m "feat: chrome-futurist palette with one pale-cyan accent"`
 
