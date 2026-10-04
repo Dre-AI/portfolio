@@ -54,6 +54,7 @@ export const founder = {
     linkedin: 'https://www.linkedin.com/in/derrick-ndiga-76a119311/',
     github: 'https://github.com/Dre-AI',
   },
+  linkLabels: { linkedin: 'LinkedIn', github: 'GitHub' },
 };
 
 export const ctas = {

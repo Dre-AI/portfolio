@@ -42,3 +42,14 @@ test('Footer renders the studio note, city, contact links and a computed year', 
   assert.match(footer, /studio\.name/);
   assert.doesNotMatch(footer, /tel:|phone/i);
 });
+
+test('Header stays on one line from 30rem and shows text links from 900px', () => {
+  assert.match(header, /@media \(min-width: 30rem\)[^}]*flex-wrap: nowrap/);
+  assert.match(header, /@media \(min-width: 900px\)[^}]*\.link/);
+  assert.match(header, /nav a:not\(\.btn\)/);
+});
+
+test('Footer link labels come from studio data', () => {
+  assert.match(footer, /founder\.linkLabels\.linkedin/);
+  assert.match(footer, /founder\.linkLabels\.github/);
+});

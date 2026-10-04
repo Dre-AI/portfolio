@@ -17,7 +17,7 @@ const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${ba
     <nav aria-label="Primary">
       <ul>
         {nav.map((item) => (
-          <li><a href={resolve(item.href)}>{item.label}</a></li>
+          <li class="link"><a href={resolve(item.href)}>{item.label}</a></li>
         ))}
         <li><a class="btn primary" href={resolve('#contact')}>{ctas.startProject}</a></li>
       </ul>
@@ -42,8 +42,9 @@ const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${ba
   @media (prefers-reduced-transparency: reduce) { .site-header { background: rgb(10 11 13 / 0.96); } }
 
   /* One line on desktop; wraps only when text is enlarged (WCAG 1.4.10 reflow). */
-  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-m); min-height: 4.5rem; }
+  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-s); min-height: 4.5rem; max-height: 72px; }
   .home { display: inline-flex; align-items: center; gap: var(--space-s); padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); color: var(--fg); text-decoration: none; }
+  .home:hover { text-decoration: none; }
   .wordmark { font-size: var(--step-0); white-space: nowrap; }
   ul { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
   nav a:not(.btn) {
@@ -59,6 +60,10 @@ const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${ba
   }
   nav a:not(.btn):hover { color: var(--fg); }
   nav .btn { margin-left: var(--space-xs); min-height: 2.75rem; }
+  /* One line from 30rem up. Text links need room, so they appear from 900px; below that the CTA carries the way in. */
+  @media (min-width: 30rem) { .wrap, ul { flex-wrap: nowrap; } }
+  .link { display: none; }
+  @media (min-width: 900px) { .link { display: list-item; } }
   @media (max-width: 480px) { .wordmark { display: none; } }
   @media (max-width: 380px) { nav a:not(.btn) { padding-inline: var(--space-xs); } }
 </style>
