@@ -1,27 +1,32 @@
 ---
-import { pipeline } from '../data/site';
-// Phosphor icons (regular weight), inlined at build time so they take the current colour.
-import envelope from '@phosphor-icons/core/assets/regular/envelope-simple.svg?raw';
-import sparkle from '@phosphor-icons/core/assets/regular/sparkle.svg?raw';
-import split from '@phosphor-icons/core/assets/regular/arrows-split.svg?raw';
-import userCheck from '@phosphor-icons/core/assets/regular/user-check.svg?raw';
+import { processSection } from '../data/process';
 
-const icons: Record<string, string> = { 'envelope-simple': envelope, sparkle, 'arrows-split': split, 'user-check': userCheck };
-const svg = (name: string) => (icons[name] ?? '').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+// Phosphor icons (regular weight), inlined at build time so they take the current colour.
+const iconFiles = import.meta.glob('/node_modules/@phosphor-icons/core/assets/regular/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+const icon = (name: string) =>
+  (iconFiles[`/node_modules/@phosphor-icons/core/assets/regular/${name}.svg`] ?? '').replace(
+    '<svg ',
+    '<svg aria-hidden="true" focusable="false" fill="currentColor" ',
+  );
 ---
-{/* src/scripts/motion/pipeline.ts draws a glowing connector through the nodes as you scroll and lights each
-    step when it's reached; statically every step is lit. */}
+{/* src/scripts/motion/pipeline.ts draws a connector through the .node circles as you scroll and lights each
+    step when it is reached; statically every step is lit. */}
 <section id="how" data-section="pipeline">
   <div class="wrap">
-    <h2>{pipeline.heading}</h2>
-    <p class="muted">{pipeline.intro}</p>
+    <h2>{processSection.heading}</h2>
+    <p class="muted">{processSection.intro}</p>
     <ol data-pipeline>
-      {pipeline.steps.map((step) => (
+      {processSection.steps.map((step) => (
         <li data-step>
-          <span class="node" set:html={svg(step.icon)} />
+          <span class="node" set:html={icon(step.icon)} />
           <div class="tile">
             <h3>{step.title}</h3>
-            <p class="muted">{step.text}</p>
+            <p class="usual muted"><span class="label">{processSection.usualLabel}</span>{step.usual}</p>
+            <p class="with"><span class="label">{processSection.withAILabel}</span>{step.withAI}</p>
           </div>
         </li>
       ))}
@@ -30,70 +35,36 @@ const svg = (name: string) => (icons[name] ?? '').replace('<svg ', '<svg aria-hi
 </section>
 
 <style>
-  ol {
-    --node: 3rem;
-    position: relative;
-    display: grid;
-    gap: var(--space-l);
-    margin: var(--space-2xl) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  /* The static rail, vertical on phones and horizontal from tablet up. */
-  ol::before {
-    content: '';
-    position: absolute;
-    top: calc(var(--node) / 2);
-    bottom: calc(var(--node) / 2);
-    left: calc(var(--node) / 2 - 1px);
-    width: 2px;
-    background: linear-gradient(180deg, var(--accent-2), var(--accent), rgb(var(--glow-3)));
-    opacity: 0.35;
-  }
+  ol { --node: 3rem; position: relative; display: grid; gap: var(--space-l); margin: var(--space-2xl) 0 0; padding: 0; list-style: none; }
+  /* Static rail: vertical on phones, horizontal from tablet up. */
+  ol::before { content: ''; position: absolute; top: calc(var(--node) / 2); bottom: calc(var(--node) / 2); left: calc(var(--node) / 2 - 1px); width: 2px; background: var(--line-strong); }
   li { position: relative; display: grid; grid-template-columns: var(--node) 1fr; gap: var(--space-m); align-items: start; }
   .node {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    place-items: center;
-    width: var(--node);
-    height: var(--node);
-    border: 1px solid rgb(var(--glow-2) / 0.55);
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 30%, rgb(var(--glow-2) / 0.25), var(--bg-raised) 70%);
-    color: var(--accent-2);
-    box-shadow: 0 0 24px -4px rgb(var(--glow-2) / 0.6), inset 0 0 12px rgb(var(--glow-2) / 0.15);
-    transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+    position: relative; z-index: 1; display: grid; place-items: center; width: var(--node); height: var(--node);
+    border: 1px solid var(--line-strong); border-radius: 50%; background: var(--bg-raised); color: var(--accent);
+    transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
   }
   .node :global(svg) { width: 1.35rem; height: 1.35rem; }
-  .tile {
-    padding: var(--space-m) var(--space-l);
-    border: 1px solid transparent;
-    border-radius: var(--radius-card);
-    background: var(--glass) padding-box, linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box, var(--edge) border-box;
-    transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
-  }
-  h3 { font-size: var(--step-1); margin-bottom: var(--space-xs); transition: color var(--dur) var(--ease-out); }
-  .tile p { margin: 0; font-size: 0.9375rem; }
-
-  /* Interactive: hovering a step lifts and lights it. */
-  li:hover .node { transform: scale(1.08); box-shadow: 0 0 34px -2px rgb(var(--glow-2) / 0.85), inset 0 0 14px rgb(var(--glow-2) / 0.25); }
-  li:hover .tile { transform: translateY(-2px); box-shadow: 0 0 0 1px rgb(var(--glow-1) / 0.35), 0 18px 40px -24px rgb(var(--glow-1) / 0.8); }
+  .tile { align-self: stretch; display: grid; align-content: start; gap: var(--space-s); padding: var(--space-l); border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--glass), var(--bg-raised); }
+  .tile > * { margin: 0; }
+  h3 { font-size: var(--step-1); transition: color var(--dur) var(--ease-out); }
+  .tile p { display: grid; gap: 0.125rem; font-size: 0.9375rem; }
+  .with { color: var(--fg); }
+  .with .label { color: var(--accent); }
 
   /* Motion only: steps wait, dimmed, until the connector reaches them. */
-  ol.is-dim::before { opacity: 0.15; }
-  ol.is-dim li:not(.is-on) .node { color: var(--muted); border-color: var(--line); box-shadow: none; background: var(--bg-raised); }
+  ol.is-dim::before { opacity: 0.4; }
+  ol.is-dim li:not(.is-on) .node { color: var(--muted); border-color: var(--line); }
   ol.is-dim li:not(.is-on) h3 { color: var(--muted); }
-  /* The connector (built by pipeline.ts) glows; once every step is lit a light packet travels it on a loop. */
-  ol > :global(svg) { filter: drop-shadow(0 0 6px rgb(var(--glow-2) / 0.75)); } /* glow on the whole SVG: filters on a flat line can vanish */
+  /* The connector (built by pipeline.ts) is drawn on top of the rail; once every step is lit a light packet travels it. */
   ol :global(.pipe-packet) { opacity: 0; transition: opacity var(--dur) var(--ease-out); }
   ol:global(.is-complete) :global(.pipe-packet) { opacity: 1; animation: travel 2.6s linear infinite; }
   @keyframes travel { from { stroke-dashoffset: 1.06; } to { stroke-dashoffset: 0; } }
 
   @media (min-width: 768px) {
     ol { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-m); }
-    ol::before { top: calc(var(--node) / 2 - 1px); bottom: auto; left: calc(var(--node) / 2); right: calc((100% - 3 * var(--space-m)) / 4 - var(--node) / 2); width: auto; height: 2px; background: var(--gradient); }
-    li { grid-template-columns: 1fr; gap: var(--space-m); }
+    ol::before { top: calc(var(--node) / 2 - 1px); bottom: auto; left: calc(var(--node) / 2); right: calc((100% - 3 * var(--space-m)) / 4 - var(--node) / 2); width: auto; height: 2px; }
+    li { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: var(--space-m); }
     .node { justify-self: start; }
   }
 </style>

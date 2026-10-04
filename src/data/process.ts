@@ -3,6 +3,8 @@ export type ProcessStep = { title: string; usual: string; withAI: string; icon: 
 
 export const processSection = {
   heading: 'Why I finish sooner',
+  usualLabel: 'Usually',
+  withAILabel: 'With AI',
   intro: 'Same craft, less waiting. Here is where AI takes time out of a project.',
   steps: [
     {

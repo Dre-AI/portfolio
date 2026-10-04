@@ -49,6 +49,7 @@ export const founder = {
   name: 'Derrick Ndiga',
   role: 'Freelance Full-Stack & AI Developer',
   bio: 'I started in hands-on IT, setting up machines, networks and company email, and that still shapes how I build: things should keep working on a Monday morning. Today I design and build websites, web apps and brands, using AI to move faster without lowering the bar. I work under the Ndiga Dee Creative Co. name, and I am also studying Cyber Security & Digital Forensics.',
+  photoAlt: 'Derrick Ndiga',
   email: 'ndigaderrick6@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/derrick-ndiga-76a119311/',
@@ -67,6 +68,7 @@ export const ctas = {
   aboutFounder: 'More about Derrick',
   emailUs: 'Email me',
   about: 'About me',
+  caseStudy: 'Read the case study',
 };
 
 export const contactCopy = {

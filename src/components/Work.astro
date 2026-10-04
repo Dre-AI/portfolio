@@ -1,46 +1,48 @@
 ---
 import ProjectCard from './ProjectCard.astro';
-import { projects } from '../data/projects';
-import { profile } from '../data/profile';
-import { sections, cta } from '../data/site';
-import { isReady } from '../lib/content';
+import { featuredWork, moreBuilds, publicView } from '../data/work';
+import { sections, ctas } from '../data/studio';
 
-const flagship = projects.filter((p) => p.flagship);
-const more = projects.filter((p) => !p.flagship);
+// Always render through publicView(): unapproved concepts stay anonymous. Covers are hidden for them too.
+const featured = featuredWork.map((item) => ({
+  item: publicView(item),
+  showCover: item.label !== 'concept' || !!item.clientApproved,
+}));
 ---
 <section id="work" data-section="work">
   <div class="wrap">
-    <h2>{sections.work.heading}</h2>
-    <div class="cases">{flagship.map((p) => <ProjectCard project={p} />)}</div>
+    <h2>{sections.work}</h2>
+    <div class="cases">
+      {featured.map(({ item, showCover }) => <ProjectCard item={item} showCover={showCover} />)}
+    </div>
 
-    <h3 class="more-title">{sections.work.more}</h3>
+    <h3 class="more-title">{sections.moreBuilds}</h3>
     <ul class="more">
-      {more.map((p) => (
+      {moreBuilds.map((build) => (
         <li>
-          <h4>{p.link ? <a href={p.link} rel="noopener">{p.title}</a> : p.title}</h4>
-          <p class="muted">{p.summary}</p>
-          <ul class="tags">{p.stack.filter((s) => isReady(s)).map((s) => <li>{s}</li>)}</ul>
+          <h4>{build.title}</h4>
+          <p class="muted">{build.summary}</p>
+          <ul class="tags">{build.stack.map((s) => <li>{s}</li>)}</ul>
+          {build.repoUrl && (
+            <a class="link code" href={build.repoUrl} rel="noopener">{ctas.viewCode}<span class="visually-hidden">: {build.title}</span></a>
+          )}
         </li>
       ))}
-      <li class="github">
-        <a class="btn" href={profile.links.github} rel="noopener">{cta.github}</a>
-      </li>
     </ul>
   </div>
 </section>
 
 <style>
-  .cases { display: grid; gap: var(--space-l); margin-top: var(--space-2xl); }
+  .cases { display: grid; gap: var(--space-l); margin-top: var(--space-2xl); align-items: start; }
   .more-title { margin: var(--space-3xl) 0 var(--space-l); font-size: var(--step-1); }
-  .more { display: grid; gap: var(--space-xl); margin: 0; padding: 0; list-style: none; }
+  .more { display: grid; gap: var(--space-l); margin: 0; padding: 0; list-style: none; }
   .more > li { display: grid; gap: var(--space-s); align-content: start; padding-top: var(--space-l); border-top: 1px solid var(--line); }
   .more > li > * { margin: 0; }
   h4 { font-size: var(--step-1); }
-  h4 a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; } /* 44px target */
-  h4 { margin-block: calc((2.75rem - 1.3em) / -2) !important; }
-  h4 a:hover { text-decoration: underline; }
-  .github { align-content: center; justify-items: start; }
+  .code { display: inline-flex; align-items: center; min-height: 2.75rem; justify-self: start; }
   @media (min-width: 768px) {
-    .more { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cases { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+    .cases > :nth-child(even) { margin-top: var(--space-3xl); }
+    .more { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); }
   }
 </style>
