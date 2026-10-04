@@ -12,7 +12,7 @@ const NEGATIVE =
 const CAMERA = 'Shot on Sony A7IV, 85mm f/1.8, RAW photograph, subtle film grain, cinematic 16:9 frame.';
 
 const LIGHT =
-  'A cool chrome-silver rim light traces the edge of his face, ear and shoulders from behind on the right; the key light is soft and low, falling off quickly into darkness on the shadow side of his face; a faint haze in the air catches the rim light.';
+  'Same lighting as the last attached image: soft frontal light on his face, and a faint cool silver rim light along the edge of his hair and shoulders from behind on the right, against the same deep charcoal backdrop falling off to near-black at the edges.';
 
 export const keyframes = {
   K1: {
@@ -28,9 +28,9 @@ export const keyframes = {
   K2: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: same male, same suit, same near-black studio void, same light direction and the same rim light. The camera has orbited about 30 degrees further around him in the same direction and moved slightly closer, framed from upper chest up.',
+      'Continue from the last attached image: same man, same suit, same charcoal studio backdrop. The camera has orbited about 30 degrees around him, so we now see him at a three-quarter angle with his face turned slightly towards the empty left side of the frame, and it has moved slightly closer, framed from upper chest up. He stays in the right half of the frame.',
       'A thin horizontal line of white holographic light crosses his face at cheekbone height. Below the line, his jaw, neck and the near shoulder have become polished liquid chrome with a fine glowing wireframe mesh etched into the surface, reflecting the rim light. Above the line his eyes, forehead and hair remain fully human with real skin.',
-      'His expression is unchanged: calm, composed, mouth closed.',
+      'His expression softens from the big smile to a calm, confident slight smile, lips relaxed.',
       LIGHT,
       `For the human part of the face: ${REALISM}`,
       NEGATIVE,
@@ -40,9 +40,9 @@ export const keyframes = {
   K3: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: same scene, same light direction, same rim light. The camera has orbited about 30 degrees further in the same direction, now close to a side profile, framed from upper chest up.',
+      'Continue from the last attached image: same scene, same light direction, same rim light. The camera has orbited about 30 degrees further in the same direction, so he is now close to a side profile facing the left side of the frame, framed from upper chest up and still in the right half of the frame.',
       'The male is now almost entirely polished liquid chrome with a fine glowing wireframe mesh, still clearly the same person: exact same face shape, nose, lips, ears and hairline as the reference. The outer edges of his shoulders and hair are breaking apart into thousands of tiny points of white light drifting backwards into the darkness.',
-      'Still and calm, mouth closed.',
+      'Calm, confident slight smile, lips relaxed, same as the last attached image.',
       LIGHT,
       NEGATIVE,
       CAMERA,
@@ -51,7 +51,7 @@ export const keyframes = {
   K4: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: same near-black studio void, same cool silver tone. The camera has pulled far back into a wide shot.',
+      'Continue from the last attached image: same charcoal studio backdrop falling off to near-black, same cool silver tone. The camera has pulled far back into a wide shot.',
       'The male is gone. Thousands of tiny points of white light have gathered into one small, bright, softly glowing cluster in the centre of the frame, slightly below the middle, surrounded by vast calm dark space. A faint haze around the cluster catches its light. Very still and quiet.',
       NEGATIVE,
       'Shot on Sony A7IV, 35mm f/1.8, RAW photograph, subtle film grain, cinematic 16:9 frame.',
