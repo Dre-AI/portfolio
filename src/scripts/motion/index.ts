@@ -9,6 +9,7 @@ import { setupPipeline } from './pipeline';
 import { setupTimeline } from './timeline';
 import { setupCounters } from './counters';
 import { setupReveal } from './reveal';
+import { setupInteract } from './interact';
 
 gsap.registerPlugin(ScrollTrigger);
 // Phones: the address bar showing/hiding must not re-measure pins and make them jump.
@@ -56,9 +57,10 @@ if (document.documentElement.classList.contains('motion')) {
     },
   );
 
-  // Smooth scrolling for mouse and trackpad only; touch and keyboard keep native scrolling.
+  // Mouse and trackpad only: smooth scrolling plus the pointer details; touch and keyboard stay native.
   // Anchor handling stays native so the skip link still moves keyboard focus.
   mm.add('(pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+    const stopInteract = setupInteract();
     const lenis = new Lenis({ autoRaf: false });
     lenis.on('scroll', ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -67,6 +69,7 @@ if (document.documentElement.classList.contains('motion')) {
     return () => {
       gsap.ticker.remove(tick);
       lenis.destroy();
+      stopInteract();
     };
   });
 }

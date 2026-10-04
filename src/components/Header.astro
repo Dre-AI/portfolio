@@ -3,23 +3,47 @@ import Monogram from './Monogram.astro';
 import { profile } from '../data/profile';
 import { nav } from '../data/site';
 import { base } from '../lib/content';
+
+// The last item (Contact) is the call to action and gets the lit pill.
+const lastIndex = nav.length - 1;
 ---
-{/* Same dark band as the hero, so the page opens as one dark surface in both modes. */}
-<header class="site-header" data-theme="dark">
+{/* Fixed glass bar over the page; it firms up as you scroll (CSS scroll-driven, no JS). */}
+<header class="site-header">
   <div class="wrap">
     <a class="home" href={base} aria-label={`${profile.name}, home`}><Monogram /></a>
     <nav aria-label="Primary">
-      <ul>{nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}</ul>
+      <ul>
+        {nav.map((item, i) => (
+          <li><a class={i === lastIndex ? 'cta' : undefined} href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
     </nav>
   </div>
 </header>
 
 <style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    background: rgb(5 6 15 / 0.35);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    border-bottom: 1px solid rgb(var(--glow-1) / 0.12);
+  }
+  @supports (animation-timeline: scroll()) {
+    .site-header { animation: firm-up linear both; animation-timeline: scroll(); animation-range: 0 240px; }
+    @keyframes firm-up { to { background: rgb(5 6 15 / 0.8); border-bottom-color: rgb(var(--glow-1) / 0.24); } }
+  }
+  @media (prefers-reduced-transparency: reduce) { .site-header { background: rgb(5 6 15 / 0.96); } }
+
   /* Wraps rather than overflowing when text is enlarged (WCAG 1.4.10 reflow). */
   .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-m); min-height: 4.5rem; }
-  .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); }
-  ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
+  .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); color: var(--fg); }
+  .home:hover { filter: drop-shadow(0 0 10px rgb(var(--glow-2) / 0.6)); }
+  ul { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
   nav a {
+    position: relative;
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
@@ -30,6 +54,28 @@ import { base } from '../lib/content';
     text-decoration: none;
     transition: color var(--dur-fast) var(--ease-out);
   }
+  nav a:not(.cta)::after {
+    content: '';
+    position: absolute;
+    inset: auto var(--space-s) 0.55rem;
+    height: 1px;
+    background: var(--gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease-out);
+  }
   nav a:hover { color: var(--fg); }
-  @media (max-width: 380px) { nav a { padding-inline: var(--space-xs); } }
+  nav a:hover::after { transform: scaleX(1); }
+  .cta {
+    margin-left: var(--space-xs);
+    padding-inline: var(--space-m);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box, var(--gradient) border-box;
+    color: var(--fg);
+    box-shadow: 0 0 22px -8px rgb(var(--glow-2) / 0.7);
+    transition: box-shadow var(--dur) var(--ease-out);
+  }
+  .cta:hover { box-shadow: 0 0 30px -6px rgb(var(--glow-2) / 0.9); }
+  @media (max-width: 380px) { nav a { padding-inline: var(--space-xs); } .cta { padding-inline: var(--space-s); } }
 </style>

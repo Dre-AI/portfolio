@@ -3,6 +3,7 @@ export const profile = {
   name: 'Derrick Ndiga',
   role: 'AI & Automation Engineer',
   location: 'Nairobi, Kenya',
+  availability: 'Available', // shown with a live dot in the hero; remove when you're not looking
   headline: 'I build AI automations that do the work.',
   subline:
     'LLM agents, n8n workflows and full-stack apps that run in production, not just in demos.',

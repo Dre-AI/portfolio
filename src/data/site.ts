@@ -19,10 +19,10 @@ export const pipeline = {
   heading: 'How my automations work',
   intro: 'The email triage bot, one message at a time.',
   steps: [
-    { title: 'Email arrives', text: 'The bot picks up new mail as it lands.' },
-    { title: 'An LLM reads it', text: 'It classifies intent and urgency, and filters spam and phishing.' },
-    { title: 'It routes and drafts', text: 'The message goes to the right person with a suggested reply.' },
-    { title: 'A human approves', text: 'People stay in control of what gets sent.' },
+    { icon: 'envelope-simple', title: 'Email arrives', text: 'The bot picks up new mail as it lands.' },
+    { icon: 'sparkle', title: 'An LLM reads it', text: 'It classifies intent and urgency, and filters spam and phishing.' },
+    { icon: 'arrows-split', title: 'It routes and drafts', text: 'The message goes to the right person with a suggested reply.' },
+    { icon: 'user-check', title: 'A human approves', text: 'People stay in control of what gets sent.' },
   ],
 };
 
