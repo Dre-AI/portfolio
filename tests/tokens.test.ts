@@ -48,3 +48,7 @@ test('grain sits on a fixed, non-interactive layer', () => {
   assert.match(css, /body::before,\s*body::after\s*\{[^}]*position:\s*fixed[^}]*pointer-events:\s*none/);
   assert.match(after, /--grain-opacity|opacity/);
 });
+
+test('no gradient text anywhere in the global styles', () => {
+  assert.doesNotMatch(css, /background-clip:\s*text/);
+});

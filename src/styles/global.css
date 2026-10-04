@@ -150,12 +150,7 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .grid { display: grid; gap: var(--space-xl); grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
 
 /* ─── Gradient text ─────────────────────────────────────────── */
-.grad-text {
-  background: var(--chrome-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+.grad-text { color: var(--fg); }
 
 /* ─── Buttons (pill) ───────────────────────────────────────── */
 .btn {
@@ -223,8 +218,8 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .field .error { font-size: var(--step--1); color: var(--fg); margin: 0; }
 .field [aria-invalid='true'] { border-color: var(--fg); border-width: 2px; }
 
-/* ─── Chrome text (wordmark and the final hero beat only) ─── */
-.chrome-text { background: var(--chrome-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* Wordmark and final hero beat: solid type; the chrome look lives on surfaces, not text. */
+.chrome-text { color: var(--fg); }
 
 /* ─── Dark section on media (hero) ─────────────────────────── */
 /* Use with data-theme="dark". The scrim keeps light text at AA even over the brightest nodes. */
