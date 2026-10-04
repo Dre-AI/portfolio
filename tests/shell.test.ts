@@ -53,3 +53,16 @@ test('Footer link labels come from studio data', () => {
   assert.match(footer, /founder\.linkLabels\.linkedin/);
   assert.match(footer, /founder\.linkLabels\.github/);
 });
+
+test('Footer renders the nav items so About stays reachable on small screens', () => {
+  assert.match(footer, /nav\.map/);
+  assert.match(footer, /resolveNavHref/);
+  assert.doesNotMatch(header, /max-height/);
+});
+
+test('resolveNavHref handles anchors on and off the home page and about/', async () => {
+  const { resolveNavHref } = await import('../src/lib/nav.ts');
+  assert.equal(resolveNavHref('#work', '/portfolio/', true), '#work');
+  assert.equal(resolveNavHref('#work', '/portfolio/', false), '/portfolio/#work');
+  assert.equal(resolveNavHref('about/', '/portfolio/', true), '/portfolio/about/');
+});

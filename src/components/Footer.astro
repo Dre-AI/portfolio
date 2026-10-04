@@ -1,6 +1,10 @@
 ---
 import Monogram from './Monogram.astro';
-import { studio, founder } from '../data/studio';
+import { studio, founder, nav } from '../data/studio';
+import { base } from '../lib/content';
+import { isHomePath, resolveNavHref } from '../lib/nav';
+
+const isHome = isHomePath(Astro.url.pathname, base);
 ---
 <footer class="site-footer">
   <div class="wrap">
@@ -10,6 +14,9 @@ import { studio, founder } from '../data/studio';
       <p class="label">{studio.city}</p>
     </div>
     <ul class="links">
+      {nav.map((item) => (
+        <li><a href={resolveNavHref(item.href, base, isHome)}>{item.label}</a></li>
+      ))}
       <li><a href={`mailto:${founder.email}`}>{founder.email}</a></li>
       <li><a href={founder.links.linkedin} rel="noopener">{founder.linkLabels.linkedin}</a></li>
       <li><a href={founder.links.github} rel="noopener">{founder.linkLabels.github}</a></li>

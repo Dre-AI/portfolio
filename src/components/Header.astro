@@ -2,10 +2,10 @@
 import Monogram from './Monogram.astro';
 import { studio, nav, ctas } from '../data/studio';
 import { base } from '../lib/content';
+import { isHomePath, resolveNavHref } from '../lib/nav';
 
-// '#anchor' links only exist on the home page; elsewhere they point back to it. Other hrefs are base-relative.
-const isHome = Astro.url.pathname === base || Astro.url.pathname === base.replace(/\/$/, '');
-const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${base}${href}`) : `${base}${href}`);
+const isHome = isHomePath(Astro.url.pathname, base);
+const resolve = (href: string) => resolveNavHref(href, base, isHome);
 ---
 {/* Fixed bar over the page; it firms up as you scroll (CSS scroll-driven, no JS). */}
 <header class="site-header">
@@ -42,7 +42,7 @@ const resolve = (href: string) => (href.startsWith('#') ? (isHome ? href : `${ba
   @media (prefers-reduced-transparency: reduce) { .site-header { background: rgb(10 11 13 / 0.96); } }
 
   /* One line on desktop; wraps only when text is enlarged (WCAG 1.4.10 reflow). */
-  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-s); min-height: 4.5rem; max-height: 72px; }
+  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-s); min-height: 4.5rem; }
   .home { display: inline-flex; align-items: center; gap: var(--space-s); padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); color: var(--fg); text-decoration: none; }
   .home:hover { text-decoration: none; }
   .wordmark { font-size: var(--step-0); white-space: nowrap; }
