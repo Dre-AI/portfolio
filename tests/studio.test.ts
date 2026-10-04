@@ -27,6 +27,7 @@ test('AI benefits are about time saved and contain no invented numbers', () => {
 test('hero has four beats in scroll order, ending on the studio name', () => {
   assert.equal(heroBeats.length, 4);
   assert.deepEqual(heroBeats.map((b) => b.at), [0, 0.3, 0.6, 0.85]);
+  assert.deepEqual(heroBeats[0].ctas, ['startProject', 'seeWork']);
   assert.equal(heroBeats[0].heading, studio.headline);
   assert.equal(heroBeats[3].heading, studio.name);
   assert.deepEqual(findContentIssues(heroBeats), []);

@@ -61,7 +61,7 @@ const labels = contactCopy.formLabels;
           <div class="sg-beat">
             <p class={`display sg-beat-heading${i === lastBeat ? ' chrome-text' : ''}`}>{beat.heading}</p>
             {beat.text && <p class="lead muted">{beat.text}</p>}
-            {beat.cta && <p><a class="btn primary" href="#sg-beats">{ctas[beat.cta]}</a></p>}
+            {beat.ctas && <p>{beat.ctas.map((key, j) => <a class={`btn ${j === 0 ? 'primary' : 'ghost'}`} href="#sg-beats">{ctas[key]}</a>)}</p>}
           </div>
         ))}
       </div>

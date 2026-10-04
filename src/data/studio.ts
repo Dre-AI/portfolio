@@ -17,11 +17,11 @@ export const studio = {
 };
 
 // Hero copy that changes with the film as you scroll (spec §5). `at` = scroll progress where the beat starts.
-export const heroBeats: { at: number; heading: string; text?: string; cta?: 'startProject' | 'seeWork' }[] = [
-  { at: 0, heading: studio.headline, text: studio.subline, cta: 'startProject' },
+export const heroBeats: { at: number; heading: string; text?: string; ctas?: ('startProject' | 'seeWork')[] }[] = [
+  { at: 0, heading: studio.headline, text: studio.subline, ctas: ['startProject', 'seeWork'] },
   { at: 0.3, heading: 'Taste is human.', text: 'Every design and decision is made by people who care how it lands.' },
   { at: 0.6, heading: 'Speed is the machine’s.', text: 'AI drafts, explores and checks, so you see real options sooner and launch sooner.' },
-  { at: 0.85, heading: studio.name, text: studio.tag, cta: 'startProject' },
+  { at: 0.85, heading: studio.name, text: studio.tag, ctas: ['startProject'] },
 ];
 
 // The core promise: AI shortens the time to finished work. Qualitative on purpose: no invented numbers.

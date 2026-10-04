@@ -13,7 +13,7 @@ export function setupPipeline(isMobile: boolean): (() => void) | undefined {
   const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('aria-hidden', 'true');
   svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none';
-  // Gradient stroke (cyan to cobalt to violet) along the connector, in the list's own pixel space.
+  // Gradient stroke (cyan fading to silver) along the connector, in the list's own pixel space.
   const defs = document.createElementNS(SVG_NS, 'defs');
   const gradient = document.createElementNS(SVG_NS, 'linearGradient');
   gradient.id = 'pipe-gradient';

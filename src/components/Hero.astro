@@ -41,7 +41,7 @@ const city = profile.location.split(',')[0];
   .wrap { min-width: 0; } /* let the grid column shrink instead of growing to the longest word */
   .wrap > * { max-width: 38rem; }
   .wrap > h1 { max-width: 60rem; } /* two balanced lines on desktop */
-  h1 { font-size: clamp(2.75rem, 1.4rem + 5.2vw, 5.25rem); line-height: 0.98; letter-spacing: -0.045em; margin-bottom: var(--space-l); padding-bottom: 0.08em; }
+  h1 { font-size: clamp(2.75rem, 1.4rem + 5.2vw, 5.25rem); line-height: 0.98; margin-bottom: var(--space-l); padding-bottom: 0.08em; }
   .lead { margin: 0 0 var(--space-xl); max-width: 34rem; }
   .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0; }
 
@@ -55,14 +55,14 @@ const city = profile.location.split(',')[0];
     padding: 0.375rem 0.875rem;
     border: 1px solid rgb(var(--glow-2) / 0.3);
     border-radius: var(--radius-pill);
-    background: rgb(5 6 15 / 0.55);
+    background: rgb(10 11 13 / 0.55);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     color: var(--fg);
     font: 450 var(--step--1) / 1.3 var(--font-mono);
   }
   .avail { display: inline-flex; align-items: center; gap: var(--space-xs); }
-  .dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 0 rgb(52 211 153 / 0.6); }
+  .dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.6); }
   .sep { width: 1px; height: 0.9em; background: rgb(var(--glow-2) / 0.35); }
   /* Narrow screens: the role wraps to its own line, so drop the divider and soften the pill. */
   @media (max-width: 480px) { .status { border-radius: 0.875rem; row-gap: 0.25rem; } .sep { display: none; } }
@@ -83,7 +83,7 @@ const city = profile.location.split(',')[0];
   :global(.motion-hero) .poster { opacity: 0; }
   @media (max-width: 767px) { :global(.motion-hero) .hero { background-image: var(--start-mobile); } }
   /* The hero's own pin spacer stays dark if a short screen leaves a gap below the pinned hero. */
-  :global(.pin-spacer:has(> #hero)) { background: #05060f; }
+  :global(.pin-spacer:has(> #hero)) { background: var(--bg); }
 
   /* Parallax: the video drifts slightly against the pointer (--px/--py in -1..1 from interact.ts). */
   :global(.motion) .media { transform: translate3d(calc(var(--px, 0) * -14px), calc(var(--py, 0) * -10px), 0) scale(1.05); }
@@ -95,7 +95,7 @@ const city = profile.location.split(',')[0];
   :global(.motion) [data-hero-copy] > :nth-child(4) { animation-delay: 0.24s; }
   :global(.motion) .dot { animation: pulse 2.4s ease-out infinite; }
   @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
-  @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgb(52 211 153 / 0); } 100% { box-shadow: 0 0 0 0 rgb(52 211 153 / 0); } }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgb(var(--accent-rgb) / 0); } 100% { box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0); } }
 
   /* The copy fades as the sequence resolves; keyboard focus always brings it back. */
   [data-hero-copy]:focus-within { opacity: 1 !important; }

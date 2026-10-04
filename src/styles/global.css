@@ -106,7 +106,7 @@ body::before {
 body::after {
   z-index: var(--z-grain);
   opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
@@ -161,11 +161,11 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
   font: 500 0.9375rem / 1.2 var(--font-sans); text-decoration: none; cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
 }
-.btn:hover { border-color: var(--fg); }
+.btn:not(:disabled):not([aria-disabled='true']):hover { border-color: var(--fg); }
 .btn:active { transform: translateY(1px) scale(0.98); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .btn.ghost { background: transparent; }
-.btn.primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--fg)); }
+.btn.primary:not(:disabled):not([aria-disabled='true']):hover { background: color-mix(in srgb, var(--accent) 86%, var(--fg)); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 /* ─── Tags (pill) ──────────────────────────────────────────── */
@@ -216,7 +216,8 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .field :is(input, select, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
 .field .help { font-size: var(--step--1); color: var(--muted); margin: 0; }
 .field .error { font-size: var(--step--1); color: var(--fg); margin: 0; }
-.field [aria-invalid='true'] { border-color: var(--fg); border-width: 2px; }
+.field [aria-invalid='true'] { border-color: var(--fg); box-shadow: 0 0 0 1px var(--fg); }
+.field :is(input, select, textarea):disabled { opacity: 0.55; cursor: not-allowed; }
 
 /* Wordmark and final hero beat: solid type; the chrome look lives on surfaces, not text. */
 .chrome-text { color: var(--fg); }
@@ -230,11 +231,11 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgb(5 6 15 / 0.74) 0%, rgb(5 6 15 / 0.66) 55%, rgb(5 6 15 / 0.1) 90%);
+  background: linear-gradient(90deg, rgb(10 11 13 / 0.74) 0%, rgb(10 11 13 / 0.66) 55%, rgb(10 11 13 / 0.1) 90%);
   pointer-events: none;
 }
 @media (max-width: 767px) {
-  .media-scrim::before { background: rgb(5 6 15 / 0.72); }
+  .media-scrim::before { background: rgb(10 11 13 / 0.72); }
 }
 /* On media, secondary text uses --fg: --muted can dip below AA over bright nodes. */
 .media-scrim .muted, .media-scrim .label { color: var(--fg); }
