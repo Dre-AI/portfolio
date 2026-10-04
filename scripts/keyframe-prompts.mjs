@@ -1,4 +1,4 @@
-// Hero keyframe prompts ("human → digital"), written to the AI Video Creator Course anatomy:
+// Hero keyframe prompts ("human → visitor": subtle otherworldly glow, not chrome), written to the AI Video Creator Course anatomy:
 // shot/angle → subject → clothing → environment → lighting (behaviour, not equipment) → realism block → camera last.
 // Continuity rules: same key/rim light direction in every frame, camera orbits one way only (180° rule),
 // shot size progresses gradually. The video stays neutral (black, chrome, silver); the accent lives in the UI.
@@ -28,23 +28,24 @@ export const keyframes = {
   K2: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: same man, same suit, same charcoal studio backdrop. The camera has orbited about 30 degrees around him, so we now see him at a three-quarter angle with his face turned slightly towards the empty left side of the frame, and it has moved slightly closer, framed from upper chest up. He stays in the right half of the frame.',
-      'A thin horizontal line of white holographic light crosses his face at cheekbone height. Below the line, his jaw, neck and the near shoulder have become polished liquid chrome with a fine glowing wireframe mesh etched into the surface, reflecting the rim light. Above the line his eyes, forehead and hair remain fully human with real skin.',
-      'His expression softens from the big smile to a calm, confident slight smile, lips relaxed.',
+      'Continue from the last attached image: the exact same man as in both attached photos, same suit, same charcoal studio backdrop. The camera has orbited about 30 degrees around him, so we now see him at a three-quarter angle with his face turned slightly towards the empty left side of the frame, and it has moved slightly closer, framed from upper chest up. He stays in the right half of the frame.',
+      'He is subtly otherworldly: very fine, faint lines of soft pale-cyan bioluminescent light have just begun to appear under his skin at his temples and along the top of his cheekbones, thin and elegant like a delicate natural pattern, glowing gently. His irises catch a faint iridescent shimmer. Everything else is unchanged: real human skin with pores and natural texture, same face, same hair, same beard.',
+      'Calm, confident slight smile, lips relaxed.',
       LIGHT,
-      `For the human part of the face: ${REALISM}`,
-      NEGATIVE,
+      `${REALISM} The glow must be subtle and photographic, not makeup, not paint, not a costume, not CGI.`,
+      NEGATIVE.replace('no colour accents other than silver and cool white', 'no colour accents other than silver, cool white and the soft pale-cyan glow'),
       CAMERA,
     ].join(' '),
   },
   K3: {
     usesPrevious: true,
     prompt: [
-      'Continue from the last attached image: same scene, same light direction, same rim light. The camera has orbited about 30 degrees further in the same direction, so he is now close to a side profile facing the left side of the frame, framed from upper chest up and still in the right half of the frame.',
-      'The male is now almost entirely polished liquid chrome with a fine glowing wireframe mesh, still clearly the same person: exact same face shape, nose, lips, ears and hairline as the reference. The outer edges of his shoulders and hair are breaking apart into thousands of tiny points of white light drifting backwards into the darkness.',
+      'Continue from the last attached image: same man, same suit, same backdrop, same light direction and rim light. The camera has orbited about 30 degrees further in the same direction, so he is now close to a side profile facing the left side of the frame, framed from upper chest up and still in the right half of the frame.',
+      'The soft pale-cyan bioluminescent lines under his skin have spread: they now trace his temple, cheekbone, jawline and down the side of his neck in fine, elegant, symmetrical lines like a quiet constellation, glowing softly from beneath real skin. His visible eye has a gentle iridescent shimmer. He is still unmistakably the same real person, with real skin texture and pores.',
       'Calm, confident slight smile, lips relaxed, same as the last attached image.',
       LIGHT,
-      NEGATIVE,
+      `${REALISM} The glow must be subtle and photographic, not makeup, not paint, not a costume, not CGI.`,
+      NEGATIVE.replace('no colour accents other than silver and cool white', 'no colour accents other than silver, cool white and the soft pale-cyan glow'),
       CAMERA,
     ].join(' '),
   },
@@ -52,8 +53,8 @@ export const keyframes = {
     usesPrevious: true,
     prompt: [
       'Continue from the last attached image: same charcoal studio backdrop falling off to near-black, same cool silver tone. The camera has pulled far back into a wide shot.',
-      'The male is gone. Thousands of tiny points of white light have gathered into one small, bright, softly glowing cluster in the centre of the frame, slightly below the middle, surrounded by vast calm dark space. A faint haze around the cluster catches its light. Very still and quiet.',
-      NEGATIVE,
+      'The man is gone. Thousands of tiny points of the same soft pale-cyan and white light have gathered into one small, bright, softly glowing cluster in the centre of the frame, slightly below the middle, surrounded by vast calm dark space. A faint haze around the cluster catches its light. Very still and quiet.',
+      'No text, no logos, no people, no lens flares.',
       'Shot on Sony A7IV, 35mm f/1.8, RAW photograph, subtle film grain, cinematic 16:9 frame.',
     ].join(' '),
   },
