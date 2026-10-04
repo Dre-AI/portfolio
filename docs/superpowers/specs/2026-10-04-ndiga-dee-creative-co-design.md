@@ -28,13 +28,20 @@ Speed claims must be framed as process benefits ("first designs in days, not wee
 ## 4. Brand assets
 - **Logo:** the **existing logo** in `brand/` (DN monogram set and favicon set) stays. No new mark gets designed. The wordmark "Ndiga Dee Creative Co." is set in the display typeface next to the monogram.
 - **Mood: chrome futurist.** Near-black base, silver/chrome gradients for highlights, **one** electric accent, fine film grain.
-- **Accent:** chosen in Phase 2 from three candidates (acid lime, signal orange, electric blue), all checked for AA contrast on the base.
+- **Accent:** pale cyan (chosen 2026-10-04), matching the glow in the hero film. Exact value set and AA-checked in Phase 2.
 - **Type:** a condensed display face for headlines and Geist Mono for labels and meta. Body is Geist or whatever the taste pass picks.
 - **Themes:** dark-first. A light theme is optional and not required at launch.
 
 ## 5. Information architecture
 ### Home (`/`), one scroll story
-1. **Hero (pinned, ~300vh):** scroll-scrubbed Flow sequence (§6). Headline, subline, CTAs ("Start a project", "See the work") and mono label row `Nairobi · AI-native studio · #longliveAI`. Copy fades out as the sequence resolves.
+1. **Hero (pinned, ~300vh):** scroll-scrubbed Flow sequence (§6). The copy changes with the film in four beats, so scrolling tells the manifesto while Derrick transforms:
+   | Scroll | Film | Copy |
+   |---|---|---|
+   | 0–30% | Real Derrick, smiling | Headline "Creative work, engineered with AI.", subline, CTAs ("Start a project", "See the work"), label row `Nairobi · AI-native studio · #longliveAI` |
+   | 30–60% | Glow wakes | "Taste is human." + "Every design and decision is made by people who care how it lands." |
+   | 60–85% | Glow spreads, near profile | "Speed is the machine's." + "AI drafts, explores and checks, so you see real options sooner and launch sooner." |
+   | 85–100% | Light cluster, DN monogram fades in | "Ndiga Dee Creative Co." + `#longliveAI` + "Start a project" |
+   Beat copy lives in `src/data/studio.ts`. With reduced motion, all four beats show as a static stacked list over the poster frame.
 2. **Manifesto:** large text that reveals word by word. Human taste + AI speed. Ends with `#longliveAI`.
 3. **Services:** the three services from §3, each with deliverables and its AI speed angle.
 4. **Why AI = faster (pinned process):** Discover → Design → Build with AI → Launch & grow. Each step shows the old way vs the AI-assisted way (e.g. "Concepts: weeks → days"), with no invented numbers. Reuses the existing pipeline motion hooks.
