@@ -1,5 +1,5 @@
 // Generate hero keyframes with kie.ai Nano Banana Pro, using the character references in hero-src/refs/.
-// Usage: node --env-file=.env scripts/kie-keyframes.mjs K1 [variants] [gpt2|nano]   (default model: gpt2)
+// Usage: node --env-file=.env scripts/kie-keyframes.mjs K1 [variants] [gpt2|nano] [1K|2K]   (defaults: 2, gpt2, 1K; 1K is enough for Flow's 720p)
 // Then copy the take you like to hero-src/keyframes/K1.png; K2–K4 use the previous chosen frame for continuity.
 // kie deletes uploads after 3 days and outputs after 14 days, so results are downloaded immediately.
 
@@ -40,13 +40,13 @@ async function upload(path) {
   throw new Error('No kie upload host accepted the file');
 }
 
-async function createTask(model, prompt, imageUrls) {
+async function createTask(model, prompt, imageUrls, resolution) {
   const res = await fetch(`${API}/api/v1/jobs/createTask`, {
     method: 'POST',
     headers: { ...auth, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: model.id,
-      input: { prompt, [model.imageField]: imageUrls, aspect_ratio: '16:9', resolution: '2K', ...model.extra },
+      input: { prompt, [model.imageField]: imageUrls, aspect_ratio: '16:9', resolution, ...model.extra },
     }),
   });
   const json = await res.json();
@@ -80,7 +80,7 @@ function previousFrame(id) {
 }
 
 async function main() {
-  const [id = 'K1', variantsArg = '2', modelArg = 'gpt2'] = process.argv.slice(2);
+  const [id = 'K1', variantsArg = '2', modelArg = 'gpt2', resolution = '1K'] = process.argv.slice(2);
   const model = MODELS[modelArg];
   if (!model) throw new Error(`Unknown model ${modelArg}. Use one of: ${Object.keys(MODELS).join(', ')}`);
   const frame = keyframes[id];
@@ -93,7 +93,7 @@ async function main() {
   const imageUrls = await Promise.all(refPaths.map(upload));
 
   console.log(`Generating ${variants} take(s) of ${id} with ${model.id}…`);
-  const taskIds = await Promise.all(Array.from({ length: variants }, () => createTask(model, frame.prompt, imageUrls)));
+  const taskIds = await Promise.all(Array.from({ length: variants }, () => createTask(model, frame.prompt, imageUrls, resolution)));
   const results = await Promise.allSettled(
     taskIds.map(async (taskId, i) => {
       const out = join(OUT_DIR, `${id}-${modelArg}-v${i + 1}.png`);
