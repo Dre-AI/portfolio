@@ -67,19 +67,19 @@ Speed claims must be framed as process benefits ("first designs in days, not wee
 - **Email:** `ndigaderrick6@gmail.com`, plus LinkedIn and GitHub.
 - **No phone number anywhere.**
 
-## 6. Hero: "human → digital"
-Built from three Flow clips of ~8s each, chained frames-to-video so each clip's last frame is the next one's first.
+## 6. Hero: "human → visitor"
+Built from three Flow clips of ~8s each, chained frames-to-video so each clip's last frame is the next one's first. (Changed 2026-10-04 from a chrome "human → digital" look, which Derrick rejected.)
 
 | Clip | What happens |
 |---|---|
-| A | Derrick's real portrait in dark studio light with a chrome rim light. A slow orbit begins and a thin holographic scan line starts to sweep across him. |
-| B | The orbit continues; the chrome and wireframe spread until he is almost fully digital, edges breaking into points of light. |
-| C | He dissolves into points of light that gather into one small glowing cluster as the camera pulls back into darkness. The **existing DN monogram** is faded in over the final frames by the website (UI overlay), not drawn by the video model. |
+| A | Derrick's real portrait (big smile, charcoal backdrop, silver rim light). The camera orbits as he turns towards the headline; his smile calms and faint pale-cyan lines wake up under the skin at his temple and cheekbone. |
+| B | The orbit continues to near profile; the pale-cyan lines branch across his cheekbone, past his ear and down his neck. Still clearly a real person. |
+| C | The light lifts off him as points that gather into one small glowing cluster while the camera pulls back into darkness. The **existing DN monogram** is faded in over the final frames by the website (UI overlay), not drawn by the video model. |
 
-- **Input:** 1–2 high-res photos (3/4 angle, plain background). Prompts go in `docs/FLOW_PROMPTS.md`, rewritten in Phase 1.
+- **Keyframes:** K1–K4 generated with GPT Image 2 on kie.ai from Derrick's real photo (`scripts/kie-keyframes.mjs`); Flow animates between them. Prompts live in `docs/FLOW_PROMPTS.md`.
 - **Pipeline:** `scripts/extract-frames.sh` → WebP frames (desktop and mobile sets) → the existing canvas scrubber in `src/scripts/motion/hero.ts`.
 - **Reject takes** with face drift, flicker or speed jumps. Scrubbing makes these obvious.
-- **Fallback:** if Flow drifts identity or refuses a real-person image, build the hero from the still photo instead, using a depth-map parallax and a chrome sweep (WebGL/CSS).
+- **Fallback:** if Flow drifts identity or refuses a real-person image, build the hero from the still photo instead, using a depth-map parallax and a soft cyan glow (WebGL/CSS).
 - **Reduced motion and slow connections:** a static poster frame, with all content visible.
 - **Budgets:** frames ≤ 6 MB desktop / ≤ 2.5 MB mobile.
 
