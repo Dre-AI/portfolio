@@ -8,8 +8,9 @@ Turn the personal portfolio into the site for **Ndiga Dee Creative Co.**, a foun
 **Primary conversion:** submit a project brief or book a discovery call.
 
 ## 2. Positioning
-- **Studio:** Ndiga Dee Creative Co., an AI-native creative studio in Nairobi.
-- **Founder line:** Derrick Ndiga, Founder · Full-Stack & AI Engineer.
+- **Who:** Derrick Ndiga, a **freelance** full-stack and AI developer who works under the brand **Ndiga Dee Creative Co.** (decided 2026-10-04). It is a one-person business, presented honestly, and the brand can grow into a studio later.
+- **Voice:** first person singular. All copy says "I" and "my", never "we", "our" or "the team". Clients hire Derrick directly.
+- **Founder line:** Derrick Ndiga, Freelance Full-Stack & AI Developer. Ndiga Dee Creative Co. is the brand name used in the nav, footer, hero final beat and legal/contact details.
 - **Role of AI:** AI is the studio's *method*, not a service it sells. Every page should reinforce one benefit: **work is delivered in less time without cutting quality**, because AI handles drafting, code scaffolding, visual exploration and QA, and Derrick handles judgement, design and engineering.
 - **Headline direction:** "Creative work, engineered with AI." Final copy comes from the brand-voice pass in Phase 1.
 - **Signature tag:** `#longliveAI`. It appears in the hero mono label row, the manifesto close, the footer and the OG image. Always written exactly `#longliveAI`.
