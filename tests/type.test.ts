@@ -12,7 +12,7 @@ test('Archivo width axis is installed, imported and preloaded', () => {
 
 test('headings and display classes use the condensed display face', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
-  assert.match(css, /h1,\s*h2\s*,?\s*\.display\s*\{[^}]*font-family:\s*var\(--font-display\)[^}]*font-variation-settings:\s*'wdth'\s*var\(--display-width\)/);
+  assert.match(css, /h1,\s*h2,\s*\.display,\s*\.beat\s*\{[^}]*font-family:\s*var\(--font-display\)[^}]*font-variation-settings:\s*'wdth'\s*var\(--display-width\)/);
   assert.match(css, /\.beat\s*\{[^}]*font-size:\s*var\(--step-5\)/);
   assert.doesNotMatch(css, /text-shadow:\s*0 0 42px/); // old neon glow on h2 is gone
 });

@@ -119,7 +119,7 @@ section { padding-block: var(--space); border-top: 1px solid var(--line); scroll
 
 /* overflow-wrap: long words break only when they can't fit (e.g. 200% text on a phone). */
 h1, h2, h3, h4 { margin: 0 0 var(--space-m); font-weight: 600; text-wrap: balance; overflow-wrap: anywhere; }
-h1, h2, .display {
+h1, h2, .display, .beat {
   font-family: var(--font-display);
   font-variation-settings: 'wdth' var(--display-width);
   font-weight: 700;
@@ -169,6 +169,7 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .btn:hover { border-color: var(--fg); }
 .btn:active { transform: translateY(1px) scale(0.98); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.btn.ghost { background: transparent; }
 .btn.primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--fg)); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; }
 
