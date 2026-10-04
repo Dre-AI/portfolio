@@ -86,7 +86,14 @@ export const contactCopy = {
   budgets: ['Under KES 100k', 'KES 100k-300k', 'KES 300k-750k', 'KES 750k+', 'Not sure yet'],
   timelines: ['As soon as possible', 'Within 1 month', '1-3 months', 'Just exploring'],
   nameHelp: 'So I know who to reply to.',
-  emailError: 'Enter an email like name@example.com',
+  errors: {
+    name: 'Please add your name.',
+    email: 'Enter an email like name@example.com',
+    message: 'A sentence or two about the project helps.',
+  },
+  fallbackNote: 'This opens your email app with your brief filled in.',
+  directHeading: 'Or reach me directly',
+  sending: 'Sending...',
   success: 'Thanks, your brief is in. I will reply within two working days.',
   error: 'Something went wrong sending that. Please email ndigaderrick6@gmail.com instead.',
 };

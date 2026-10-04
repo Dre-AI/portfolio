@@ -112,7 +112,7 @@ const labels = contactCopy.formLabels;
         <div class="field">
           <label for="sg-email">{labels.email}</label>
           <input id="sg-email" type="email" value="name@" aria-invalid="true" aria-describedby="sg-email-error" />
-          <p class="error" id="sg-email-error">{contactCopy.emailError}</p>
+          <p class="error" id="sg-email-error">{contactCopy.errors.email}</p>
         </div>
         <div class="field">
           <label for="sg-service">{labels.service}</label>
