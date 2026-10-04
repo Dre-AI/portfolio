@@ -1,17 +1,22 @@
-# Derrick Ndiga — Portfolio
+# Ndiga Dee Creative Co. — Studio Site
 
-Read `docs/BRIEF.md` before any design or build work. It is the source of truth for positioning, design direction, motion rules and the phase plan.
+Source of truth: `docs/superpowers/specs/2026-10-04-ndiga-dee-creative-co-design.md`. Read it before any design or build work. `docs/BRIEF.md` is the short version.
 
 ## Ground rules
-- Work ONE phase per session (see `docs/PROMPTS.md`). Show a plan before writing code. Commit at the end of each phase.
-- All content lives in `src/data/*.ts`. Never hard-code copy in components, and never publish text in [brackets] or `TODO`.
+- One phase per session (see `docs/PROMPTS.md`), from a written plan in `docs/superpowers/plans/`. Commit at the end of each phase.
+- All copy lives in `src/data/*.ts`. Never hard-code copy in components. Never publish `[brackets]`, `TODO` or `TBD`. `npm test` enforces this.
 - Never add a phone number anywhere on the site.
-- Site is served from `/portfolio/` (see `astro.config.mjs`). Always build URLs from `import.meta.env.BASE_URL`.
-- Design lead: Taste Skill (`design-taste-frontend`). Reviewer: UI UX Pro Max. Identity: Logo Design Skill.
-- Motion must respect `prefers-reduced-motion` and must never hide content from people who can't or don't scroll.
-- Keep `data-section`, `data-pipeline`, `data-step`, `data-card`, `data-timeline` and `#hero-canvas`. The motion layer hooks into these.
+- The tag is always written exactly `#longliveAI`.
+- AI speed claims stay qualitative unless Derrick supplies a real before/after. Never invent a metric.
+- Render work items through `publicView()` from `src/data/work.ts` so unapproved concepts stay anonymous.
+- Logo: the existing DN monogram in `brand/`. Do not design a new mark.
+- Build URLs from `import.meta.env.BASE_URL`.
+- Design lead: `design-taste-frontend`. Critique/polish: `impeccable`. Review: UI UX Pro Max. Planning/review/verification: ECC.
+- Motion respects `prefers-reduced-motion` and never hides content from people who can't or don't scroll.
+- Keep `#hero-canvas` and the motion `data-*` hooks (`data-section`, `data-pipeline`, `data-step`, `data-card`, `data-timeline`).
 - Performance budget: Lighthouse 90+ on mobile; hero frames ≤ 6 MB desktop / ≤ 2.5 MB mobile.
 
 ## Development
-Start the dev server in background mode: `astro dev --background` (manage with `astro dev stop | status | logs`).
-Docs: https://docs.astro.build
+- `npm test` runs the content and docs tests (Node built-in test runner).
+- Start the dev server in background mode: `astro dev --background` (manage with `astro dev stop | status | logs`).
+- Docs: https://docs.astro.build

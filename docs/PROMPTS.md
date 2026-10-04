@@ -37,46 +37,14 @@ Then, inside Claude Code:
 ```
 Restart Claude Code and run `/plugin list` to confirm everything is enabled.
 
-> Phase 1 (scaffold, base path, deploy workflow, content data, semantic skeleton) is **already done** in this pack. Start at Phase 1b.
 
----
+## Phases (Ndiga Dee Creative Co. rebuild)
 
-## Phase 1b — Identity (Logo Design Skill)
-```
-Use the logo-design skill. Brief: a personal monogram for Derrick Ndiga, an AI & Automation Engineer in Nairobi. Initials "DN". It must feel precise, calm and technical — premium minimal like Apple/Linear, not "techy" clichés (no circuit boards, robots, brains or glowing gradients). It will be used at 16px as a favicon, in the site nav, on an OG image and on my CV. Show me the concept overview and your recommendation, then stop.
-```
-After you pick a direction:
-```
-Go with concept [X]. Produce the kit: final SVG mark, one-colour and reversed versions, and the favicon / app-icon / web-manifest set. Put web assets in public/ and replace public/favicon.svg. Commit.
-```
+Each phase starts from a written plan in `docs/superpowers/plans/`. Run one phase per session, review it, then commit.
 
-## Phase 2 — Design system (Taste Skill)
-```
-Read CLAUDE.md and docs/BRIEF.md. Use the design-taste-frontend skill to create the design system for this portfolio: clean minimal premium (Apple/Linear spirit), neutral palette with ONE accent that works with the DN monogram in public/. Propose 3 accent options and 2 font pairings and show me before deciding. Then implement the tokens in src/styles/global.css (keep the existing variable names), self-host the fonts, and build a /styleguide page showing colours, type scale, buttons, tags and a project card in light and dark mode. Don't touch the homepage layout yet.
-```
-
-## Phase 3 — Static build (no animation)
-```
-Read CLAUDE.md. Using the design system from Phase 2, design and build the full homepage in src/pages/index.astro from the data in src/data/. Extract components (Hero, Proof, Pipeline, ProjectCase, Timeline, Contact) into src/components/. Zero animation this phase: it must look finished standing still, on a 375px phone and a 1440px desktop. Project screenshots are in public/work/ (use Astro's <Image> for WebP output). Keep all data-* hooks. When done, use the ui-ux-pro-max skill to review accessibility, contrast, spacing and focus states, and fix what it finds.
-```
-
-## Phase 4 — Motion layer
-```
-Read CLAUDE.md and the motion rules in docs/BRIEF.md §6. Add GSAP + ScrollTrigger and Lenis. Build: (1) the pinned "How my automations work" section: turn [data-pipeline] into an SVG flow diagram whose steps light up and connect as you scroll; (2) the experience timeline line drawing on scroll; (3) metric counters in #proof; (4) restrained reveal on project cards — one orchestrated moment per section, not fade-up on everything. Reduced motion = static final states. On mobile, no pin longer than one screen. Look at references/ for timing inspiration. Show me the plan first.
-```
-
-> **Also in Phase 4: the hero scrubber** (moved from Phase 5 so GSAP is installed once for the whole motion layer). The frames already exist in `public/hero/`; read counts, sizes and the breakpoint from `public/hero/frames.json` instead of hard-coding them. Build: (5) a canvas scrubber on `#hero-canvas`: pin the hero with ScrollTrigger, preload the first ~10 frames immediately and the rest in the background, draw the frame that matches scroll progress (show the nearest loaded frame while loading), handle devicePixelRatio and resize, and use the mobile set under 768px; (6) a static poster fallback (`public/hero/poster.webp`, the final frame) in the markup for reduced motion, Save-Data and no-JS, where the canvas never starts; (7) the headline fading as the sequence resolves, with no fade under reduced motion and CTAs always reachable.
-
-## Phase 5 — Hero sequence (Google Flow)
-**Frames: done.** Clips 1 + 2 (`hero-src/3.mp4` is an unused alternate take) were extracted with:
-```bash
-bash scripts/extract-frames.sh -f 20 -m 12 hero-src/1.mp4 hero-src/2.mp4
-```
-Desktop: 320 frames at 1280px/20fps, 4.7 MB. Mobile: 192 frames at 800px/12fps, 1.6 MB. Budgets are 6 MB and 2.5 MB. The script exits non-zero if a set goes over budget. Re-run it only if you regenerate the clips.
-
-The scrubber, poster fallback and headline fade moved into Phase 4 (see the note above).
-
-## Phase 6 — Polish & ship
-```
-Read CLAUDE.md. Final pass: run Lighthouse (mobile) and fix everything under 90; generate public/og.png (1200×630) using the monogram and headline; add a sitemap (@astrojs/sitemap); verify JSON-LD; test keyboard navigation and reduced motion; check there are no [brackets] or TODO left in src/data. Then use the ui-ux-pro-max skill for a last review and give me a launch checklist.
-```
+1. **Content & brand:** studio copy, services, AI process, work lineup, docs, Flow prompts. *(this plan)*
+2. **Design system:** tokens, type, chrome treatment, accent picked from three, `/styleguide`. Skills: design-taste-frontend, impeccable.
+3. **Static build:** home, `/work/[slug]`, `/about`, `404` with real content and no animation; screenshots captured from the live URLs; old data modules removed.
+4. **Motion layer:** reveals, manifesto word reveal, pinned process, horizontal work glide.
+5. **Hero sequence:** Flow clips → frames → canvas scrubber, monogram overlay, poster and reduced-motion fallback (or the still-photo fallback).
+6. **Ship:** Web3Forms brief form, Cal.com, SEO and JSON-LD, Lighthouse 90+, custom-domain config, deploy.
