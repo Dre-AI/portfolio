@@ -1,5 +1,5 @@
 // Generate hero keyframes with kie.ai Nano Banana Pro, using the character references in hero-src/refs/.
-// Usage: node --env-file=.env scripts/kie-keyframes.mjs K1 [variants]
+// Usage: node --env-file=.env scripts/kie-keyframes.mjs K1 [variants] [gpt2|nano]   (default model: gpt2)
 // Then copy the take you like to hero-src/keyframes/K1.png; K2–K4 use the previous chosen frame for continuity.
 // kie deletes uploads after 3 days and outputs after 14 days, so results are downloaded immediately.
 
@@ -10,10 +10,15 @@ import { keyframes } from './keyframe-prompts.mjs';
 
 const API = 'https://api.kie.ai';
 const UPLOAD_HOSTS = ['https://kieai.redpandaai.co', 'https://api.kie.ai'];
-const MODEL = 'nano-banana-pro';
+// Image models on kie.ai differ in their model id and in the name of the reference-image field.
+const MODELS = {
+  gpt2: { id: 'gpt-image-2-image-to-image', imageField: 'input_urls', extra: {} },
+  nano: { id: 'nano-banana-pro', imageField: 'image_input', extra: { output_format: 'png' } },
+};
 const POLL_MS = 5000;
 const TIMEOUT_MS = 6 * 60 * 1000;
-const REFS = ['hero-src/refs/face.png', 'hero-src/refs/back.png'];
+// Face close-up only: the back view adds nothing to likeness and the sheet's front panel is headless.
+const REFS = ['hero-src/refs/face.png'];
 const OUT_DIR = 'hero-src/keyframes';
 
 const key = process.env.KIE_API_KEY;
@@ -35,13 +40,13 @@ async function upload(path) {
   throw new Error('No kie upload host accepted the file');
 }
 
-async function createTask(prompt, imageUrls) {
+async function createTask(model, prompt, imageUrls) {
   const res = await fetch(`${API}/api/v1/jobs/createTask`, {
     method: 'POST',
     headers: { ...auth, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: MODEL,
-      input: { prompt, image_input: imageUrls, aspect_ratio: '16:9', resolution: '2K', output_format: 'png' },
+      model: model.id,
+      input: { prompt, [model.imageField]: imageUrls, aspect_ratio: '16:9', resolution: '2K', ...model.extra },
     }),
   });
   const json = await res.json();
@@ -75,7 +80,9 @@ function previousFrame(id) {
 }
 
 async function main() {
-  const [id = 'K1', variantsArg = '2'] = process.argv.slice(2);
+  const [id = 'K1', variantsArg = '2', modelArg = 'gpt2'] = process.argv.slice(2);
+  const model = MODELS[modelArg];
+  if (!model) throw new Error(`Unknown model ${modelArg}. Use one of: ${Object.keys(MODELS).join(', ')}`);
   const frame = keyframes[id];
   if (!frame) throw new Error(`Unknown keyframe ${id}. Use one of: ${Object.keys(keyframes).join(', ')}`);
   const variants = Math.max(1, Math.min(4, Number(variantsArg) || 2));
@@ -85,11 +92,11 @@ async function main() {
   console.log(`Uploading ${refPaths.length} reference image(s)…`);
   const imageUrls = await Promise.all(refPaths.map(upload));
 
-  console.log(`Generating ${variants} take(s) of ${id} with ${MODEL}…`);
-  const taskIds = await Promise.all(Array.from({ length: variants }, () => createTask(frame.prompt, imageUrls)));
+  console.log(`Generating ${variants} take(s) of ${id} with ${model.id}…`);
+  const taskIds = await Promise.all(Array.from({ length: variants }, () => createTask(model, frame.prompt, imageUrls)));
   const results = await Promise.allSettled(
     taskIds.map(async (taskId, i) => {
-      const out = join(OUT_DIR, `${id}-v${i + 1}.png`);
+      const out = join(OUT_DIR, `${id}-${modelArg}-v${i + 1}.png`);
       await download(await waitForResult(taskId), out);
       return out;
     }),

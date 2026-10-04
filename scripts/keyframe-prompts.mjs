@@ -18,14 +18,14 @@ export const keyframes = {
   K1: {
     usesPrevious: false,
     prompt: [
-      'A cinematic three-quarter portrait, camera at eye level positioned to the left of the male, capturing him from a 3/4 angle, framed from mid-chest up and placed in the right half of the frame. The left third of the frame is empty dark space.',
-      'The male from the reference images looks calmly just past the camera with a composed, confident expression, mouth closed.',
-      'He wears the same dark navy suit jacket and crisp white open-collar shirt as the reference, fine wool texture visible.',
-      'Environment: a near-black seamless studio void, nothing else.',
-      LIGHT,
-      REALISM,
-      NEGATIVE,
-      CAMERA,
+      'A real, unretouched photograph of the exact man in the reference photo. Same person: identical face shape, eyes, nose, lips, ears, hairline, short coily hair, beard line and skin tone. Do not idealise, slim or restyle his face; it must be instantly recognisable as him.',
+      'Natural three-quarter portrait at eye level, framed from mid-chest up, placed in the right half of the frame with plain dark space on the left.',
+      'He has a relaxed, natural expression with a slight, genuine smile, as if caught between two sentences, looking towards the camera.',
+      'He wears a dark navy suit jacket and a white open-collar shirt, natural fabric creases.',
+      'Plain charcoal-grey backdrop. Soft natural light from a large window to his left, gentle shadows, with a faint cool highlight on the edge of his hair and shoulder.',
+      'Real skin with pores, small marks and natural texture, no smoothing, no airbrushing, no beauty filter, no HDR, no plastic look.',
+      'No text, no logos, no extra people.',
+      'Looks like an editorial portrait taken on a Sony A7IV with an 85mm lens at f/2, true-to-life colour, light film grain.',
     ].join(' '),
   },
   K2: {
