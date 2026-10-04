@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { frameAt, beatAt, coverRect } from './heroMath';
 
 interface FrameSet { count: number; width: number; height: number; pattern: string }
 interface FramesManifest { desktop: FrameSet; mobile: FrameSet; pad: number; breakpoint: number }
@@ -7,8 +8,16 @@ const FIRST_BATCH = 10; // frames loaded straight away
 const CONCURRENCY = 4; // background requests in flight
 const MAX_DPR = 2;
 const IDLE_TIMEOUT_MS = 4000;
-const PIN_SCREENS = { desktop: 1.5, mobile: 1 }; // mobile: never pin longer than one screen (brief §6)
-const FADE_FROM = 0.7; // copy fades over the last 30% of the scrub
+const PIN_SCREENS = { desktop: 3, mobile: 1 }; // mobile: never pin longer than one screen (brief §6)
+const FILM_END = 0.88; // the film reaches its last frame here and holds for the closing beat
+const HANDOFF_FROM = 0.92; // the last 8% of the pin dims the film into the next section
+const CLUSTER = { x: 0.508, y: 0.602 }; // centre of the light cluster in the last frame (both frame sets)
+
+/** object-position of the poster as 0..1 anchors, so the canvas crops exactly like the CSS. */
+function anchors(el: HTMLElement): { ax: number; ay: number } {
+  const [x = 50, y = 50] = (getComputedStyle(el).objectPosition.match(/-?[\d.]+(?=%)/g) ?? []).map(Number);
+  return { ax: x / 100, ay: y / 100 };
+}
 
 /** Frame indices ordered coarse-to-fine (every 16th, then every 8th, ...) so early scrubbing already has nearby frames. */
 function loadOrder(count: number): number[] {
@@ -25,8 +34,19 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
   const canvas = document.querySelector<HTMLCanvasElement>('#hero-canvas');
   const hero = canvas?.closest<HTMLElement>('#hero');
   const copy = hero?.querySelector<HTMLElement>('[data-hero-copy]');
+  const poster = hero?.querySelector<HTMLElement>('.poster');
   const ctx = canvas?.getContext('2d');
-  if (!canvas || !hero || !copy || !ctx || !document.documentElement.classList.contains('motion-hero')) return undefined;
+  if (!canvas || !hero || !copy || !poster || !ctx || !document.documentElement.classList.contains('motion-hero')) return undefined;
+
+  const slides = Array.from(copy.querySelectorAll<HTMLElement>('.beat-slide'));
+  const starts = JSON.parse(copy.dataset.starts ?? '[0]') as number[];
+  let beat = 0;
+  const showBeat = (next: number) => {
+    if (next === beat) return;
+    slides[beat]?.classList.remove('is-active');
+    slides[next]?.classList.add('is-active');
+    beat = next;
+  };
 
   const manifest = JSON.parse(canvas.dataset.frames ?? '{}') as FramesManifest;
   const set = isMobile ? manifest.mobile : manifest.desktop;
@@ -35,6 +55,7 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
   let current = 0;
   let drawn = -1;
   let cancelled = false;
+  let anchor = anchors(poster);
 
   // The first batch is decoded up front so it draws instantly. Background frames only download; the browser
   // decodes each one when it is drawn, which keeps CPU and memory low while the rest stream in.
@@ -60,18 +81,26 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     const i = nearest(current);
     const img = images[i];
     if (!img || i === drawn) return;
-    const { width: cw, height: ch } = canvas;
-    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const w = img.naturalWidth * scale;
-    const h = img.naturalHeight * scale;
-    ctx.drawImage(img, (cw - w) / 2, ch - h, w, h); // cover, anchored to the bottom like the poster
+    const { x, y, w, h } = coverRect(canvas.width, canvas.height, img.naturalWidth, img.naturalHeight, anchor.ax, anchor.ay);
+    ctx.drawImage(img, x, y, w, h); // cover, cropped like the poster's object-position
     drawn = i;
   };
+
+  // Where the light cluster lands on screen (CSS px; the canvas fills the hero), so the closing beat's
+  // monogram sits on it.
+  const placeCluster = () => {
+    const r = coverRect(hero.clientWidth, hero.clientHeight, set.width, set.height, anchor.ax, anchor.ay);
+    hero.style.setProperty('--cluster-x', `${Math.round(r.x + r.w * CLUSTER.x)}px`);
+    hero.style.setProperty('--cluster-y', `${Math.round(r.y + r.h * CLUSTER.y)}px`);
+  };
+  placeCluster();
 
   const resize = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     canvas.width = Math.round(canvas.clientWidth * dpr);
     canvas.height = Math.round(canvas.clientHeight * dpr);
+    anchor = anchors(poster);
+    placeCluster();
     drawn = -1;
     draw();
   };
@@ -115,12 +144,15 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
       scrub: true,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        const next = Math.round(self.progress * (set.count - 1));
+        const next = frameAt(self.progress, set.count, FILM_END);
         if (next !== current) { current = next; requestAnimationFrame(draw); }
+        showBeat(beatAt(self.progress, starts));
       },
     },
   });
-  timeline.to(copy, { opacity: 0, ease: 'none', duration: 1 - FADE_FROM }, FADE_FROM);
+  // The hand-off fills the last 8% of the pin, so the timeline spans exactly 0..1 of the scroll.
+  gsap.set(hero, { '--handoff': 0 });
+  timeline.to(hero, { '--handoff': 1, ease: 'none', duration: 1 - HANDOFF_FROM }, HANDOFF_FROM);
 
   return () => {
     cancelled = true;
@@ -129,6 +161,7 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     if ('cancelIdleCallback' in window) window.cancelIdleCallback(idle as number); else window.clearTimeout(idle as number);
     hero.classList.remove('is-live');
     canvas.hidden = true;
-    gsap.set(copy, { clearProps: 'opacity' });
+    ['--handoff', '--cluster-x', '--cluster-y'].forEach((p) => hero.style.removeProperty(p));
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === 0));
   };
 }
