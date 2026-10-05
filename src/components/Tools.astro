@@ -1,0 +1,50 @@
+---
+import { toolGroups, toolsSection } from '../data/tools';
+import { brandIcon, icon } from '../lib/icons';
+---
+<section id="tools" data-section="tools">
+  <div class="wrap">
+    <div class="head">
+      <h2>{toolsSection.heading}</h2>
+      <p class="muted">{toolsSection.intro}</p>
+    </div>
+    {toolGroups.map((g) => (
+      <div class="group">
+        <h3 class="label">{g.group}</h3>
+        <ul class="grid">
+          {g.tools.map((tool) => (
+            <li class="tool" data-card>
+              <span class="logo" set:html={tool.brand ? brandIcon(tool.brand) : icon(tool.glyph ?? '')} />
+              <span class="text">
+                <span class="name">{tool.name}</span>
+                <span class="use">{tool.use}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .head { display: grid; gap: var(--space-m); max-width: 40rem; margin-bottom: var(--space-2xl); }
+  .head h2, .head p { margin: 0; }
+  .group + .group { margin-top: var(--space-xl); }
+  .group h3 { margin: 0 0 var(--space-m); }
+  .grid { display: grid; gap: var(--space-s); margin: 0; padding: 0; list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .tool { display: flex; gap: var(--space-m); align-items: center; padding: var(--space-m);
+    border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--bg-raised);
+    transition: border-color var(--dur) var(--ease-out); }
+  .logo { flex: none; display: inline-flex; width: 1.75rem; height: 1.75rem; color: var(--fg);
+    transition: color var(--dur) var(--ease-out); }
+  .logo :global(svg) { width: 100%; height: 100%; }
+  .text { display: grid; gap: 0.125rem; min-width: 0; }
+  .name { font-weight: 600; }
+  .use { color: var(--muted); font-size: var(--step--1); }
+  @media (hover: hover) {
+    .tool:hover { border-color: rgb(var(--accent-rgb) / 0.45); }
+    .tool:hover .logo { color: var(--accent); }
+  }
+</style>

@@ -28,6 +28,7 @@
     "esbuild": true
   },
   "devDependencies": {
-    "playwright-core": "^1.63.0"
+    "playwright-core": "^1.63.0",
+    "simple-icons": "^16.34.0"
   }
 }
