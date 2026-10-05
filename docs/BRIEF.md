@@ -3,7 +3,7 @@
 Short version of `docs/superpowers/specs/2026-10-04-ndiga-dee-creative-co-design.md`. If they disagree, the spec wins.
 
 ## Goal
-The site for **Ndiga Dee Creative Co.**, an AI-native creative studio in Nairobi led by Derrick Ndiga (Founder · Full-Stack & AI Engineer). A prospective client should understand within 10 seconds what the studio does, why AI makes it faster, and how to start a project. Conversion: submit a project brief or book a call.
+The site for **Ndiga Dee Creative Co.**, an AI-native creative studio in Nairobi led by Derrick Ndiga (Freelance Web Developer & Digital Creative: websites and web apps, graphic design and digital marketing). A prospective client should understand within 10 seconds what the studio does, why AI makes it faster, and how to start a project. Conversion: submit a project brief or book a call.
 
 ## Positioning
 - Services: Websites & Web Apps · Brand & Creative · Growth (SEO & Analytics).

@@ -7,24 +7,45 @@ export type ToolGroup = { group: string; compact?: boolean; tools: Tool[] };
 
 export const toolsSection = {
   heading: 'Stack & tools',
-  intro: 'The kit behind the speed. AI does the heavy lifting, and every result still passes through my hands.',
+  intro: 'The kit behind the work: design, marketing and code. AI does the heavy lifting, and every result still passes through my hands.',
 };
 
 export const toolGroups: ToolGroup[] = [
   {
+    group: 'Design & content',
+    tools: [
+      { name: 'Photoshop', use: 'Product photos, retouching and ad creatives', glyph: 'image' },
+      { name: 'Canva', use: 'Social posts, ads and brand assets', glyph: 'palette' },
+      { name: 'CapCut', use: 'Short videos for Reels and TikTok', glyph: 'film-slate' },
+      { name: 'Figma', use: 'Layouts, prototypes and handoff', brand: 'figma' },
+    ],
+  },
+  {
+    group: 'Marketing',
+    tools: [
+      { name: 'Google Ads', use: 'Search and display campaigns', brand: 'googleads' },
+      { name: 'TikTok', use: 'Short-form content that gets seen', brand: 'tiktok' },
+      { name: 'Mailchimp', use: 'Email campaigns and newsletters', brand: 'mailchimp' },
+      { name: 'Google Analytics', use: 'Tracking what actually works', brand: 'googleanalytics' },
+      { name: 'Search Console', use: 'Search visibility and SEO fixes', brand: 'googlesearchconsole' },
+    ],
+  },
+  {
     group: 'AI',
     tools: [
+      { name: 'ChatGPT', use: 'Ad copy, ideas and first drafts', glyph: 'chat-circle-dots' },
+      { name: 'Nano Banana', use: 'AI product shots and image edits', brand: 'googlegemini' },
+      { name: 'Kling & Runway', use: 'AI video clips for ads', glyph: 'video-camera' },
+      { name: 'Google Flow', use: 'AI video for films like the hero', glyph: 'film-strip' },
       { name: 'Claude', use: 'Planning, code and reviews', brand: 'claude' },
       { name: 'Codex', use: 'Second pair of eyes on code', glyph: 'terminal-window' },
       { name: 'OpenRouter', use: 'Models inside the apps I ship', brand: 'openrouter' },
       { name: 'n8n', use: 'Automations and AI workflows', brand: 'n8n' },
-      { name: 'Google Flow', use: 'AI video for films like the hero', glyph: 'film-strip' },
     ],
   },
   {
-    group: 'Design & build',
+    group: 'Build & ship',
     tools: [
-      { name: 'Figma', use: 'Layouts, prototypes and handoff', brand: 'figma' },
       { name: 'VS Code', use: 'Where the code gets written', glyph: 'code' },
       { name: 'GitHub', use: 'Code, reviews and deploys', brand: 'github' },
       { name: 'Docker', use: 'The same setup on every machine', brand: 'docker' },

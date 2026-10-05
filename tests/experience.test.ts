@@ -10,12 +10,12 @@ test('experience, education, capabilities and 404 copy pass the copy guard', () 
 
 test('the current role is the studio', () => {
   assert.equal(experience[0].org, 'Ndiga Dee Creative Co.');
-  assert.equal(experience[0].role, 'Freelance Full-Stack & AI Developer');
+  assert.equal(experience[0].role, 'Freelance Web Developer & Digital Creative');
 });
 
 test('capabilities are grouped to match the services', () => {
   assert.deepEqual(capabilities.map((c) => c.group), [
-    'Web & apps', 'Brand & creative', 'Growth', 'AI & automation', 'Infrastructure & security',
+    'Web & apps', 'Design & content', 'Digital marketing', 'AI & automation', 'Infrastructure & security',
   ]);
 });
 

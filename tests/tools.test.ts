@@ -16,7 +16,7 @@ test('tools section has a heading and non-empty groups', () => {
 
 test('the tools Derrick named are listed', () => {
   const names = allTools.map((t) => t.name);
-  for (const name of ['Claude', 'Codex', 'Figma', 'Docker']) assert.ok(names.includes(name), `${name} missing`);
+  for (const name of ['Claude', 'Codex', 'Figma', 'Docker', 'Canva', 'Photoshop', 'CapCut', 'Google Ads', 'TikTok', 'Mailchimp', 'ChatGPT']) assert.ok(names.includes(name), `${name} missing`);
 });
 
 test('tool cards have a use line; stack chips are compact and cover the core stack', () => {

@@ -21,14 +21,14 @@ export const processSection = {
     },
     {
       title: 'Build with AI',
-      usual: 'Routine code written slowly by hand.',
-      withAI: 'AI handles scaffolding and first drafts; I review every line and engineer the hard parts.',
+      usual: 'Routine code and design work done slowly by hand.',
+      withAI: 'AI handles first drafts of code, layouts and visuals; I review every piece and craft the parts that matter.',
       icon: 'code',
     },
     {
       title: 'Launch & grow',
       usual: 'Problems found by your customers after launch.',
-      withAI: 'Automated accessibility, speed and SEO checks run before launch.',
+      withAI: 'Automated speed and SEO checks run before launch, then campaigns bring the right people in.',
       icon: 'rocket-launch',
     },
   ] satisfies ProcessStep[],

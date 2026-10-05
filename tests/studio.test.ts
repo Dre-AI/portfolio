@@ -16,7 +16,7 @@ test('studio name is exact and the retired #longliveAI tag is gone', () => {
 });
 
 test('founder line matches the spec', () => {
-  assert.equal(`${founder.name}, ${founder.role}`, 'Derrick Ndiga, Freelance Full-Stack & AI Developer');
+  assert.equal(`${founder.name}, ${founder.role}`, 'Derrick Ndiga, Freelance Web Developer & Digital Creative');
 });
 
 test('AI benefits are about time saved and contain no invented numbers', () => {

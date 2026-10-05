@@ -7,8 +7,8 @@ export const studio = {
   city: 'Nairobi, Kenya',
   headline: 'Creative work, engineered with AI.',
   subline:
-    'Websites, brands and growth for ambitious businesses. Designed by a person, built faster with AI.',
-  heroLabels: ['Freelance design & development', 'Full-stack & AI'],
+    'Websites, ads and design that sell, plus the marketing to back them. Made by a person, faster with AI.',
+  heroLabels: ['Web, design & marketing', 'Freelance creative'],
   address: { locality: 'Nairobi', country: 'KE' },
   footerNote: 'Designed and built in Nairobi by Derrick, with AI.',
 };
@@ -37,8 +37,8 @@ export const aiBenefits = [
     text: 'AI explores many directions in hours, so you react to real designs early in the project, and the result is better for it: the strongest idea wins, not the first one.',
   },
   {
-    title: 'Working builds sooner',
-    text: 'AI-assisted scaffolding and code review clear the routine work, so engineering time goes into the parts that matter.',
+    title: 'Finished work sooner',
+    text: 'AI clears the routine drafting in code, design and copy, so my time goes into the parts that matter.',
   },
   {
     title: 'Fewer rounds of fixes',
@@ -46,14 +46,14 @@ export const aiBenefits = [
   },
   {
     title: 'A person stays in charge',
-    text: 'I review every design and every line of code before it reaches you.',
+    text: 'I review every design, every ad and every line of code before it reaches you.',
   },
 ];
 
 export const founder = {
   name: 'Derrick Ndiga',
-  role: 'Freelance Full-Stack & AI Developer',
-  bio: 'I started in hands-on IT, setting up machines, networks and company email, and that still shapes how I build: things should keep working on a Monday morning. Today I design and build websites, web apps and brands, using AI to move faster without lowering the bar. I work under the Ndiga Dee Creative Co. name, and I am also studying Cyber Security & Digital Forensics.',
+  role: 'Freelance Web Developer & Digital Creative',
+  bio: 'I design, build and market for businesses: websites and web apps, ad creatives and product photos, and the campaigns that put them in front of customers. I started in hands-on IT, setting up machines, networks and company email, and that still shapes how I work: things should keep working on a Monday morning. I use AI to move faster without lowering the bar, and I finish every piece by hand. I work under the Ndiga Dee Creative Co. name, and I am also studying Cyber Security & Digital Forensics.',
   photoAlt: 'Derrick Ndiga',
   email: 'ndigaderrick6@gmail.com',
   links: {

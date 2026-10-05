@@ -4,12 +4,19 @@ import { services } from '../src/data/services.ts';
 import { processSection } from '../src/data/process.ts';
 import { findContentIssues } from '../src/lib/guards.ts';
 
-test('exactly the three agreed services, in order', () => {
+test('exactly the three agreed services, in order (web, design, marketing; 2026-10-05)', () => {
   assert.deepEqual(services.map((s) => s.title), [
     'Websites & Web Apps',
-    'Brand & Creative',
-    'Growth (SEO & Analytics)',
+    'Graphic Design & Content',
+    'Digital Marketing',
   ]);
+  assert.deepEqual(services.map((s) => s.slug), ['websites', 'design', 'marketing']);
+});
+
+test('the design service sells ads and product photos', () => {
+  const design = services[1].deliverables.join(' ');
+  assert.match(design, /Ad creatives/);
+  assert.match(design, /Product photos/);
 });
 
 test('AI is a method, not a service', () => {

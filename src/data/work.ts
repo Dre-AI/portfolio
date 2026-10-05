@@ -43,7 +43,7 @@ export const featuredWork: WorkItem[] = [
     slug: 'keton-consulting',
     label: 'built-for',
     title: 'Keton Consulting',
-    services: ['websites', 'growth'],
+    services: ['websites', 'marketing'],
     summary: 'A fast, findable website for a clinical lab-equipment distributor.',
     brief: 'Keton needed laboratory buyers to find it on search and trust it enough to get in touch.',
     approach:
@@ -89,7 +89,7 @@ export const featuredWork: WorkItem[] = [
     title: 'Bazaar Cleaning & Car Wash',
     conceptTitle: 'Cleaning & car-wash brand',
     clientApproved: false,
-    services: ['websites', 'brand'],
+    services: ['websites', 'design'],
     summary: 'A 3D scroll-animated website concept for a cleaning and car-wash business.',
     brief: 'Show a local service business how a website can feel premium and memorable, not like a template.',
     approach:

@@ -10,7 +10,7 @@ Turn the personal portfolio into the site for **Ndiga Dee Creative Co.**, a foun
 ## 2. Positioning
 - **Who:** Derrick Ndiga, a **freelance** full-stack and AI developer who works under the brand **Ndiga Dee Creative Co.** (decided 2026-10-04). It is a one-person business, presented honestly, and the brand can grow into a studio later.
 - **Voice:** first person singular. All copy says "I" and "my", never "we", "our" or "the team". Clients hire Derrick directly.
-- **Founder line:** Derrick Ndiga, Freelance Full-Stack & AI Developer. Ndiga Dee Creative Co. is the brand name used in the nav, footer, hero final beat and legal/contact details.
+- **Founder line:** Derrick Ndiga, Freelance Web Developer & Digital Creative (was "Freelance Full-Stack & AI Developer" until 2026-10-05). Ndiga Dee Creative Co. is the brand name used in the nav, footer, hero final beat and legal/contact details.
 - **Role of AI:** AI is the studio's *method*, not a service it sells. Every page should reinforce one benefit: **work is delivered in less time without cutting quality**, because AI handles drafting, code scaffolding, visual exploration and QA, and Derrick handles judgement, design and engineering.
 - **Headline direction:** "Creative work, engineered with AI." Final copy comes from the brand-voice pass in Phase 1.
 - **Signature tag:** retired on 2026-10-05 at Derrick's request. `#longliveAI` no longer appears anywhere on the site; older mentions below are historical.
@@ -20,6 +20,8 @@ Turn the personal portfolio into the site for **Ndiga Dee Creative Co.**, a foun
 Speed claims must be framed as process benefits ("first designs in days, not weeks") or backed by a real comparison Derrick supplies. Never invent a percentage or multiplier. Placeholder numbers never ship.
 
 ## 3. Services (three)
+**Updated 2026-10-05:** Derrick's goal is client work in websites and web apps, graphic design and digital marketing, and he wants the site to sell him as a creative (ads, product photos). The services are now **Websites & Web Apps**, **Graphic Design & Content** (ad creatives, product photos, social posts, short-form video, logos) and **Digital Marketing** (Google Ads, TikTok, email, SEO, analytics). His role line is now "Freelance Web Developer & Digital Creative". His tools: Photoshop, Canva, CapCut, Figma, Google Ads, TikTok, Mailchimp, ChatGPT, Nano Banana, Kling and Runway, plus the dev stack in `src/data/tools.ts`. A creative gallery gets built from the samples he sends. The table below is the original version.
+
 | Service | Example deliverables | AI speed angle |
 |---|---|---|
 | Websites & Web Apps | Marketing sites, custom web apps (React/Django, Laravel, Astro), CMS, integrations | AI-assisted scaffolding and testing means working builds sooner |
