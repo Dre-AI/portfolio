@@ -7,7 +7,6 @@ import 'lenis/dist/lenis.css';
 import { setupHero } from './hero';
 import { setupPipeline } from './pipeline';
 import { setupTimeline } from './timeline';
-import { setupCounters } from './counters';
 import { setupReveal } from './reveal';
 import { setupInteract } from './interact';
 
@@ -40,7 +39,7 @@ if (document.documentElement.classList.contains('motion')) {
       const { mobile, reduce } = context.conditions as { mobile: boolean; reduce: boolean };
       if (reduce) return undefined;
       // One short task per effect instead of one long one, still in page order so pins measure correctly.
-      const setups = [() => setupHero(mobile), () => setupPipeline(mobile), setupTimeline, setupCounters, setupReveal];
+      const setups = [() => setupHero(mobile), () => setupPipeline(mobile), setupTimeline, setupReveal];
       const cleanups: ((() => void) | undefined)[] = [];
       let cancelled = false;
       const next = () => {

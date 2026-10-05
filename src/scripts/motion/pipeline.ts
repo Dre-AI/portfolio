@@ -18,7 +18,7 @@ export function setupPipeline(isMobile: boolean): (() => void) | undefined {
   const gradient = document.createElementNS(SVG_NS, 'linearGradient');
   gradient.id = 'pipe-gradient';
   gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
-  [['0', 'var(--accent-2)'], ['0.55', 'var(--accent)'], ['1', 'rgb(var(--glow-3))']].forEach(([offset, colour]) => {
+  [['0', 'var(--accent)'], ['0.55', 'var(--accent)'], ['1', 'rgb(var(--silver-rgb))']].forEach(([offset, colour]) => {
     const stop = document.createElementNS(SVG_NS, 'stop');
     stop.setAttribute('offset', offset);
     stop.style.stopColor = colour; // CSS variables resolve in style, not in presentation attributes

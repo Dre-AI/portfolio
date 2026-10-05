@@ -1,8 +1,9 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { findContentIssues } from './guards';
 
 /** True when copy is filled in: never publish [bracket] placeholders or TODO (CLAUDE.md). */
-export const isReady = (text?: string): text is string => !!text && !/\[|\]|TODO/.test(text);
+export const isReady = (text?: string): text is string => !!text && findContentIssues(text).length === 0;
 
 /** True when a file exists in public/, so we never link to a missing CV or screenshot. */
 export const publicFileExists = (path?: string): path is string =>

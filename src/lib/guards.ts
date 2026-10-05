@@ -3,9 +3,9 @@
 
 export const LONG_LIVE_TAG = '#longliveAI';
 
-const PLACEHOLDER = /\[|\]|\bTODO\b|\bTBD\b/i;
-const PHONE = /(?:\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4}\b/;
-const TAG_LIKE = /#long\s*live\s*ai\b/gi;
+const PLACEHOLDER = /\[|\]|\bTODO\b|\bTBD\b|\blorem\b|\bX{2,}\b|\{\{/i;
+const PHONE = /(?<!\d)(?:\+\d[\d\s-]{8,14}\d|0[17]\d{8}|\(?\d{3,4}\)?[\s-]\d{3}[\s-]?\d{3,4})(?!\d)/;
+const TAG_LIKE = /#?long[\s_-]*live[\s_-]*a\.?i\w*/gi;
 
 export type FoundString = { path: string; text: string };
 

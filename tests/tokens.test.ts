@@ -52,3 +52,9 @@ test('grain sits on a fixed, non-interactive layer', () => {
 test('no gradient text anywhere in the global styles', () => {
   assert.doesNotMatch(css, /background-clip:\s*text/);
 });
+
+test('legacy token aliases and .grad-text are gone', () => {
+  for (const legacy of ['--accent-2', '--glow-1', '--glow-2', '--glow-3', '--gradient', '--glass', '--edge', '--radius-control', '.grad-text']) {
+    assert.ok(!css.includes(legacy), `${legacy} must be removed`);
+  }
+});

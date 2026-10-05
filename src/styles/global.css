@@ -25,14 +25,6 @@
   --chrome-text: linear-gradient(180deg, #f4f6f8 10%, #b9c1c9 60%, #e6eaee 100%);
   --grain-opacity: 0.07;
 
-  /* Legacy aliases (Phase 1 components). Single accent: everything resolves to cyan or silver. */
-  --accent-2: var(--accent);
-  --glow-1: var(--accent-rgb);
-  --glow-2: var(--accent-rgb);
-  --glow-3: var(--silver-rgb);
-  --gradient: var(--chrome-text);
-  --glass: linear-gradient(180deg, rgb(var(--silver-rgb) / 0.06), rgb(var(--silver-rgb) / 0.015));
-  --edge: linear-gradient(180deg, rgb(var(--silver-rgb) / 0.4), rgb(var(--silver-rgb) / 0.08) 40%, rgb(var(--silver-rgb) / 0.03));
   color-scheme: dark;
 }
 
@@ -64,7 +56,6 @@
 
   /* Shape */
   --radius-card: 0.75rem;
-  --radius-control: var(--radius-card); /* legacy alias: inputs */
   --radius-pill: 999px;
 
   /* Motion */
@@ -113,7 +104,7 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 ::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); }
 .skip { position: absolute; left: -999px; }
-.skip:focus { left: 1rem; top: 1rem; display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-control); z-index: 100; }
+.skip:focus { left: 1rem; top: 1rem; display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-card); z-index: 100; }
 .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
 section { padding-block: var(--space); border-top: 1px solid var(--line); scroll-margin-top: 4.5rem; }
 
@@ -150,7 +141,6 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .grid { display: grid; gap: var(--space-xl); grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
 
 /* ─── Gradient text ─────────────────────────────────────────── */
-.grad-text { color: var(--fg); }
 
 /* ─── Buttons (pill) ───────────────────────────────────────── */
 .btn {
@@ -182,7 +172,7 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .card {
   position: relative; isolation: isolate; display: flex; flex-direction: column; gap: var(--space-m);
   padding: var(--space-l); border-radius: var(--radius-card); overflow: hidden;
-  background: var(--glass), var(--bg-raised); border: 1px solid var(--line);
+  background: var(--bg-raised); border: 1px solid var(--line);
   transition: border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
 }
 .card::before {

@@ -9,6 +9,8 @@
     "test": "node --test \"tests/**/*.test.ts\"",
     "dev": "astro dev",
     "build": "astro build",
+    "check:dist": "node scripts/check-dist.mjs",
+    "verify": "npm test && npm run build && npm run check:dist",
     "preview": "astro preview",
     "astro": "astro"
   },

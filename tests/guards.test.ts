@@ -42,3 +42,27 @@ test('flags more than one middle dot in a string', () => {
   assert.equal(findContentIssues({ a: 'A · B · C' }).length, 1);
   assert.deepEqual(findContentIssues({ a: 'Founder · Full-Stack & AI Engineer' }), []);
 });
+
+test('flags lorem, XX% and {{x}} as placeholders', () => {
+  for (const text of ['lorem ipsum', 'Cut time by XX%', 'Hello {{name}}']) {
+    const issues = findContentIssues({ a: text });
+    assert.equal(issues.length, 1, text);
+    assert.ok(issues[0].endsWith('placeholder'), text);
+  }
+});
+
+test('flags hyphenated and suffixed misspellings of the tag', () => {
+  assert.equal(findContentIssues({ a: '#long-live-ai' }).length, 1);
+  assert.equal(findContentIssues({ a: '#longliveAIs' }).length, 1);
+  assert.equal(findContentIssues({ a: 'long_live_AI' }).length, 1);
+  assert.deepEqual(findContentIssues({ a: `Yes ${LONG_LIVE_TAG}.` }), []);
+});
+
+test('does not flag long order numbers as phone numbers', () => {
+  assert.deepEqual(findContentIssues({ a: 'Order 123456789012' }), []);
+});
+
+test('flags unseparated Kenyan mobile numbers but not other long digit runs', () => {
+  assert.equal(findContentIssues({ a: 'Call 0712345678' }).length, 1);
+  assert.deepEqual(findContentIssues({ a: 'Ref 1234567890123' }), []);
+});
