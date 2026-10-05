@@ -1,11 +1,11 @@
 ---
-import { experience, education } from '../data/experience';
-import { sections } from '../data/site';
+import { experience } from '../data/experience';
+import { sections } from '../data/studio';
 ---
-{/* Phase 4 draws the rail on scroll via [data-timeline]. */}
+{/* src/scripts/motion/timeline.ts draws the rail on scroll via [data-timeline]. */}
 <section id="experience" data-section="timeline">
-  <div class="wrap">
-    <h2>{sections.experience.heading}</h2>
+  <div class="wrap layout">
+    <h2>{sections.experience}</h2>
     <ol data-timeline>
       {experience.map((e) => (
         <li>
@@ -17,29 +17,20 @@ import { sections } from '../data/site';
         </li>
       ))}
     </ol>
-
-    <h3 class="edu-title">{sections.experience.education}</h3>
-    <ul class="edu">
-      {education.map((ed) => (
-        <li>
-          <p class="award">{ed.award}</p>
-          <p class="muted">{ed.school}</p>
-          <p class="label">{ed.period}</p>
-        </li>
-      ))}
-    </ul>
   </div>
 </section>
 
 <style>
+  .layout { display: grid; gap: var(--space-2xl); }
+  h2 { margin: 0; }
   ol {
     --dot: 0.5625rem;
     position: relative;
-    margin: var(--space-2xl) 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
-  /* The rail Phase 4 draws on scroll. */
+  /* The rail the motion script draws on scroll. */
   ol::before {
     content: '';
     position: absolute;
@@ -61,6 +52,8 @@ import { sections } from '../data/site';
     border-radius: var(--radius-pill);
     background: var(--bg);
     border: 1px solid color-mix(in srgb, var(--fg) 40%, var(--line));
+    z-index: 1;
+    transition: background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
   }
   li:first-child::before { background: var(--accent); border-color: var(--accent); }
   /* Motion only (src/scripts/motion/timeline.ts): the accent line draws down and fills each dot it passes. */
@@ -73,22 +66,13 @@ import { sections } from '../data/site';
     background: var(--accent);
     transform-origin: top;
   }
-  li::before { transition: background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); z-index: 1; }
   li.is-passed::before { background: var(--accent); border-color: var(--accent); }
   li p, h3 { margin: 0; }
   h3 { font-size: var(--step-1); line-height: 1.35; }
   .org { font-weight: 400; color: var(--muted); }
   .period { padding-top: 0.2rem; }
 
-  .edu-title { margin: var(--space-3xl) 0 var(--space-l); font-size: var(--step-1); }
-  .edu { display: grid; gap: var(--space-l); margin: 0; padding: 0; list-style: none; }
-  .edu li { padding: var(--space-m) 0 0; border-top: 1px solid var(--line); gap: var(--space-2xs); }
-  .edu li::before { content: none; }
-  .award { font-weight: 600; }
-
   @media (min-width: 768px) {
     li { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--space-xl); }
-    .edu { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
-    .edu li { grid-template-columns: 1fr; gap: var(--space-2xs); }
   }
 </style>

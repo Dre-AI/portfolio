@@ -105,6 +105,9 @@ export const sections = {
   moreBuilds: 'More builds',
   about: 'Who you work with',
   contact: contactCopy.heading,
+  experience: 'Experience',
+  education: 'Education',
+  capabilities: 'What I work with',
   case: {
     brief: 'The brief',
     approach: 'What I built',
@@ -116,6 +119,12 @@ export const sections = {
     duration: 'Delivered in',
     weeks: 'weeks',
   },
+};
+
+export const notFound = {
+  heading: 'This page drifted off.',
+  text: 'The link may be old. Everything I make starts from the home page.',
+  cta: 'Back to home',
 };
 
 // Header navigation. Hrefs are relative to the site base.

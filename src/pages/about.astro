@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Timeline from '../components/Timeline.astro';
+import { founder, ctas, sections, studio } from '../data/studio';
+import { education, capabilities } from '../data/experience';
+import { base } from '../lib/content';
+---
+<Base title={`${founder.name} | ${studio.name}`} description={founder.bio.split('. ')[0] + '.'}>
+  <Header />
+  <main id="main" class="about">
+    <section class="intro" data-section="about-intro">
+      <div class="wrap layout">
+        <div class="photo">
+          <img src={`${base}founder.webp`} alt={founder.photoAlt} width="900" height="1125" decoding="async" />
+        </div>
+        <div class="text">
+          <h1>{founder.name}</h1>
+          <p class="label">{founder.role}</p>
+          <p class="lead">{founder.bio}</p>
+        </div>
+      </div>
+    </section>
+
+    <Timeline />
+
+    <section class="education" data-section="education">
+      <div class="wrap">
+        <h2>{sections.education}</h2>
+        <ul class="edu">
+          {education.map((ed) => (
+            <li>
+              <p class="award">{ed.award}</p>
+              <p class="muted">{ed.school}</p>
+              <p class="label">{ed.period}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="capabilities" data-section="capabilities">
+      <div class="wrap">
+        <h2>{sections.capabilities}</h2>
+        <div class="groups">
+          {capabilities.map((c) => (
+            <div class="group">
+              <h3>{c.group}</h3>
+              <ul class="tags">{c.items.map((i) => <li>{i}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" data-section="about-cta">
+      <div class="wrap">
+        <a class="btn primary" href={`${base}#contact`}>{ctas.startProject}</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .intro { border-top: 0; padding-top: 8rem; }
+  .layout { display: grid; gap: var(--space-xl); align-items: start; }
+  .photo { max-width: 24rem; border-radius: var(--radius-card); overflow: hidden; border: 1px solid var(--line); }
+  .photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .text { display: grid; gap: var(--space-m); justify-items: start; }
+  .text > * { margin: 0; }
+  .lead { max-width: 60ch; }
+
+  .education h2, .capabilities h2 { margin: 0 0 var(--space-xl); font-size: var(--step-2); }
+  .edu { display: grid; gap: var(--space-l); margin: 0; padding: 0; list-style: none; }
+  .edu li { display: grid; gap: var(--space-2xs); padding-top: var(--space-m); border-top: 1px solid var(--line); }
+  .edu p { margin: 0; }
+  .award { font-weight: 600; }
+
+  .groups { display: grid; gap: var(--space-xl); }
+  .group { padding-top: var(--space-m); border-top: 1px solid var(--line); }
+  .group h3 { margin: 0 0 var(--space-s); font-size: var(--step-0); font-weight: 600; letter-spacing: -0.01em; }
+
+  .closing { padding-block: var(--space-2xl); }
+
+  @media (min-width: 768px) {
+    .layout { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-2xl); }
+    .photo { grid-column: span 5; max-width: none; }
+    .text { grid-column: 7 / span 6; padding-top: var(--space-l); }
+    .edu { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+    .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl) var(--space-2xl); }
+  }
+</style>
+
+<script>
+  // Progressive enhancement: the timeline rail draws on scroll once the page has loaded (never under reduced motion).
+  if (document.documentElement.classList.contains('motion')) {
+    const start = () => import('../scripts/motion/index.ts');
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  }
+</script>
