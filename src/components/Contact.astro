@@ -27,6 +27,7 @@ const mailto = `mailto:${founder.email}`;
         >
           {web3 && <input type="hidden" name="access_key" value={contactConfig.web3formsKey} />}
           {web3 && <input type="hidden" name="subject" value={`${studio.shortName}: new project brief`} />}
+          {web3 && <input type="hidden" name="from_name" value={studio.name} />}
 
           <div class="field">
             <label for="contact-name">{labels.name}</label>
