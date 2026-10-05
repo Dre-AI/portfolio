@@ -1,17 +1,22 @@
 ---
-import { pipeline } from '../data/site';
+import { processSection } from '../data/process';
+import { icon } from '../lib/icons';
 ---
-{/* Phase 4 turns [data-pipeline] into a pinned, scroll-scrubbed diagram. Static, it already reads as a flow. */}
+{/* src/scripts/motion/pipeline.ts draws a connector through the .node circles as you scroll and lights each
+    step when it is reached; statically every step is lit. */}
 <section id="how" data-section="pipeline">
   <div class="wrap">
-    <h2>{pipeline.heading}</h2>
-    <p class="muted">{pipeline.intro}</p>
+    <h2>{processSection.heading}</h2>
+    <p class="muted">{processSection.intro}</p>
     <ol data-pipeline>
-      {pipeline.steps.map((step) => (
+      {processSection.steps.map((step) => (
         <li data-step>
-          <span class="node" aria-hidden="true"></span>
-          <h3>{step.title}</h3>
-          <p class="muted">{step.text}</p>
+          <span class="node" set:html={icon(step.icon)} />
+          <div class="tile">
+            <h3>{step.title}</h3>
+            <p class="usual muted"><span class="label">{processSection.usualLabel}</span>{step.usual}</p>
+            <p class="with"><span class="label">{processSection.withAILabel}</span>{step.withAI}</p>
+          </div>
         </li>
       ))}
     </ol>
@@ -19,44 +24,36 @@ import { pipeline } from '../data/site';
 </section>
 
 <style>
-  ol {
-    --node: 0.75rem;
-    position: relative;
-    display: grid;
-    gap: var(--space-xl);
-    margin: var(--space-2xl) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  /* The connecting rail: vertical on phones, horizontal from tablet up. */
-  ol::before {
-    content: '';
-    position: absolute;
-    top: calc(var(--node) / 2);
-    bottom: calc(var(--node) / 2);
-    left: calc(var(--node) / 2 - 0.5px);
-    width: 1px;
-    background: var(--line);
-  }
-  li { position: relative; padding-left: calc(var(--node) + var(--space-l)); }
+  ol { --node: 3rem; position: relative; display: grid; gap: var(--space-l); margin: var(--space-2xl) 0 0; padding: 0; list-style: none; }
+  /* Static rail: vertical on phones, horizontal from tablet up. */
+  ol::before { content: ''; position: absolute; top: calc(var(--node) / 2); bottom: calc(var(--node) / 2); left: calc(var(--node) / 2 - 1px); width: 2px; background: var(--line-strong); }
+  li { position: relative; display: grid; grid-template-columns: var(--node) 1fr; gap: var(--space-m); align-items: start; }
   .node {
-    position: absolute;
-    top: 0.3rem;
-    left: 0;
-    width: var(--node);
-    height: var(--node);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-pill);
-    background: var(--bg);
+    position: relative; z-index: 1; display: grid; place-items: center; width: var(--node); height: var(--node);
+    border: 1px solid var(--line-strong); border-radius: 50%; background: var(--bg-raised); color: var(--accent);
+    transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
   }
-  li:last-child .node { background: var(--accent); }
-  h3 { font-size: var(--step-1); margin-bottom: var(--space-xs); }
-  li p { margin: 0; font-size: 0.9375rem; }
+  .node :global(svg) { width: 1.35rem; height: 1.35rem; }
+  .tile { align-self: stretch; display: grid; align-content: start; gap: var(--space-s); padding: var(--space-l); border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--bg-raised); }
+  .tile > * { margin: 0; }
+  h3 { font-size: var(--step-1); transition: color var(--dur) var(--ease-out); }
+  .tile p { display: grid; gap: 0.125rem; font-size: 0.9375rem; }
+  .with { color: var(--fg); }
+  .with .label { color: var(--accent); }
+
+  /* Motion only: steps wait, dimmed, until the connector reaches them. */
+  ol.is-dim::before { opacity: 0.4; }
+  ol.is-dim li:not(.is-on) .node { color: var(--muted); border-color: var(--line); }
+  ol.is-dim li:not(.is-on) h3 { color: var(--muted); }
+  /* The connector (built by pipeline.ts) is drawn on top of the rail; once every step is lit a light packet travels it. */
+  ol :global(.pipe-packet) { opacity: 0; transition: opacity var(--dur) var(--ease-out); }
+  ol:global(.is-complete) :global(.pipe-packet) { opacity: 1; animation: travel 2.6s linear infinite; }
+  @keyframes travel { from { stroke-dashoffset: 1.06; } to { stroke-dashoffset: 0; } }
 
   @media (min-width: 768px) {
-    ol { grid-template-columns: repeat(4, 1fr); gap: var(--space-l); }
-    ol::before { top: calc(var(--node) / 2 - 0.5px); bottom: auto; left: 0; right: 0; width: auto; height: 1px; }
-    li { padding: calc(var(--node) + var(--space-l)) 0 0; }
-    .node { top: 0; }
+    ol { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-m); }
+    ol::before { top: calc(var(--node) / 2 - 1px); bottom: auto; left: calc(var(--node) / 2); right: calc((100% - 3 * var(--space-m)) / 4 - var(--node) / 2); width: auto; height: 2px; }
+    li { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: var(--space-m); }
+    .node { justify-self: start; }
   }
 </style>

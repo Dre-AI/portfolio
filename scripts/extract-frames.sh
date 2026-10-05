@@ -2,7 +2,7 @@
 # Turn Flow clips into scroll-scrub WebP frame sets in public/hero/.
 # Needs ffmpeg + ffprobe with libwebp.
 #
-# Usage: bash scripts/extract-frames.sh [-f desktop_fps] [-m mobile_fps] [-c crop] clip [clip ...]
+# Usage: bash scripts/extract-frames.sh [-f desktop_fps] [-m mobile_fps] [-q desktop_quality] [-Q mobile_quality] [-c crop] clip [clip ...]
 # Example: bash scripts/extract-frames.sh -f 20 -m 12 hero-src/1.mp4 hero-src/2.mp4
 # Watermark trim: add -c "crop=iw*0.94:ih*0.94:0:0"
 #
@@ -13,12 +13,16 @@ set -euo pipefail
 DESKTOP_FPS=20
 MOBILE_FPS=12
 CROP=""
-while getopts "f:m:c:" opt; do
+DESKTOP_Q=72
+MOBILE_Q=68
+while getopts "f:m:q:Q:c:" opt; do
   case "$opt" in
     f) DESKTOP_FPS="$OPTARG" ;;
     m) MOBILE_FPS="$OPTARG" ;;
+    q) DESKTOP_Q="$OPTARG" ;;
+    Q) MOBILE_Q="$OPTARG" ;;
     c) CROP="$OPTARG" ;;
-    *) echo "Usage: $0 [-f desktop_fps] [-m mobile_fps] [-c crop] clip [clip ...]" >&2; exit 2 ;;
+    *) echo "Usage: $0 [-f desktop_fps] [-m mobile_fps] [-q desktop_quality] [-Q mobile_quality] [-c crop] clip [clip ...]" >&2; exit 2 ;;
   esac
 done
 shift $((OPTIND - 1))
@@ -55,8 +59,8 @@ MW=$(cap "$MOBILE_WIDTH")
 
 PRE=""
 [ -n "$CROP" ] && PRE="${CROP},"
-ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${DESKTOP_FPS},scale=${DW}:-2" -c:v libwebp -quality 72 "$OUT/desktop/%04d.webp"
-ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${MOBILE_FPS},scale=${MW}:-2" -c:v libwebp -quality 68 "$OUT/mobile/%04d.webp"
+ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${DESKTOP_FPS},scale=${DW}:-2" -c:v libwebp -quality "$DESKTOP_Q" "$OUT/desktop/%04d.webp"
+ffmpeg -y -loglevel error -i "$TMP/joined.mp4" -vf "${PRE}fps=${MOBILE_FPS},scale=${MW}:-2" -c:v libwebp -quality "$MOBILE_Q" "$OUT/mobile/%04d.webp"
 
 # Poster = the final desktop frame, i.e. the state the sequence resolves to.
 LAST=$(ls "$OUT/desktop" | sort | tail -n 1)

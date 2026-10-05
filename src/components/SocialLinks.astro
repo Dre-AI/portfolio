@@ -1,0 +1,36 @@
+---
+// Round icon buttons for Derrick's direct channels. Labels come from data (they become aria-labels and tooltips).
+import { founder } from '../data/studio';
+import { contactConfig, hasBooking } from '../data/contact';
+import { icon } from '../lib/icons';
+
+interface Props { booking?: boolean }
+const { booking = false } = Astro.props;
+
+const links = [
+  { href: `mailto:${founder.email}`, label: founder.linkLabels.email, glyph: 'envelope-simple', external: false },
+  { href: founder.links.linkedin, label: founder.linkLabels.linkedin, glyph: 'linkedin-logo', external: true },
+  { href: founder.links.github, label: founder.linkLabels.github, glyph: 'github-logo', external: true },
+  ...(booking && hasBooking()
+    ? [{ href: contactConfig.calLink, label: founder.linkLabels.booking, glyph: 'calendar-dots', external: true }]
+    : []),
+];
+---
+<ul class="social">
+  {links.map((link) => (
+    <li>
+      <a
+        class="icon-btn"
+        href={link.href}
+        aria-label={link.label}
+        title={link.label}
+        {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
+        set:html={icon(link.glyph)}
+      />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0; padding: 0; list-style: none; }
+</style>

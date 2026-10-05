@@ -2,24 +2,40 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Proof from '../components/Proof.astro';
+import Manifesto from '../components/Manifesto.astro';
+import Services from '../components/Services.astro';
 import Pipeline from '../components/Pipeline.astro';
 import Work from '../components/Work.astro';
-import About from '../components/About.astro';
-import Timeline from '../components/Timeline.astro';
+import Founder from '../components/Founder.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { base } from '../lib/content';
 ---
 <Base>
+  {/* LCP: the hero's first frame is the background until the canvas takes over, so fetch it early. */}
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/webp" href={`${base}hero/desktop/0001.webp`} media="(min-width: 768px)" />
+    <link rel="preload" as="image" type="image/webp" href={`${base}hero/mobile/0001.webp`} media="(max-width: 767px)" />
+  </Fragment>
   <Header />
   <main id="main">
     <Hero />
-    <Proof />
+    <Manifesto />
+    <Services />
     <Pipeline />
     <Work />
-    <About />
-    <Timeline />
+    <Founder />
     <Contact />
   </main>
   <Footer />
 </Base>
+
+<script>
+  // The motion layer is progressive enhancement: fetch it only after the page has loaded, so it never
+  // competes with the content (and never loads at all under reduced motion).
+  if (document.documentElement.classList.contains('motion')) {
+    const start = () => import('../scripts/motion/index.ts');
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  }
+</script>

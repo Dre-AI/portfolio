@@ -1,63 +1,47 @@
 /*
-  Design system (Phase 2). Clean minimal premium: cool slate neutrals, one accent (cobalt),
-  Geist + Geist Mono. Preview everything at /styleguide.
+  Design system: chrome futurist. Near-black cool ground, silver/chrome highlights, ONE pale-cyan accent
+  (it matches the glow in the hero film), fine grain. Display type: Archivo condensed; body: Geist;
+  labels: Geist Mono. Preview everything at /styleguide. Contrast is checked by tests/tokens.test.ts.
 
-  Theming: the page follows the system setting. Any element can pin a theme with
-  data-theme="light" | "dark"; the tokens and the element's own background/colour switch with it.
-  Dark section: data-theme="dark" on a section keeps it dark in both modes (the hero uses this,
-  plus .media-scrim when text sits on the video).
-
-  Shape rule: controls (buttons, inputs) use --radius-control, cards use --radius-card,
-  tags are pills. Nothing else gets a radius.
+  The site is dark-only. [data-theme] attributes still resolve to these tokens.
+  Shape rule: buttons and tags are full pill; cards, inputs and media use --radius-card. Nothing else.
+  Legacy aliases at the bottom of the colour block keep Phase 1 components working; Phase 3 removes them.
 */
 
 :root,
-[data-theme='light'] {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --fg: #020617;
-  --muted: #475569;
-  --line: #e2e8f0;
-  --accent: #2446d8;
-  --accent-fg: #ffffff;
-  color-scheme: light;
-}
+[data-theme] {
+  --bg: #0a0b0d;
+  --bg-raised: #111317;
+  --surface: #16191e;
+  --fg: #eef1f4;
+  --muted: #9aa3ad;
+  --line: #2a2f36; /* decorative hairlines only */
+  --line-strong: #656d77; /* input and control borders */
+  --accent: #7de3f0;
+  --accent-fg: #06171a;
+  --accent-rgb: 125 227 240; /* for rgb(var(--accent-rgb) / a) */
+  --silver-rgb: 200 207 214;
+  --chrome: linear-gradient(180deg, #f4f6f8 0%, #c9d0d7 38%, #6f7780 52%, #dfe4e9 100%);
+  --chrome-text: linear-gradient(180deg, #f4f6f8 10%, #b9c1c9 60%, #e6eaee 100%);
+  --grain-opacity: 0.07;
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #020617;
-    --surface: #0b1120;
-    --fg: #f1f5f9;
-    --muted: #94a3b8;
-    --line: #1e293b;
-    --accent: #7b93ff;
-    --accent-fg: #020617;
-    color-scheme: dark;
-  }
-}
-
-[data-theme='dark'] {
-  --bg: #020617;
-  --surface: #0b1120;
-  --fg: #f1f5f9;
-  --muted: #94a3b8;
-  --line: #1e293b;
-  --accent: #7b93ff;
-  --accent-fg: #020617;
   color-scheme: dark;
 }
 
 :root {
   /* Type */
+  --font-display: 'Archivo Variable', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --display-width: 72; /* Archivo wdth axis: 62 (narrowest) to 125 */
   --step--1: 0.875rem; /* labels, tags, captions */
   --step-0: 1.0625rem; /* body */
   --step-1: 1.25rem; /* lead paragraph */
   --step-2: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem); /* h3, card titles */
-  --step-3: clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem); /* h2, section titles */
-  --step-4: clamp(2.5rem, 1.5rem + 4.4vw, 4.5rem); /* h1, hero */
-  --measure: 68ch;
+  --step-3: clamp(2rem, 1.4rem + 2.4vw, 3.5rem); /* h2, section titles (display) */
+  --step-4: clamp(2.75rem, 1.6rem + 5vw, 5.75rem); /* h1, hero headline (display) */
+  --step-5: clamp(3.25rem, 1.8rem + 6.5vw, 7.5rem); /* hero beat words (display, 3-5 words only) */
+  --measure: 65ch;
 
   /* Space */
   --space-2xs: 0.25rem;
@@ -68,18 +52,22 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
   --space-3xl: 4.5rem;
-  --space: clamp(4rem, 10vw, 9rem); /* section padding */
+  --space: clamp(5rem, 12vw, 10rem); /* section padding (density 3: airy) */
 
   /* Shape */
-  --radius-control: 0.625rem;
-  --radius-card: 1rem;
+  --radius-card: 0.75rem;
   --radius-pill: 999px;
 
-  /* Motion (brief §6: short, ease-out) */
+  /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 150ms;
   --dur: 300ms;
   --dur-slow: 600ms;
+
+  /* Layers */
+  --z-nav: 50;
+  --z-grain: 60;
+  --z-overlay: 70;
 }
 
 /* ─── Base ─────────────────────────────────────────────────── */
@@ -95,19 +83,42 @@ body {
   text-rendering: optimizeLegibility;
 }
 [data-theme] { background: var(--bg); color: var(--fg); }
+
+/* Depth: a soft silver falloff and a faint cyan breath (behind content), plus fixed film grain on top.
+   Both layers are fixed and pointer-events: none, so they never repaint with scroll. */
+body::before,
+body::after { content: ''; position: fixed; inset: 0; pointer-events: none; }
+body::before {
+  z-index: -1;
+  background:
+    radial-gradient(60rem 40rem at 85% -10%, rgb(var(--silver-rgb) / 0.08), transparent 70%),
+    radial-gradient(40rem 30rem at 10% 110%, rgb(var(--accent-rgb) / 0.05), transparent 70%);
+}
+body::after {
+  z-index: var(--z-grain);
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 ::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); }
 .skip { position: absolute; left: -999px; }
-.skip:focus { left: 1rem; top: 1rem; display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-control); z-index: 10; }
+.skip:focus { left: 1rem; top: 1rem; display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-card); z-index: 100; }
 .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
-section { padding-block: var(--space); border-top: 1px solid var(--line); }
+section { padding-block: var(--space); border-top: 1px solid var(--line); scroll-margin-top: 4.5rem; }
 
 /* overflow-wrap: long words break only when they can't fit (e.g. 200% text on a phone). */
 h1, h2, h3, h4 { margin: 0 0 var(--space-m); font-weight: 600; text-wrap: balance; overflow-wrap: anywhere; }
-h1 { font-size: var(--step-4); line-height: 1.02; letter-spacing: -0.04em; }
-h2 { font-size: var(--step-3); line-height: 1.1; letter-spacing: -0.03em; }
+h1, h2, .display, .beat {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-width);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--step-4); line-height: 0.95; }
+h2 { font-size: var(--step-3); line-height: 1; }
+.beat { font-size: var(--step-5); line-height: 0.92; }
 h3 { font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.02em; }
 h4 { font-size: var(--step-1); line-height: 1.3; letter-spacing: -0.01em; }
 p { max-width: var(--measure); text-wrap: pretty; }
@@ -129,78 +140,92 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 
 .grid { display: grid; gap: var(--space-xl); grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
 
-/* ─── Buttons ──────────────────────────────────────────────── */
+/* ─── Gradient text ─────────────────────────────────────────── */
+
+/* ─── Buttons (pill) ───────────────────────────────────────── */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  min-height: 2.75rem; /* 44px touch target */
-  padding: 0.625rem 1.125rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-control);
-  background: var(--surface);
-  color: var(--fg);
-  font: 500 0.9375rem / 1.2 var(--font-sans);
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 2.875rem; padding: 0 1.375rem; white-space: nowrap;
+  border-radius: var(--radius-pill); border: 1px solid var(--line-strong);
+  background: transparent; color: var(--fg);
+  font: 500 0.9375rem / 1.2 var(--font-sans); text-decoration: none; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
 }
-.btn:hover { border-color: color-mix(in srgb, var(--fg) 35%, var(--line)); }
-.btn:active { transform: translateY(1px); }
+.btn:not(:disabled):not([aria-disabled='true']):hover { border-color: var(--fg); }
+.btn:active { transform: translateY(1px) scale(0.98); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
-.btn.primary:hover {
-  background: color-mix(in srgb, var(--accent) 88%, var(--fg));
-  border-color: color-mix(in srgb, var(--accent) 88%, var(--fg));
-}
+.btn.ghost { background: transparent; }
+.btn.primary:not(:disabled):not([aria-disabled='true']):hover { background: color-mix(in srgb, var(--accent) 86%, var(--fg)); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-/* ─── Tags ─────────────────────────────────────────────────── */
+/* Icons inside buttons and text links: sized to the text, coloured by currentColor. */
+.btn svg, .link svg { width: 1.125em; height: 1.125em; flex: none; }
+.link { display: inline-flex; align-items: center; gap: 0.375em; }
+
+/* ─── Icon buttons (circle; part of the pill family) ───────── */
+.icon-btn {
+  display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  border-radius: var(--radius-pill); border: 1px solid var(--line-strong);
+  color: var(--fg); background: transparent;
+  transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.icon-btn svg { width: 1.25rem; height: 1.25rem; }
+.icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+.icon-btn:active { transform: translateY(1px) scale(0.96); }
+
+/* ─── Tags (pill) ──────────────────────────────────────────── */
 .tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); padding: 0; margin: 0; list-style: none; }
 .tags li, .tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.1875rem 0.625rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  color: var(--muted);
+  display: inline-flex; align-items: center; min-height: 1.75rem; padding: 0 0.75rem;
+  border-radius: var(--radius-pill); border: 1px solid var(--line); color: var(--muted);
   font: 450 0.8125rem / 1.4 var(--font-mono);
 }
-.tag.accent {
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-  color: var(--accent);
-}
+.tag.accent { color: var(--accent); border-color: rgb(var(--accent-rgb) / 0.4); }
 
-/* ─── Card ─────────────────────────────────────────────────── */
+/* ─── Cards ────────────────────────────────────────────────── */
+/* The spotlight follows --mx/--my, set by the pointer (src/scripts/motion/interact.ts); centred-top otherwise. */
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-m);
-  padding: var(--space-l);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  transition: border-color var(--dur) var(--ease-out);
+  position: relative; isolation: isolate; display: flex; flex-direction: column; gap: var(--space-m);
+  padding: var(--space-l); border-radius: var(--radius-card); overflow: hidden;
+  background: var(--bg-raised); border: 1px solid var(--line);
+  transition: border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
 }
-.card:hover { border-color: color-mix(in srgb, var(--fg) 22%, var(--line)); }
+.card::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(28rem circle at var(--mx, 50%) var(--my, -30%), rgb(var(--accent-rgb) / 0.1), transparent 60%);
+  opacity: 0.6; transition: opacity var(--dur) var(--ease-out);
+}
+.card:hover { border-color: var(--line-strong); }
+.card:hover::before { opacity: 1; }
 .card > * { margin: 0; }
 .card-media {
   margin: calc(var(--space-l) * -1) calc(var(--space-l) * -1) 0;
   aspect-ratio: 16 / 10;
   border-bottom: 1px solid var(--line);
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
   overflow: hidden;
   background: var(--bg);
 }
 .card-media img { width: 100%; height: 100%; object-fit: cover; }
 .card dl { display: grid; gap: var(--space-s); margin: 0; }
-.card dt { font: 450 var(--step--1) / 1.4 var(--font-mono); color: var(--muted); }
-.card dd { margin: 0; }
+.card dt { font: 450 var(--step--1) / 1.4 var(--font-mono); color: var(--accent); }
+.card dd { margin: 0; color: var(--fg); }
+
+/* ─── Form fields: label above, helper, error below ───────── */
+.field { display: grid; gap: var(--space-xs); max-width: 32rem; }
+.field label { font-weight: 500; }
+.field input, .field select, .field textarea {
+  min-height: 2.875rem; padding: 0.625rem 0.875rem; border-radius: var(--radius-card);
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); font: inherit;
+}
+.field textarea { min-height: 8rem; resize: vertical; }
+.field :is(input, select, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+.field .help { font-size: var(--step--1); color: var(--muted); margin: 0; }
+.field .error { font-size: var(--step--1); color: var(--fg); margin: 0; }
+.field [aria-invalid='true'] { border-color: var(--fg); box-shadow: 0 0 0 1px var(--fg); }
+.field :is(input, select, textarea):disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Wordmark and final hero beat: solid type; the chrome look lives on surfaces, not text. */
+.chrome-text { color: var(--fg); }
 
 /* ─── Dark section on media (hero) ─────────────────────────── */
 /* Use with data-theme="dark". The scrim keeps light text at AA even over the brightest nodes. */
@@ -211,11 +236,11 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgb(2 6 23 / 0.72) 0%, rgb(2 6 23 / 0.7) 55%, rgb(2 6 23 / 0.15) 90%);
+  background: linear-gradient(90deg, rgb(10 11 13 / 0.74) 0%, rgb(10 11 13 / 0.66) 55%, rgb(10 11 13 / 0.1) 90%);
   pointer-events: none;
 }
 @media (max-width: 767px) {
-  .media-scrim::before { background: rgb(2 6 23 / 0.72); }
+  .media-scrim::before { background: rgb(10 11 13 / 0.72); }
 }
 /* On media, secondary text uses --fg: --muted can dip below AA over bright nodes. */
 .media-scrim .muted, .media-scrim .label { color: var(--fg); }

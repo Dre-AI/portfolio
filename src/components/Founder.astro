@@ -1,0 +1,31 @@
+---
+import { founder, ctas } from '../data/studio';
+import { base } from '../lib/content';
+---
+<section id="founder" data-section="founder">
+  <div class="wrap layout">
+    <div class="photo">
+      <img src={`${base}founder.webp`} alt={founder.photoAlt} width="900" height="1125" loading="lazy" decoding="async" />
+    </div>
+    <div class="text">
+      <h2>{founder.name}</h2>
+      <p class="label">{founder.role}</p>
+      <p class="lead">{founder.bio}</p>
+      <a class="btn" href={`${base}about/`}>{ctas.about}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout { display: grid; gap: var(--space-xl); align-items: center; }
+  .photo { max-width: 24rem; border-radius: var(--radius-card); overflow: hidden; border: 1px solid var(--line); }
+  .photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .text { display: grid; gap: var(--space-m); justify-items: start; }
+  .text > * { margin: 0; }
+  .lead { font-size: var(--step-0); line-height: 1.6; }
+  @media (min-width: 768px) {
+    .layout { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-2xl); }
+    .photo { grid-column: span 5; max-width: none; }
+    .text { grid-column: 7 / span 6; }
+  }
+</style>

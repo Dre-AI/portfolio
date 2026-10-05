@@ -1,29 +1,125 @@
 ---
-import { profile } from '../data/profile';
-import { sections, cta } from '../data/site';
-import { base, publicFileExists } from '../lib/content';
+import { icon } from '../lib/icons';
+import { contactCopy, ctas, founder, studio } from '../data/studio';
+import { services } from '../data/services';
+import { contactConfig, hasBooking, hasForm } from '../data/contact';
 
-const hasCv = publicFileExists(profile.cvFile);
+const labels = contactCopy.formLabels;
+const web3 = hasForm();
+const mailto = `mailto:${founder.email}`;
 ---
 <section id="contact" data-section="contact">
   <div class="wrap">
-    <h2>{sections.contact.heading}</h2>
-    <p class="lead muted">{sections.contact.intro}</p>
-    <p class="actions">
-      <a class="btn primary" href={`mailto:${profile.email}`}>{cta.email}</a>
-      <a class="btn" href={profile.links.linkedin} rel="noopener">{cta.linkedin}</a>
-      <a class="btn" href={profile.links.github} rel="noopener">{cta.githubProfile}</a>
-      {hasCv && <a class="btn" href={`${base}${profile.cvFile}`} download>{cta.cv}</a>}
-    </p>
-    <p class="label"><a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+    <h2>{contactCopy.heading}</h2>
+    <p class="lead muted">{contactCopy.intro}</p>
+
+    <div class="layout">
+      <div class="formcol">
+        <form
+          id="contact-form"
+          novalidate
+          data-mode={web3 ? 'web3forms' : 'mailto'}
+          data-success={contactCopy.success}
+          data-error={contactCopy.error}
+          data-sending={contactCopy.sending}
+          action={web3 ? 'https://api.web3forms.com/submit' : mailto}
+          method="post"
+          enctype={web3 ? undefined : 'text/plain'}
+        >
+          {web3 && <input type="hidden" name="access_key" value={contactConfig.web3formsKey} />}
+          {web3 && <input type="hidden" name="subject" value={`${studio.shortName}: new project brief`} />}
+          {web3 && <input type="hidden" name="from_name" value={studio.name} />}
+
+          <div class="field">
+            <label for="contact-name">{labels.name}</label>
+            <input id="contact-name" name="name" type="text" autocomplete="name" required aria-describedby="contact-name-help contact-name-error" />
+            <p class="help" id="contact-name-help">{contactCopy.nameHelp}</p>
+            <p class="error" id="contact-name-error"></p>
+          </div>
+          <div class="field">
+            <label for="contact-email">{labels.email}</label>
+            <input id="contact-email" name="email" type="email" autocomplete="email" required aria-describedby="contact-email-error" />
+            <p class="error" id="contact-email-error"></p>
+          </div>
+          <div class="field">
+            <label for="contact-service">{labels.service}</label>
+            <select id="contact-service" name="service">
+              {services.map((s) => <option value={s.title}>{s.title}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="contact-budget">{labels.budget}</label>
+            <select id="contact-budget" name="budget">
+              {contactCopy.budgets.map((b) => <option value={b}>{b}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="contact-timeline">{labels.timeline}</label>
+            <select id="contact-timeline" name="timeline">
+              {contactCopy.timelines.map((t) => <option value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="contact-message">{labels.message}</label>
+            <textarea id="contact-message" name="message" rows="5" required aria-describedby="contact-message-error"></textarea>
+            <p class="error" id="contact-message-error"></p>
+          </div>
+
+          <div class="visually-hidden" aria-hidden="true">
+            <input type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="submit">
+            <button class="btn primary" type="submit">{labels.submit}<Fragment set:html={icon('paper-plane-tilt')} /></button>
+            {!web3 && <p class="help">{contactCopy.fallbackNote}</p>}
+          </div>
+        </form>
+        <p id="contact-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="direct" aria-labelledby="contact-direct">
+        <h3 id="contact-direct">{contactCopy.directHeading}</h3>
+        <ul>
+          <li>
+            <a class="row" href={mailto}><span class="ico" set:html={icon('envelope-simple')} />{ctas.emailUs}</a>
+            <span class="label sub">{founder.email}</span>
+          </li>
+          <li><a class="row" href={founder.links.linkedin} target="_blank" rel="noopener"><span class="ico" set:html={icon('linkedin-logo')} />{founder.linkLabels.linkedin}</a></li>
+          <li><a class="row" href={founder.links.github} target="_blank" rel="noopener"><span class="ico" set:html={icon('github-logo')} />{founder.linkLabels.github}</a></li>
+          <li class="row label"><span class="ico" set:html={icon('map-pin')} />{studio.city}</li>
+        </ul>
+        {hasBooking() && (
+          <a class="btn ghost" href={contactConfig.calLink} target="_blank" rel="noopener"><Fragment set:html={icon('calendar-dots')} />{ctas.bookCall}</a>
+        )}
+      </aside>
+    </div>
   </div>
 </section>
 
 <style>
-  h2 { font-size: var(--step-4); line-height: 1.02; letter-spacing: -0.04em; max-width: 14ch; margin-bottom: var(--space-l); }
+  h2 { font-size: var(--step-4); line-height: 1.02; max-width: 14ch; margin-bottom: var(--space-l); }
   .lead { margin: 0 0 var(--space-xl); }
-  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0 0 var(--space-l); }
-  .label { margin: 0; }
-  .label a { display: inline-flex; align-items: center; min-height: 2.75rem; max-width: 100%; overflow-wrap: anywhere; text-decoration: none; } /* 44px target; long address can wrap */
-  .label a:hover { text-decoration: underline; }
+  .layout { display: grid; gap: var(--space-xl); }
+  form { display: grid; gap: var(--space-m); }
+  .field { max-width: none; }
+  .submit { display: grid; gap: var(--space-xs); justify-items: start; }
+  .submit .help { margin: 0; font-size: var(--step--1); color: var(--muted); }
+  .status { min-height: 1.5em; margin: var(--space-s) 0 0; }
+  .direct h3 { font-size: var(--step-1); margin: 0 0 var(--space-m); }
+  .direct ul { list-style: none; margin: 0 0 var(--space-l); padding: 0; display: grid; gap: var(--space-s); }
+  .direct li { display: grid; gap: 0.125rem; }
+  .direct .row { display: inline-flex; align-items: center; gap: var(--space-s); min-height: 2.75rem; overflow-wrap: anywhere; color: var(--fg); text-decoration: none; }
+  .direct a.row:hover { color: var(--accent); }
+  .direct .ico { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); color: var(--accent); }
+  .direct .ico :global(svg) { width: 1.125rem; height: 1.125rem; }
+  .direct .sub { padding-left: calc(2.25rem + var(--space-s)); }
+  .direct .label { margin: 0; overflow-wrap: anywhere; }
+  @media (min-width: 60rem) {
+    .layout { grid-template-columns: 7fr 5fr; gap: var(--space-2xl); align-items: start; }
+    .direct { position: sticky; top: var(--space-xl); }
+  }
 </style>
+
+<script>
+  import '../scripts/contact-form.ts';
+</script>

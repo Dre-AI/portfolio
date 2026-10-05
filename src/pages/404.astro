@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Monogram from '../components/Monogram.astro';
+import { notFound, studio } from '../data/studio';
+import { base } from '../lib/content';
+---
+<Base title={`${notFound.heading} | ${studio.name}`} noindex>
+  <Header />
+  <main id="main" class="lost">
+    <div class="wrap stack">
+      <Monogram height={56} />
+      <h1>{notFound.heading}</h1>
+      <p class="lead muted">{notFound.text}</p>
+      <a class="btn primary" href={base}>{notFound.cta}</a>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .lost { display: grid; place-items: center; min-height: 80vh; padding: 8rem 0 var(--space-3xl); text-align: center; }
+  .stack { display: grid; justify-items: center; gap: var(--space-l); max-width: 36rem; }
+  .stack > * { margin: 0; }
+  .stack :global(svg) { color: var(--muted); }
+</style>

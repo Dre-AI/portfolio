@@ -1,56 +1,45 @@
 ---
-import type { Project } from '../data/projects';
-import { cta } from '../data/site';
-import { base, isReady, publicFileExists } from '../lib/content';
+import { icon } from '../lib/icons';
+import Monogram from './Monogram.astro';
+import { labelText, type PublicWorkItem } from '../data/work';
+import { services } from '../data/services';
+import { ctas, sections } from '../data/studio';
+import { base, publicFileExists } from '../lib/content';
 
-interface Props { project: Project }
-const { project: p } = Astro.props;
+// `item` must come from publicView(); it carries no cover for an unapproved concept (no screenshot of a client's site).
+interface Props { item: PublicWorkItem }
+const { item } = Astro.props;
 
-// Screenshots slot in when public/work/<slug>.webp exists; until then the card is text-led, with no empty frame.
-const image = publicFileExists(p.image) ? p.image : undefined;
-const details = [
-  { term: 'Problem', text: p.problem },
-  { term: 'What I built', text: p.built },
-  { term: 'Result', text: p.result },
-].filter((d) => isReady(d.text));
-const stack = p.stack.filter((s) => isReady(s));
-const host = p.link ? new URL(p.link).host.replace(/^www\./, '') : undefined;
+const cover = item.cover && publicFileExists(item.cover) ? item.cover : undefined;
+const label = labelText(item.label);
+// "Built for" reads as a sentence with the client name; other labels stay a small kicker above the title.
+const isBuiltFor = item.label === 'built-for';
+const title = isBuiltFor ? `${label} ${item.title}` : item.title;
+const tags = item.services.map((slug) => services.find((s) => s.slug === slug)?.title).filter((t): t is string => !!t);
 ---
-<article class="card case" data-card>
-  {image && (
-    <div class="card-media">
-      <img src={`${base}${image}`} alt={`Screenshot of ${p.title}`} width="1600" height="1000" loading="lazy" decoding="async" />
-    </div>
-  )}
-  <div class="case-body">
-    <div class="case-head">
-      <h3>{p.title}</h3>
-      <p class="muted">{p.summary}</p>
-      {stack.length > 0 && <ul class="tags">{stack.map((s) => <li>{s}</li>)}</ul>}
-      {p.link && (
-        <a class="link live" href={p.link} rel="noopener">
-          {cta.live}<span class="visually-hidden">: {p.title}</span> <span class="label host">{host}</span>
-        </a>
-      )}
-    </div>
-    {details.length > 0 && (
-      <dl>{details.map((d) => (<div><dt>{d.term}</dt><dd>{d.text}</dd></div>))}</dl>
+<article class="card project" data-card>
+  <div class="card-media">
+    {cover ? (
+      <img src={`${base}${cover}`} alt={`${sections.case.coverAltPrefix} ${item.title}`} width="1440" height="900" loading="lazy" decoding="async" />
+    ) : (
+      <div class="placeholder"><Monogram height={44} /></div>
     )}
   </div>
+  {!isBuiltFor && <p class="label">{label}</p>}
+  <h3>{title}</h3>
+  <p class="muted">{item.summary}</p>
+  {tags.length > 0 && <ul class="tags">{tags.map((t) => <li>{t}</li>)}</ul>}
+  <a class="link more" href={`${base}work/${item.slug}/`}>{ctas.caseStudy}<span class="visually-hidden">: {item.title}</span><Fragment set:html={icon('arrow-right')} /></a>
 </article>
 
 <style>
-  .case { container-type: inline-size; }
-  .case-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-l); }
-  .case-head { display: grid; gap: var(--space-s); align-content: start; }
-  .case-head > * { margin: 0; }
-  h3 { margin: 0; }
-  .live { display: inline-flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-xs); justify-self: start; min-height: 2.75rem; }
-  .host { color: var(--muted); text-decoration: none; overflow-wrap: anywhere; }
-  dl { padding-top: var(--space-l); border-top: 1px solid var(--line); }
-
-  @container (min-width: 44rem) {
-    .case-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-2xl); }
-    dl { padding-top: 0; padding-left: var(--space-2xl); border-top: 0; border-left: 1px solid var(--line); }
+  h3 { font-size: var(--step-2); }
+  /* No cover yet: a chrome-tinted surface with the monogram, never a fake screenshot. */
+  .placeholder {
+    position: relative; display: grid; place-items: center; width: 100%; height: 100%;
+    background: var(--surface); color: var(--muted);
   }
+  .placeholder::before { content: ''; position: absolute; inset: 0; background: var(--chrome); opacity: 0.12; }
+  .placeholder :global(svg) { position: relative; }
+  .more { display: inline-flex; align-items: center; min-height: 2.75rem; align-self: flex-start; margin-top: auto; }
 </style>

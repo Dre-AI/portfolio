@@ -1,35 +1,69 @@
 ---
 import Monogram from './Monogram.astro';
-import { profile } from '../data/profile';
-import { nav } from '../data/site';
+import { studio, nav, ctas, a11y } from '../data/studio';
 import { base } from '../lib/content';
+import { isHomePath, resolveNavHref } from '../lib/nav';
+
+const isHome = isHomePath(Astro.url.pathname, base);
+const resolve = (href: string) => resolveNavHref(href, base, isHome);
 ---
-{/* Same dark band as the hero, so the page opens as one dark surface in both modes. */}
-<header class="site-header" data-theme="dark">
+{/* Fixed bar over the page; it firms up as you scroll (CSS scroll-driven, no JS). */}
+<header class="site-header">
   <div class="wrap">
-    <a class="home" href={base} aria-label={`${profile.name}, home`}><Monogram /></a>
-    <nav aria-label="Primary">
-      <ul>{nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}</ul>
+    <a class="home" href={base} aria-label={studio.name}>
+      <Monogram height={26} />
+      <span class="display wordmark" aria-hidden="true">{studio.name}</span>
+    </a>
+    <nav aria-label={a11y.primaryNav}>
+      <ul>
+        {nav.map((item) => (
+          <li class="link"><a href={resolve(item.href)}>{item.label}</a></li>
+        ))}
+        <li><a class="btn primary" href={resolve('#contact')}>{ctas.startProject}</a></li>
+      </ul>
     </nav>
   </div>
 </header>
 
 <style>
-  /* Wraps rather than overflowing when text is enlarged (WCAG 1.4.10 reflow). */
-  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-m); min-height: 4.5rem; }
-  .home { display: inline-flex; padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-control); }
-  ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
-  nav a {
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: var(--z-nav);
+    background: rgb(10 11 13 / 0.35);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    border-bottom: 1px solid var(--line);
+  }
+  @supports (animation-timeline: scroll()) {
+    .site-header { animation: firm-up linear both; animation-timeline: scroll(); animation-range: 0 240px; }
+    @keyframes firm-up { to { background: rgb(10 11 13 / 0.85); border-bottom-color: var(--line-strong); } }
+  }
+  @media (prefers-reduced-transparency: reduce) { .site-header { background: rgb(10 11 13 / 0.96); } }
+
+  /* One line on desktop; wraps only when text is enlarged (WCAG 1.4.10 reflow). */
+  .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-s); min-height: 4.5rem; }
+  .home { display: inline-flex; align-items: center; gap: var(--space-s); padding: var(--space-xs); margin-left: calc(var(--space-xs) * -1); border-radius: var(--radius-card); color: var(--fg); text-decoration: none; }
+  .home:hover { text-decoration: none; }
+  .wordmark { font-size: var(--step-0); white-space: nowrap; }
+  ul { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs); margin: 0; padding: 0; list-style: none; }
+  nav a:not(.btn) {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
     padding-inline: var(--space-s);
-    border-radius: var(--radius-control);
+    border-radius: var(--radius-card);
     color: var(--muted);
     font-size: 0.9375rem;
     text-decoration: none;
     transition: color var(--dur-fast) var(--ease-out);
   }
-  nav a:hover { color: var(--fg); }
-  @media (max-width: 380px) { nav a { padding-inline: var(--space-xs); } }
+  nav a:not(.btn):hover { color: var(--fg); }
+  nav .btn { margin-left: var(--space-xs); min-height: 2.75rem; }
+  /* One line from 30rem up. Text links need room, so they appear from 900px; below that the CTA carries the way in. */
+  @media (min-width: 30rem) { .wrap, ul { flex-wrap: nowrap; } }
+  .link { display: none; }
+  @media (min-width: 900px) { .link { display: list-item; } }
+  @media (max-width: 480px) { .wordmark { display: none; } }
+  @media (max-width: 380px) { nav a:not(.btn) { padding-inline: var(--space-xs); } }
 </style>

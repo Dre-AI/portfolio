@@ -1,48 +1,213 @@
 ---
-import { profile } from '../data/profile';
-import { cta } from '../data/site';
-import { base, publicFileExists } from '../lib/content';
+import Monogram from './Monogram.astro';
+import { studio, heroBeats, ctas } from '../data/studio';
+import { base } from '../lib/content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const hasCv = publicFileExists(profile.cvFile);
+// Frame counts, sizes and breakpoint for the scrubber, written by scripts/extract-frames.sh.
+const frames = readFileSync(join(process.cwd(), 'public/hero/frames.json'), 'utf8');
+const ctaHref = { startProject: '#contact', seeWork: '#work' } as const;
+const starts = JSON.stringify(heroBeats.map((b) => b.at));
+const [first, ...rest] = heroBeats;
+const middle = rest.slice(0, -1);
+const last = rest[rest.length - 1];
 ---
-{/* Always dark (dark-section treatment). The poster is the static visual now; Phase 4 draws the
-     frame sequence into #hero-canvas on top of it and keeps the poster for reduced motion / Save-Data. */}
-<section id="hero" class="hero media-scrim" data-section="hero" data-theme="dark">
-  <img class="media" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
-  <canvas id="hero-canvas" class="media" aria-hidden="true" hidden></canvas>
-  <div class="wrap">
-    <p class="label">{profile.role}, {profile.location}</p>
-    <h1>{profile.headline}</h1>
-    <p class="lead muted">{profile.subline}</p>
-    <p class="actions">
-      <a class="btn primary" href="#work">{cta.work}</a>
-      {hasCv && <a class="btn" href={`${base}${profile.cvFile}`} download>{cta.cv}</a>}
-    </p>
+{/* Always dark. src/scripts/motion/hero.ts scrubs the frame sequence into #hero-canvas and shows one beat at a
+     time; src/scripts/motion/interact.ts adds the cursor light and parallax. Without .motion-hero (reduced
+     motion, Save-Data, 2g, no JS) the poster (the film's last frame) stays and all four beats are stacked. */}
+<section id="hero" class="hero media-scrim" data-section="hero" data-theme="dark"
+  style={`--start-desktop:url(${base}hero/desktop/0001.webp);--start-mobile:url(${base}hero/mobile/0001.webp)`}>
+  <img class="media poster" src={`${base}hero/poster.webp`} alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
+  <canvas id="hero-canvas" class="media" aria-hidden="true" hidden data-base={`${base}hero/`} data-frames={frames}></canvas>
+  <div class="light" aria-hidden="true"></div>
+  <div class="wrap copy" data-hero-copy data-starts={starts}>
+    <p class="label labels">{studio.heroLabels.join(' · ')}</p>
+
+    <div class="beat-slide is-active" data-beat="0">
+      <h1>{first.heading}</h1>
+      {first.text && <p class="lead">{first.text}</p>}
+      {first.ctas && (
+        <p class="actions">
+          {first.ctas.map((key, i) => (
+            <a class:list={['btn', i === 0 ? 'primary' : 'ghost']} href={ctaHref[key]} data-magnetic>{ctas[key]}</a>
+          ))}
+        </p>
+      )}
+    </div>
+
+    {middle.map((beat, i) => (
+      <div class="beat-slide" data-beat={i + 1}>
+        <p class="beat">{beat.heading}</p>
+        {beat.text && <p class="lead">{beat.text}</p>}
+      </div>
+    ))}
+
+    <div class="beat-slide lockup" data-beat={heroBeats.length - 1}>
+      <span class="mark"><Monogram height={72} /></span>
+      <p class="beat">{last.heading}</p>
+      {last.text && <p class="label">{last.text}</p>}
+      <p class="actions"><a class="btn primary" href={ctaHref.startProject} data-magnetic>{ctas.startProject}</a></p>
+    </div>
   </div>
 </section>
 
 <style>
+  /* ─── Static layout (reduced motion, Save-Data, 2g, no JS): poster plus every beat, stacked ─── */
   .hero {
+    --handoff: 0;
+    --frame-shift: 0px; /* how far right the film moves on wide screens; mirrors frameShift() in heroMath.ts */
     display: grid;
-    align-items: center;
-    min-height: max(34rem, calc(100dvh - 4.5rem));
-    padding-block: var(--space-3xl) var(--space-3xl);
+    align-content: start;
+    min-height: max(34rem, 100dvh);
+    padding-block: calc(4.5rem + var(--space-xl)) var(--space-3xl); /* clears the fixed nav */
     border-top: 0;
+    overflow: hidden;
   }
-  /* Short screens (phones in landscape): size to content so the CTA stays in view. */
+  .copy { display: grid; min-width: 0; } /* min-width: let the column shrink instead of growing to the longest word */
+  .copy > * { max-width: 36rem; }
+  .labels { margin: 0 0 var(--space-l); }
+  /* Beat 0 fills the first screen; the other beats follow under it. */
+  [data-beat='0'] { display: flex; flex-direction: column; justify-content: center; min-height: calc(100svh - 4.5rem - var(--space-xl) - var(--space-3xl) - 3rem); }
+  :global(html:not(.motion-hero)) .beat-slide + .beat-slide { margin-top: var(--space-xl); }
+  .beat-slide > * { margin: 0; }
+
+  h1 { font-size: clamp(2.5rem, 1.2rem + 3.4vw, 4.5rem); line-height: 0.98; padding-bottom: 0.06em; }
+  .beat { font-size: clamp(2.75rem, 1.4rem + 4.2vw, 5.75rem); }
+  .lead { margin-top: var(--space-m); max-width: 32rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin-top: var(--space-xl) !important; }
+
+  .lockup .beat { font-size: var(--step-3); line-height: 1; }
+  .lockup .label { margin-top: var(--space-xs); }
+  .lockup .actions { margin-top: var(--space-l) !important; }
+  .mark { display: block; width: fit-content; margin-bottom: var(--space-m); color: var(--fg); filter: drop-shadow(0 0 1.5rem rgb(var(--accent-rgb) / 0.55)); }
+
+  /* Bottom edge: the film fades into the page colour, so the hand-off has no hard dark band. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 20vh;
+    z-index: -1;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+
+  /* Cursor light: a soft cyan glow that follows the pointer (--hx/--hy from interact.ts). */
+  .light {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(32rem circle at var(--hx, 70%) var(--hy, 40%), rgb(var(--accent-rgb) / 0.12), transparent 60%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  /* The film: cover keeps the right edge on desktop, and from 1024px the frame also moves right (up to 18% of
+     the width at 1440px) so Derrick's face clears the copy column. hero.ts reads the anchor percentages from
+     this object-position and draws the canvas, and places the cluster, with the same maths. */
+  .media { object-position: calc(100% + var(--frame-shift)) 30%; }
+  @media (max-width: 767px) { .media { object-position: 55% 30%; } }
+  /* The canvas already draws the crop and shift itself (its bitmap matches its box), so it must not shift again. */
+  .hero canvas.media { object-position: 0 0; }
+  @media (min-width: 1024px) {
+    .hero { --frame-shift: clamp(0px, (100vw - 1024px) * 0.6231, 18vw); }
+    /* Before the canvas takes over, a gradient hides the join where the shifted frame starts (hero.ts paints
+       the same fade on the canvas). The second layer is the standard .media-scrim gradient. */
+    .hero:not(.is-live)::before {
+      background-image:
+        linear-gradient(90deg, var(--bg) var(--frame-shift), rgb(10 11 13 / 0) calc(var(--frame-shift) * 1.85)),
+        linear-gradient(90deg, rgb(10 11 13 / 0.74) 0%, rgb(10 11 13 / 0.66) 55%, rgb(10 11 13 / 0.1) 90%);
+    }
+  }
+
+  /* Static: the poster covers the first screen only and fades out; the stacked beats below sit on --bg. */
+  :global(html:not(.motion-hero)) .poster {
+    bottom: auto;
+    height: max(34rem, 100svh);
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  }
+
+  /* ─── Scrubbing (.motion-hero): one screen, one beat at a time ─── */
+  :global(.motion-hero) .hero {
+    align-content: center;
+    background: var(--bg) var(--start-desktop) calc(100% + var(--frame-shift)) 30% / cover no-repeat;
+    padding-block: calc(4.5rem + var(--space-l)) var(--space-2xl);
+  }
+  :global(.motion-hero) .poster { opacity: 0; }
+  /* Once the canvas is live, frame 1 must not show through while the hand-off dims the canvas. */
+  :global(.motion-hero) .hero.is-live { background-image: none; }
+  :global(.motion-hero) .copy { grid-template-rows: auto auto; }
+  /* Inactive beats are only transparent: they stay in the accessibility tree, and a keyboard user who tabs
+     into one (beat 0's CTAs) sees it. hero.ts takes the lockup's duplicate CTA out of the tab order. */
+  :global(.motion-hero) .beat-slide {
+    grid-area: 2 / 1;
+    min-height: 0;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms var(--ease-out);
+  }
+  :global(.motion-hero) .beat-slide.is-active,
+  :global(.motion-hero) .beat-slide:focus-within { opacity: 1; pointer-events: auto; }
+  :global(.motion-hero) [data-beat='0'] { justify-content: start; }
+  /* The label row already carries the tag; the closing lockup repeats it, so the row steps aside. */
+  :global(.motion-hero) .labels { transition: opacity 400ms var(--ease-out); }
+  :global(.motion-hero) .copy:has(> .lockup.is-active) > .labels { opacity: 0; }
+
+  /* Closing beat: a centred lockup whose monogram sits on the film's light cluster
+     (--cluster-x/--cluster-y in px from hero.ts; the fallbacks match the cluster on a 16:9 screen). */
+  :global(.motion-hero) .lockup {
+    grid-area: auto; /* out of the copy grid: its offsets resolve against the hero, not a grid cell */
+    position: absolute;
+    left: clamp(min(18rem, 50%), var(--cluster-x, 51%), max(100% - 18rem, 50%));
+    top: min(var(--cluster-y, 60%), 100% - 15rem);
+    width: min(36rem, 100% - 2.5rem);
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translate(-50%, -36px); /* half the monogram, so its centre is on the cluster */
+  }
+  :global(.motion-hero) .lockup .label { max-width: none; }
+
+  /* Hand-off: over the last 8% of the pin the film dims and the scrim deepens (--handoff 0 to 1 from hero.ts). */
+  :global(.motion-hero) .hero::before { background-color: rgb(10 11 13 / calc(var(--handoff) * 0.5)); }
+  :global(.motion-hero) canvas.media { opacity: calc(1 - var(--handoff) * 0.6); }
+
+  @media (max-width: 767px) {
+    :global(.motion-hero) .hero { align-content: end; background-image: var(--start-mobile); background-position: 55% 30%; }
+    /* Copy sits low over a bottom scrim: at least 0.88 dark behind every line keeps text far above 4.5:1. */
+    :global(.motion-hero) .hero::before { background-image: linear-gradient(to top, var(--bg) 0%, rgb(10 11 13 / 0.88) 55%, rgb(10 11 13 / 0) 85%); }
+    :global(.motion-hero) .lockup { left: 50%; }
+    :global(.motion-hero) .lead { font-size: var(--step-0); }
+  }
+
+  /* Parallax: the film drifts slightly against the pointer (--px/--py in -1..1 from interact.ts). */
+  :global(.motion) .media { transform: translate3d(calc(var(--px, 0) * -14px), calc(var(--py, 0) * -10px), 0) scale(1.05); }
+
+  /* Entrance: the opening beat rises in at first paint (motion visitors only). */
+  :global(.motion) .labels, :global(.motion) [data-beat='0'] > * { animation: rise 0.7s var(--ease-out) both; }
+  :global(.motion) [data-beat='0'] > :nth-child(1) { animation-delay: 0.08s; }
+  :global(.motion) [data-beat='0'] > :nth-child(2) { animation-delay: 0.16s; }
+  :global(.motion) [data-beat='0'] > :nth-child(3) { animation-delay: 0.24s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+  /* The h1 is the LCP element, so it only rises (no opacity fade): it paints at full opacity immediately. */
+  :global(.motion) [data-beat='0'] > h1 { animation-name: rise-only; }
+  @keyframes rise-only { from { transform: translateY(18px); } }
+
+  /* The hero's own pin spacer stays dark if a short screen leaves a gap below the pinned hero. */
+  :global(.pin-spacer:has(> #hero)) { background: var(--bg); }
+  /* The next section starts close to the hero's faded edge instead of after a full section gap. */
+  :global(#hero + section), :global(.pin-spacer:has(> #hero) + section) { padding-top: var(--space-2xl); }
+
+  /* Short screens (phones in landscape): smaller type so the opening beat and its CTAs stay in view. */
   @media (max-height: 500px) {
-    .hero { min-height: auto; padding-block: var(--space-l) var(--space-xl); }
-    .label { margin-bottom: var(--space-s); }
-    h1 { font-size: 2.25rem; margin-bottom: var(--space-s); }
-    .lead { margin-bottom: var(--space-l); font-size: var(--step-0); }
+    .hero { padding-block: calc(4.5rem + var(--space-s)) var(--space-l); }
+    h1 { font-size: 2.25rem; }
+    .lead { font-size: var(--step-0); }
+    .actions { margin-top: var(--space-l) !important; }
   }
-  .wrap { min-width: 0; } /* let the grid column shrink instead of growing to the longest word */
-  .wrap > * { max-width: 38rem; }
-  .wrap > h1 { max-width: 60rem; } /* two balanced lines on desktop */
-  .label { margin: 0 0 var(--space-l); }
-  h1 { margin-bottom: var(--space-l); }
-  .lead { margin: 0 0 var(--space-xl); max-width: 34rem; }
-  .actions { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0; }
-  /* The poster's grid sits low in the frame; anchor it to the bottom so it stays visible behind the copy. */
-  .media { object-position: 50% 100%; }
 </style>

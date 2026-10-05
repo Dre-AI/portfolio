@@ -8,6 +8,9 @@ export default defineConfig({
   site: 'https://dre-ai.github.io',
   base: '/portfolio',
   output: 'static',
+  // esbuild, not the default CSS minifier: that one drops the standard backdrop-filter (keeping only
+  // -webkit-) and folds animation-timeline into the animation shorthand, which breaks the glass nav.
+  vite: { build: { cssMinify: 'esbuild' } },
   trailingSlash: 'ignore',
   integrations: [
     // The style guide is noindex, so keep it out of the sitemap too.

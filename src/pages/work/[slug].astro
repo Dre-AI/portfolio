@@ -1,0 +1,109 @@
+---
+import { icon } from '../../lib/icons';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Monogram from '../../components/Monogram.astro';
+import { featuredWork, publicView, labelText, type PublicWorkItem } from '../../data/work';
+import { services } from '../../data/services';
+import { sections, ctas, studio } from '../../data/studio';
+import { base, publicFileExists } from '../../lib/content';
+
+// Always render through publicView(): an unapproved concept gets no client name, live link or cover.
+export function getStaticPaths() {
+  const items = featuredWork.map(publicView);
+  return items.map((item, i) => ({
+    params: { slug: item.slug },
+    props: { item, next: items[(i + 1) % items.length] },
+  }));
+}
+
+interface Props { item: PublicWorkItem; next: PublicWorkItem }
+const { item, next } = Astro.props;
+const c = sections.case;
+
+const cover = item.cover && publicFileExists(item.cover) ? item.cover : undefined;
+const label = labelText(item.label);
+const isBuiltFor = item.label === 'built-for';
+const heading = isBuiltFor ? `${label} ${item.title}` : item.title;
+const tags = item.services.map((slug) => services.find((s) => s.slug === slug)?.title).filter((t): t is string => !!t);
+const blocks = [
+  { title: c.brief, text: item.brief },
+  { title: c.approach, text: item.approach },
+  { title: c.result, text: item.result },
+];
+---
+<Base title={`${item.title} | ${studio.name}`} description={item.summary}>
+  <Header />
+  <main id="main" class="case">
+    <div class="wrap">
+      <a class="link back" href={`${base}#work`}>{c.back}</a>
+      <header>
+        {!isBuiltFor && <p class="label">{label}</p>}
+        <h1>{heading}</h1>
+        <p class="lead">{item.summary}</p>
+        {tags.length > 0 && <ul class="tags">{tags.map((t) => <li>{t}</li>)}</ul>}
+        {item.durationWeeks && <p class="label">{c.duration} {item.durationWeeks} {c.weeks}</p>}
+      </header>
+
+      <div class="media">
+        {cover ? (
+          <img src={`${base}${cover}`} alt={`${c.coverAlt}: ${item.title}`} width="1440" height="900" fetchpriority="high" decoding="async" />
+        ) : (
+          <div class="placeholder"><Monogram height={56} /></div>
+        )}
+      </div>
+
+      <div class="body">
+        {blocks.map((b) => (
+          <section>
+            <h2>{b.title}</h2>
+            <p>{b.text}</p>
+          </section>
+        ))}
+        {item.aiNote && (
+          <section>
+            <h2>{c.ai}</h2>
+            <p>{item.aiNote}</p>
+          </section>
+        )}
+        <section>
+          <h2>{c.stack}</h2>
+          <ul class="tags">{item.stack.map((s) => <li>{s}</li>)}</ul>
+        </section>
+        {(item.liveUrl || item.repoUrl) && (
+          <div class="actions">
+            {item.liveUrl && <a class="btn primary" href={item.liveUrl} target="_blank" rel="noopener">{ctas.visitLive}<span class="visually-hidden">: {item.title}</span><Fragment set:html={icon('arrow-up-right')} /></a>}
+            {item.repoUrl && <a class="btn ghost" href={item.repoUrl} target="_blank" rel="noopener"><Fragment set:html={icon('github-logo')} />{ctas.viewCode}<span class="visually-hidden">: {item.title}</span></a>}
+          </div>
+        )}
+      </div>
+
+      <nav class="next" aria-label={ctas.nextProject}>
+        <span class="label">{ctas.nextProject}</span>
+        <a class="display" href={`${base}work/${next.slug}/`}>{next.title}</a>
+      </nav>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .case { padding-top: 7rem; padding-bottom: var(--space-3xl); }
+  .back { display: inline-flex; align-items: center; min-height: 2.75rem; margin-bottom: var(--space-l); }
+  header { display: grid; gap: var(--space-m); max-width: 65ch; }
+  header > * { margin: 0; }
+  .media { margin-block: var(--space-2xl); border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; background: var(--bg); aspect-ratio: 16 / 10; }
+  .media img { width: 100%; height: 100%; object-fit: cover; }
+  .placeholder { position: relative; display: grid; place-items: center; width: 100%; height: 100%; background: var(--surface); color: var(--muted); }
+  .placeholder::before { content: ''; position: absolute; inset: 0; background: var(--chrome); opacity: 0.12; }
+  .placeholder :global(svg) { position: relative; }
+  .body { display: grid; gap: var(--space-xl); max-width: 65ch; }
+  .body section { padding: 0; border: 0; }
+  .body h2 { font-size: var(--step-2); }
+  .body p { margin: 0; max-width: 65ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-m); }
+  .next { display: grid; gap: var(--space-xs); margin-top: var(--space-3xl); padding-top: var(--space-l); border-top: 1px solid var(--line); }
+  .next a { font-size: var(--step-3); text-decoration: none; min-height: 2.75rem; }
+  .next a:hover { color: var(--accent); }
+</style>

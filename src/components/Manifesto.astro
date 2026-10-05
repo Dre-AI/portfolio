@@ -1,0 +1,41 @@
+---
+import { studio, manifesto, aiBenefits } from '../data/studio';
+
+// One span per word (Phase 4 animates them). Spaces stay as real text between spans, so it reads normally.
+const words = (text: string) => text.split(/\s+/).filter(Boolean);
+---
+<section id="manifesto" data-section="manifesto">
+  <div class="wrap layout">
+    <div class="intro">
+      <h2 class="display statement">
+        {words(manifesto.statement).map((word, i, all) => (<><span data-word>{word}</span>{i < all.length - 1 ? ' ' : ''}</>))}
+      </h2>
+      <p class="lead">{manifesto.support}</p>
+      <p class="label tag-line">{studio.tag}</p>
+    </div>
+    <ol class="benefits">
+      {aiBenefits.map((benefit) => (
+        <li>
+          <h3>{benefit.title}</h3>
+          <p class="muted">{benefit.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .layout { display: grid; gap: var(--space-xl); }
+  .intro > * { margin: 0; }
+  .statement { font-size: var(--step-4); line-height: 1.02; max-width: 12ch; text-wrap: balance; }
+  .intro .lead { margin-top: var(--space-m); max-width: 32rem; }
+  .intro .tag-line { margin-top: var(--space-l); color: var(--accent); }
+  .benefits { display: grid; gap: var(--space-l); margin: 0; padding: 0; list-style: none; }
+  .benefits li { padding-top: var(--space-m); border-top: 1px solid var(--line); }
+  .benefits h3 { margin: 0 0 var(--space-xs); font-size: var(--step-1); }
+  .benefits p { margin: 0; }
+  @media (min-width: 48rem) {
+    .layout { grid-template-columns: 1fr 1.2fr; gap: var(--space-2xl); align-items: start; }
+    .benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl) var(--space-l); }
+  }
+</style>
