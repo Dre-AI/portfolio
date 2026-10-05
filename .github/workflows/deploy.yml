@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci
+      - run: npm install --no-audit --no-fund  # npm ci rejects the Windows-made lockfile on Linux (missing optional @emnapi packages)
       - run: npm test
       - run: npm run build
       - run: npm run check:dist
