@@ -1,0 +1,60 @@
+---
+import { creativePieces, creativeSection } from '../data/creative';
+import { base } from '../lib/content';
+---
+<section id="creative" data-section="creative">
+  <div class="wrap">
+    <div class="head">
+      <h2>{creativeSection.heading}</h2>
+      <p class="lead">{creativeSection.intro}</p>
+      <p class="label note">{creativeSection.note}</p>
+    </div>
+    <ul class="gallery">
+      {creativePieces.map((piece) => (
+        <li>
+          <a class="piece" href={`${base}creative/${piece.slug}-full.webp`} target="_blank" rel="noopener">
+            <img
+              src={`${base}creative/${piece.slug}.webp`}
+              srcset={`${base}creative/${piece.slug}-480.webp 480w, ${base}creative/${piece.slug}.webp ${piece.width}w`}
+              sizes="(min-width: 900px) 33vw, 50vw"
+              alt={piece.alt} width={piece.width} height={piece.height} loading="lazy" decoding="async"
+            />
+            <span class="caption">
+              <span class="brand">{piece.brand}</span>
+              <span class="kind">{piece.kind}</span>
+            </span>
+            <span class="visually-hidden">({creativeSection.viewFull})</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .head { display: grid; gap: var(--space-m); max-width: 44rem; margin-bottom: var(--space-2xl); }
+  .head > * { margin: 0; }
+  .note { color: var(--muted); }
+  /* Masonry by CSS columns: pieces keep their own aspect ratio, so ads, posters and wide product shots sit together. */
+  .gallery { columns: 2; column-gap: var(--space-s); margin: 0; padding: 0; list-style: none; }
+  .gallery li { break-inside: avoid; margin-bottom: var(--space-s); }
+  .piece { position: relative; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card);
+    background: var(--surface); color: var(--fg); text-decoration: none; }
+  .piece img { display: block; width: 100%; height: auto; transition: transform var(--dur-slow) var(--ease-out); }
+  /* Caption sits under the image: ads carry their own type, so an overlay would fight it. */
+  .caption { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 var(--space-s);
+    padding: var(--space-s) var(--space-m); font-size: var(--step--1); background: var(--surface); }
+  .brand { font-weight: 600; white-space: nowrap; }
+  .kind { font-family: var(--font-mono); color: var(--muted); white-space: nowrap; }
+  @media (min-width: 900px) {
+    .gallery { columns: 3; column-gap: var(--space-m); }
+    .gallery li { margin-bottom: var(--space-m); }
+  }
+  @media (hover: hover) {
+    .piece:hover { border-color: rgb(var(--accent-rgb) / 0.45); }
+    .piece:hover img { transform: scale(1.03); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .piece img { transition: none; }
+  }
+</style>

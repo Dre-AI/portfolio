@@ -47,9 +47,9 @@ export const featuredWork: WorkItem[] = [
     summary: 'A fast, findable website for a clinical lab-equipment distributor.',
     brief: 'Keton needed laboratory buyers to find it on search and trust it enough to get in touch.',
     approach:
-      'Designed and built a mobile-first React site with clear product pages, privacy and legal pages, and contact forms, then ran the SEO strategy and analytics tracking.',
+      'Redesigned and rebuilt the site as a dark, motion-led React app with an interactive equipment viewer, clear product pages, quote requests and legal pages, then ran the SEO strategy and analytics tracking.',
     result: 'Live at ketonconsulting.com, with SEO and analytics running on every page.',
-    stack: ['React', 'Vite', 'Tailwind CSS', 'SEO', 'Analytics'],
+    stack: ['React', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Vitest', 'SEO', 'Analytics'],
     liveUrl: 'https://ketonconsulting.com',
     cover: 'work/keton-consulting.webp',
   },

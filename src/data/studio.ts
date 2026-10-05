@@ -135,6 +135,7 @@ export const notFound = {
 // Header navigation. Hrefs are relative to the site base.
 export const nav = [
   { label: 'Work', href: '#work' },
+  { label: 'Creative', href: '#creative' },
   { label: 'About', href: 'about/' },
   { label: 'Contact', href: '#contact' },
 ];
