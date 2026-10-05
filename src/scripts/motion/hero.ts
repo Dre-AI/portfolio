@@ -59,6 +59,10 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
     beat = next;
   };
 
+  // Keyboard: tabbing back to beat 0's links while another beat is showing must not leave two slides overlapping.
+  const onFocusIn = () => showBeat(0);
+  slides[0]?.addEventListener('focusin', onFocusIn);
+
   const manifest = JSON.parse(canvas.dataset.frames ?? '{}') as FramesManifest;
   const set = isMobile ? manifest.mobile : manifest.desktop;
   const url = (i: number) => canvas.dataset.base + set.pattern.replace('{n}', String(i + 1).padStart(manifest.pad, '0'));
@@ -183,6 +187,7 @@ export function setupHero(isMobile: boolean): (() => void) | undefined {
   return () => {
     cancelled = true;
     observer.disconnect();
+    slides[0]?.removeEventListener('focusin', onFocusIn);
     window.removeEventListener('scroll', startRest);
     if ('cancelIdleCallback' in window) window.cancelIdleCallback(idle as number); else window.clearTimeout(idle as number);
     hero.classList.remove('is-live');

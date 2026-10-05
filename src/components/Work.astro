@@ -3,17 +3,14 @@ import ProjectCard from './ProjectCard.astro';
 import { featuredWork, moreBuilds, publicView } from '../data/work';
 import { sections, ctas } from '../data/studio';
 
-// Always render through publicView(): unapproved concepts stay anonymous. Covers are hidden for them too.
-const featured = featuredWork.map((item) => ({
-  item: publicView(item),
-  showCover: item.label !== 'concept' || !!item.clientApproved,
-}));
+// Always render through publicView(): unapproved concepts stay anonymous and lose their cover.
+const featured = featuredWork.map(publicView);
 ---
 <section id="work" data-section="work">
   <div class="wrap">
     <h2>{sections.work}</h2>
     <div class="cases">
-      {featured.map(({ item, showCover }) => <ProjectCard item={item} showCover={showCover} />)}
+      {featured.map((item) => <ProjectCard item={item} />)}
     </div>
 
     <h3 class="more-title">{sections.moreBuilds}</h3>

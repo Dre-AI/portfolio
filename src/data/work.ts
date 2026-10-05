@@ -24,7 +24,8 @@ export type WorkItem = {
   cover: string; // public/work/<slug>.webp, captured in Phase 3
 };
 
-export type PublicWorkItem = Omit<WorkItem, 'conceptTitle' | 'clientApproved'>;
+// cover is optional here: publicView drops it for an unapproved concept (no screenshot of a client's site).
+export type PublicWorkItem = Omit<WorkItem, 'conceptTitle' | 'clientApproved' | 'cover'> & { cover?: string };
 
 export type BuildTile = { title: string; summary: string; stack: string[]; repoUrl?: string };
 
@@ -34,7 +35,7 @@ export const labelText = (label: WorkLabel): string => LABEL_TEXT[label];
 export function publicView(item: WorkItem): PublicWorkItem {
   const { conceptTitle, clientApproved, ...rest } = item;
   if (item.label !== 'concept' || clientApproved) return { ...rest };
-  return { ...rest, title: conceptTitle ?? 'Concept project', liveUrl: undefined };
+  return { ...rest, title: conceptTitle ?? 'Concept project', liveUrl: undefined, cover: undefined };
 }
 
 export const featuredWork: WorkItem[] = [

@@ -4,23 +4,29 @@
 export const studio = {
   name: 'Ndiga Dee Creative Co.',
   shortName: 'Ndiga Dee',
-  descriptor: 'AI-native creative studio',
-  location: 'Nairobi, Kenya',
   city: 'Nairobi, Kenya',
   tag: '#longliveAI',
   headline: 'Creative work, engineered with AI.',
   subline:
     'Websites, brands and growth for ambitious businesses. Designed by a person, built faster with AI.',
-  heroLabels: ['AI-native studio', '#longliveAI'],
-  manifesto:
-    'Taste is human. Speed is the machine’s. On every project, AI drafts, explores and checks, so my hours go into the decisions that make the work good. You see real options sooner, launch sooner and skip the shortcuts. #longliveAI',
+  heroLabels: ['Freelance design & development', '#longliveAI'],
+  address: { locality: 'Nairobi', country: 'KE' },
   footerNote: 'Designed and built in Nairobi by Derrick, with AI. #longliveAI',
 };
+
+// Opening statement of the AI-benefits section; the four aiBenefits sit beside it.
+export const manifesto = {
+  statement: 'Faster, and better for it.',
+  support: 'AI takes the routine drafting, exploring and checking, so my hours go into the decisions that make the work good.',
+};
+
+// Accessible names for page chrome.
+export const a11y = { skip: 'Skip to content', primaryNav: 'Primary' };
 
 // Hero copy that changes with the film as you scroll (spec §5). `at` = scroll progress where the beat starts.
 export const heroBeats: { at: number; heading: string; text?: string; ctas?: ('startProject' | 'seeWork')[] }[] = [
   { at: 0, heading: studio.headline, text: studio.subline, ctas: ['startProject', 'seeWork'] },
-  { at: 0.3, heading: 'Taste is human.', text: 'I make every design and decision myself, and I care how it lands.' },
+  { at: 0.3, heading: 'Taste is human.', text: 'I make every call myself, and I care how it lands.' },
   { at: 0.6, heading: 'Speed is the machine’s.', text: 'AI drafts, explores and checks, so you see real options sooner and launch sooner.' },
   { at: 0.85, heading: studio.name, text: studio.tag, ctas: ['startProject'] },
 ];
@@ -37,7 +43,7 @@ export const aiBenefits = [
   },
   {
     title: 'Fewer rounds of fixes',
-    text: 'Automated checks for accessibility, performance and SEO catch problems before launch.',
+    text: 'Problems are caught while they are cheap, so revisions go into improvements, not repairs.',
   },
   {
     title: 'A person stays in charge',
@@ -65,7 +71,6 @@ export const ctas = {
   visitLive: 'Visit live site',
   viewCode: 'View code',
   nextProject: 'Next project',
-  aboutFounder: 'More about Derrick',
   emailUs: 'Email me',
   about: 'About me',
   caseStudy: 'Read the case study',
@@ -95,7 +100,7 @@ export const contactCopy = {
   directHeading: 'Or reach me directly',
   sending: 'Sending...',
   success: 'Thanks, your brief is in. I will reply within two working days.',
-  error: 'Something went wrong sending that. Please email ndigaderrick6@gmail.com instead.',
+  error: `Something went wrong sending that. Please email ${founder.email} instead.`,
 };
 
 // Section headings for the home page.
@@ -116,6 +121,7 @@ export const sections = {
     ai: 'Where AI saved time',
     back: 'All work',
     coverAlt: 'Screenshot of the live site',
+    coverAltPrefix: 'Screenshot of',
     duration: 'Delivered in',
     weeks: 'weeks',
   },

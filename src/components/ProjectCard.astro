@@ -2,14 +2,14 @@
 import Monogram from './Monogram.astro';
 import { labelText, type PublicWorkItem } from '../data/work';
 import { services } from '../data/services';
-import { ctas } from '../data/studio';
+import { ctas, sections } from '../data/studio';
 import { base, publicFileExists } from '../lib/content';
 
-// `item` must come from publicView(); `showCover` is false for an unapproved concept (no screenshot of a client's site).
-interface Props { item: PublicWorkItem; showCover?: boolean }
-const { item, showCover = true } = Astro.props;
+// `item` must come from publicView(); it carries no cover for an unapproved concept (no screenshot of a client's site).
+interface Props { item: PublicWorkItem }
+const { item } = Astro.props;
 
-const cover = showCover && publicFileExists(item.cover) ? item.cover : undefined;
+const cover = item.cover && publicFileExists(item.cover) ? item.cover : undefined;
 const label = labelText(item.label);
 // "Built for" reads as a sentence with the client name; other labels stay a small kicker above the title.
 const isBuiltFor = item.label === 'built-for';
@@ -19,7 +19,7 @@ const tags = item.services.map((slug) => services.find((s) => s.slug === slug)?.
 <article class="card project" data-card>
   <div class="card-media">
     {cover ? (
-      <img src={`${base}${cover}`} alt={`Screenshot of ${item.title}`} width="1600" height="1000" loading="lazy" decoding="async" />
+      <img src={`${base}${cover}`} alt={`${sections.case.coverAltPrefix} ${item.title}`} width="1440" height="900" loading="lazy" decoding="async" />
     ) : (
       <div class="placeholder"><Monogram height={44} /></div>
     )}

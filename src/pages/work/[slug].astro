@@ -10,21 +10,18 @@ import { base, publicFileExists } from '../../lib/content';
 
 // Always render through publicView(): an unapproved concept gets no client name, live link or cover.
 export function getStaticPaths() {
-  const items = featuredWork.map((item) => ({
-    item: publicView(item),
-    showCover: item.label !== 'concept' || !!item.clientApproved,
-  }));
-  return items.map(({ item, showCover }, i) => ({
+  const items = featuredWork.map(publicView);
+  return items.map((item, i) => ({
     params: { slug: item.slug },
-    props: { item, showCover, next: items[(i + 1) % items.length].item },
+    props: { item, next: items[(i + 1) % items.length] },
   }));
 }
 
-interface Props { item: PublicWorkItem; showCover: boolean; next: PublicWorkItem }
-const { item, showCover, next } = Astro.props;
+interface Props { item: PublicWorkItem; next: PublicWorkItem }
+const { item, next } = Astro.props;
 const c = sections.case;
 
-const cover = showCover && publicFileExists(item.cover) ? item.cover : undefined;
+const cover = item.cover && publicFileExists(item.cover) ? item.cover : undefined;
 const label = labelText(item.label);
 const isBuiltFor = item.label === 'built-for';
 const heading = isBuiltFor ? `${label} ${item.title}` : item.title;
@@ -50,7 +47,7 @@ const blocks = [
 
       <div class="media">
         {cover ? (
-          <img src={`${base}${cover}`} alt={`${c.coverAlt}: ${item.title}`} width="1440" height="900" decoding="async" />
+          <img src={`${base}${cover}`} alt={`${c.coverAlt}: ${item.title}`} width="1440" height="900" fetchpriority="high" decoding="async" />
         ) : (
           <div class="placeholder"><Monogram height={56} /></div>
         )}

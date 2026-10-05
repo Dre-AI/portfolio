@@ -6,7 +6,7 @@ import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal
 import geistMonoLatin from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import '../styles/global.css';
-import { studio, founder } from '../data/studio';
+import { studio, founder, a11y } from '../data/studio';
 
 interface Props { title?: string; description?: string; noindex?: boolean }
 const {
@@ -39,7 +39,7 @@ const jsonLd = [
     description: studio.subline,
     url: home.href,
     logo: logo.href,
-    address: { '@type': 'PostalAddress', addressLocality: 'Nairobi', addressCountry: 'KE' },
+    address: { '@type': 'PostalAddress', addressLocality: studio.address.locality, addressCountry: studio.address.country },
     founder: person,
   },
   { '@context': 'https://schema.org', ...person },
@@ -86,10 +86,11 @@ const jsonLd = [
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image:alt" content={ogAlt} />
     <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    <slot name="head" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">{a11y.skip}</a>
     <slot />
   </body>
 </html>

@@ -194,6 +194,9 @@ const last = rest[rest.length - 1];
   :global(.motion) [data-beat='0'] > :nth-child(2) { animation-delay: 0.16s; }
   :global(.motion) [data-beat='0'] > :nth-child(3) { animation-delay: 0.24s; }
   @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+  /* The h1 is the LCP element, so it only rises (no opacity fade): it paints at full opacity immediately. */
+  :global(.motion) [data-beat='0'] > h1 { animation-name: rise-only; }
+  @keyframes rise-only { from { transform: translateY(18px); } }
 
   /* The hero's own pin spacer stays dark if a short screen leaves a gap below the pinned hero. */
   :global(.pin-spacer:has(> #hero)) { background: var(--bg); }

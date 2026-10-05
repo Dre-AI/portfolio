@@ -1,17 +1,6 @@
 ---
 import { processSection } from '../data/process';
-
-// Phosphor icons (regular weight), inlined at build time so they take the current colour.
-const iconFiles = import.meta.glob('/node_modules/@phosphor-icons/core/assets/regular/*.svg', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>;
-const icon = (name: string) =>
-  (iconFiles[`/node_modules/@phosphor-icons/core/assets/regular/${name}.svg`] ?? '').replace(
-    '<svg ',
-    '<svg aria-hidden="true" focusable="false" fill="currentColor" ',
-  );
+import { icon } from '../lib/icons';
 ---
 {/* src/scripts/motion/pipeline.ts draws a connector through the .node circles as you scroll and lights each
     step when it is reached; statically every step is lit. */}

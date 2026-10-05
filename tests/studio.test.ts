@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { studio, aiBenefits, founder, ctas, contactCopy, heroBeats } from '../src/data/studio.ts';
+import { studio, manifesto, aiBenefits, founder, ctas, contactCopy, heroBeats } from '../src/data/studio.ts';
 import { services } from '../src/data/services.ts';
 import { processSection } from '../src/data/process.ts';
 import { findContentIssues, LONG_LIVE_TAG } from '../src/lib/guards.ts';
@@ -13,8 +13,7 @@ test('studio name and tag are exact', () => {
   assert.equal(studio.name, 'Ndiga Dee Creative Co.');
   assert.equal(studio.tag, LONG_LIVE_TAG);
   assert.ok(studio.heroLabels.includes(LONG_LIVE_TAG));
-  assert.ok(studio.manifesto.endsWith(LONG_LIVE_TAG));
-  assert.ok(studio.manifesto.includes('machine\u2019s'));
+  assert.deepEqual(studio.heroLabels, ['Freelance design & development', LONG_LIVE_TAG]);
 });
 
 test('founder line matches the spec', () => {
@@ -48,4 +47,16 @@ test('first AI benefit promises early options and better results, without a hard
   assert.doesNotMatch(aiBenefits[0].text, /first week/i);
   assert.match(aiBenefits[0].text, /early/i);
   assert.match(aiBenefits[0].text, /better/i);
+});
+
+test('manifesto does not repeat the hero beats shown right above it', () => {
+  const text = `${manifesto.statement} ${manifesto.support}`;
+  assert.ok(!text.includes(heroBeats[1].heading));
+  assert.ok(!text.includes(heroBeats[2].heading));
+  assert.ok(!text.includes('drafts, explores and checks'));
+  assert.deepEqual(findContentIssues(manifesto), []);
+});
+
+test('first screen frames me as a freelancer', () => {
+  assert.equal(heroBeats[1].text, 'I make every call myself, and I care how it lands.');
 });

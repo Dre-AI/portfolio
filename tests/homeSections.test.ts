@@ -23,10 +23,10 @@ test('Pipeline keeps the motion hooks and reads processSection', () => {
   assert.match(src, /processSection\.withAILabel/);
 });
 
-test('Work renders through publicView and hides covers for unapproved concepts', () => {
+test('Work renders through publicView only (covers are dropped there)', () => {
   const src = read('src/components/Work.astro');
   assert.match(src, /publicView/);
-  assert.match(src, /clientApproved/);
+  assert.doesNotMatch(src, /showCover/);
   assert.match(src, /id="work"/);
   assert.match(read('src/components/ProjectCard.astro'), /data-card/);
 });
@@ -43,4 +43,11 @@ test('home page orders sections and drops About and Timeline', () => {
   assert.ok(order.every((n) => n > 0));
   assert.deepEqual(order, [...order].sort((a, b) => a - b));
   assert.doesNotMatch(src, /<About \/>|<Timeline \/>/);
+});
+
+test('Manifesto renders the AI benefits', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('../src/components/Manifesto.astro', import.meta.url), 'utf8');
+  assert.match(src, /aiBenefits\.map/);
+  assert.match(src, /<ol/);
 });

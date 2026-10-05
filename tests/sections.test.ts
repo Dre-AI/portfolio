@@ -15,7 +15,8 @@ test('Manifesto and Services read their copy from data', () => {
   const manifesto = readFileSync(new URL('../src/components/Manifesto.astro', import.meta.url), 'utf8');
   const services = readFileSync(new URL('../src/components/Services.astro', import.meta.url), 'utf8');
   assert.match(manifesto, /from '\.\.\/data\/studio'/);
-  assert.match(manifesto, /studio\.manifesto/);
+  assert.match(manifesto, /\bmanifesto\.statement/);
+  assert.match(manifesto, /\bmanifesto\.support/);
   assert.match(services, /from '\.\.\/data\/services'/);
   assert.match(services, /\bservices\b/);
   assert.match(services, /sections\.services/);

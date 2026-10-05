@@ -1,6 +1,6 @@
 ---
 import Monogram from './Monogram.astro';
-import { studio, nav, ctas } from '../data/studio';
+import { studio, nav, ctas, a11y } from '../data/studio';
 import { base } from '../lib/content';
 import { isHomePath, resolveNavHref } from '../lib/nav';
 
@@ -14,7 +14,7 @@ const resolve = (href: string) => resolveNavHref(href, base, isHome);
       <Monogram height={26} />
       <span class="display wordmark" aria-hidden="true">{studio.name}</span>
     </a>
-    <nav aria-label="Primary">
+    <nav aria-label={a11y.primaryNav}>
       <ul>
         {nav.map((item) => (
           <li class="link"><a href={resolve(item.href)}>{item.label}</a></li>

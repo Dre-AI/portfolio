@@ -28,7 +28,7 @@ export const processSection = {
     {
       title: 'Launch & grow',
       usual: 'Problems found by your customers after launch.',
-      withAI: 'Automated accessibility, speed and SEO checks run before launch, not after your customers find the problems.',
+      withAI: 'Automated accessibility, speed and SEO checks run before launch.',
       icon: 'rocket-launch',
     },
   ] satisfies ProcessStep[],

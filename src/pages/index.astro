@@ -9,8 +9,14 @@ import Work from '../components/Work.astro';
 import Founder from '../components/Founder.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { base } from '../lib/content';
 ---
 <Base>
+  {/* LCP: the hero's first frame is the background until the canvas takes over, so fetch it early. */}
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/webp" href={`${base}hero/desktop/0001.webp`} media="(min-width: 768px)" />
+    <link rel="preload" as="image" type="image/webp" href={`${base}hero/mobile/0001.webp`} media="(max-width: 767px)" />
+  </Fragment>
   <Header />
   <main id="main">
     <Hero />

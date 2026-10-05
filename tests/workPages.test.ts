@@ -15,6 +15,7 @@ test('publicView never exposes a live link for an unapproved item', () => {
   for (const item of featuredWork.filter((i) => i.label === 'concept' && !i.clientApproved)) {
     const view = publicView(item);
     assert.equal(view.liveUrl, undefined);
+    assert.equal(view.cover, undefined);
     assert.ok(!JSON.stringify(view).includes('Bazaar'));
   }
 });
