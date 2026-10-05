@@ -1,4 +1,5 @@
 ---
+import { icon } from '../lib/icons';
 import ProjectCard from './ProjectCard.astro';
 import { featuredWork, moreBuilds, publicView } from '../data/work';
 import { sections, ctas } from '../data/studio';
@@ -21,7 +22,7 @@ const featured = featuredWork.map(publicView);
           <p class="muted">{build.summary}</p>
           <ul class="tags">{build.stack.map((s) => <li>{s}</li>)}</ul>
           {build.repoUrl && (
-            <a class="link code" href={build.repoUrl} rel="noopener">{ctas.viewCode}<span class="visually-hidden">: {build.title}</span></a>
+            <a class="link code" href={build.repoUrl} target="_blank" rel="noopener"><Fragment set:html={icon('github-logo')} />{ctas.viewCode}<span class="visually-hidden">: {build.title}</span></a>
           )}
         </li>
       ))}

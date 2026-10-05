@@ -1,6 +1,7 @@
 ---
 import Monogram from './Monogram.astro';
-import { studio, founder, nav } from '../data/studio';
+import SocialLinks from './SocialLinks.astro';
+import { studio, nav } from '../data/studio';
 import { base } from '../lib/content';
 import { isHomePath, resolveNavHref } from '../lib/nav';
 
@@ -13,14 +14,14 @@ const isHome = isHomePath(Astro.url.pathname, base);
       <p class="note">{studio.footerNote}</p>
       <p class="label">{studio.city}</p>
     </div>
-    <ul class="links">
-      {nav.map((item) => (
-        <li><a href={resolveNavHref(item.href, base, isHome)}>{item.label}</a></li>
-      ))}
-      <li><a href={`mailto:${founder.email}`}>{founder.email}</a></li>
-      <li><a href={founder.links.linkedin} rel="noopener">{founder.linkLabels.linkedin}</a></li>
-      <li><a href={founder.links.github} rel="noopener">{founder.linkLabels.github}</a></li>
-    </ul>
+    <div class="side">
+      <ul class="links">
+        {nav.map((item) => (
+          <li><a href={resolveNavHref(item.href, base, isHome)}>{item.label}</a></li>
+        ))}
+      </ul>
+      <SocialLinks />
+    </div>
   </div>
   <div class="wrap legal">
     <p class="label">© {new Date().getFullYear()} {studio.name}</p>
@@ -32,8 +33,10 @@ const isHome = isHomePath(Astro.url.pathname, base);
   .wrap { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-l, 1.5rem); padding-block: var(--space-xl); }
   .brand { display: grid; gap: var(--space-s); color: var(--fg); max-width: 32rem; }
   .brand .note { color: var(--muted); }
-  .links { display: grid; gap: var(--space-xs); margin: 0; padding: 0; list-style: none; }
-  .links a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--fg); }
+  .side { display: grid; gap: var(--space-m); justify-items: start; }
+  .links { display: flex; flex-wrap: wrap; gap: var(--space-l); margin: 0; padding: 0; list-style: none; }
+  .links a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--fg); text-decoration: none; }
+  .links a:hover { color: var(--accent); }
   .legal { padding-block: var(--space-m); border-top: 1px solid var(--line); }
   p { margin: 0; }
 </style>

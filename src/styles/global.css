@@ -158,6 +158,21 @@ code, kbd, samp, pre { font-family: var(--font-mono); font-size: 0.9em; }
 .btn.primary:not(:disabled):not([aria-disabled='true']):hover { background: color-mix(in srgb, var(--accent) 86%, var(--fg)); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; }
 
+/* Icons inside buttons and text links: sized to the text, coloured by currentColor. */
+.btn svg, .link svg { width: 1.125em; height: 1.125em; flex: none; }
+.link { display: inline-flex; align-items: center; gap: 0.375em; }
+
+/* ─── Icon buttons (circle; part of the pill family) ───────── */
+.icon-btn {
+  display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  border-radius: var(--radius-pill); border: 1px solid var(--line-strong);
+  color: var(--fg); background: transparent;
+  transition: color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.icon-btn svg { width: 1.25rem; height: 1.25rem; }
+.icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+.icon-btn:active { transform: translateY(1px) scale(0.96); }
+
 /* ─── Tags (pill) ──────────────────────────────────────────── */
 .tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); padding: 0; margin: 0; list-style: none; }
 .tags li, .tag {

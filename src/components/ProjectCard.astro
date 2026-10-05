@@ -1,4 +1,5 @@
 ---
+import { icon } from '../lib/icons';
 import Monogram from './Monogram.astro';
 import { labelText, type PublicWorkItem } from '../data/work';
 import { services } from '../data/services';
@@ -28,7 +29,7 @@ const tags = item.services.map((slug) => services.find((s) => s.slug === slug)?.
   <h3>{title}</h3>
   <p class="muted">{item.summary}</p>
   {tags.length > 0 && <ul class="tags">{tags.map((t) => <li>{t}</li>)}</ul>}
-  <a class="link more" href={`${base}work/${item.slug}/`}>{ctas.caseStudy}<span class="visually-hidden">: {item.title}</span></a>
+  <a class="link more" href={`${base}work/${item.slug}/`}>{ctas.caseStudy}<span class="visually-hidden">: {item.title}</span><Fragment set:html={icon('arrow-right')} /></a>
 </article>
 
 <style>

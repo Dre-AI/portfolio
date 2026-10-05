@@ -1,4 +1,5 @@
 ---
+import { icon } from '../lib/icons';
 import { contactCopy, ctas, founder, studio } from '../data/studio';
 import { services } from '../data/services';
 import { contactConfig, hasBooking, hasForm } from '../data/contact';
@@ -69,7 +70,7 @@ const mailto = `mailto:${founder.email}`;
           </div>
 
           <div class="submit">
-            <button class="btn primary" type="submit">{labels.submit}</button>
+            <button class="btn primary" type="submit">{labels.submit}<Fragment set:html={icon('paper-plane-tilt')} /></button>
             {!web3 && <p class="help">{contactCopy.fallbackNote}</p>}
           </div>
         </form>
@@ -79,13 +80,16 @@ const mailto = `mailto:${founder.email}`;
       <aside class="direct" aria-labelledby="contact-direct">
         <h3 id="contact-direct">{contactCopy.directHeading}</h3>
         <ul>
-          <li><a href={mailto}>{ctas.emailUs}</a><span class="label">{founder.email}</span></li>
-          <li><a href={founder.links.linkedin} rel="noopener">{founder.linkLabels.linkedin}</a></li>
-          <li><a href={founder.links.github} rel="noopener">{founder.linkLabels.github}</a></li>
-          <li class="label">{studio.city}</li>
+          <li>
+            <a class="row" href={mailto}><span class="ico" set:html={icon('envelope-simple')} />{ctas.emailUs}</a>
+            <span class="label sub">{founder.email}</span>
+          </li>
+          <li><a class="row" href={founder.links.linkedin} target="_blank" rel="noopener"><span class="ico" set:html={icon('linkedin-logo')} />{founder.linkLabels.linkedin}</a></li>
+          <li><a class="row" href={founder.links.github} target="_blank" rel="noopener"><span class="ico" set:html={icon('github-logo')} />{founder.linkLabels.github}</a></li>
+          <li class="row label"><span class="ico" set:html={icon('map-pin')} />{studio.city}</li>
         </ul>
         {hasBooking() && (
-          <a class="btn ghost" href={contactConfig.calLink} target="_blank" rel="noopener">{ctas.bookCall}</a>
+          <a class="btn ghost" href={contactConfig.calLink} target="_blank" rel="noopener"><Fragment set:html={icon('calendar-dots')} />{ctas.bookCall}</a>
         )}
       </aside>
     </div>
@@ -104,7 +108,11 @@ const mailto = `mailto:${founder.email}`;
   .direct h3 { font-size: var(--step-1); margin: 0 0 var(--space-m); }
   .direct ul { list-style: none; margin: 0 0 var(--space-l); padding: 0; display: grid; gap: var(--space-s); }
   .direct li { display: grid; gap: 0.125rem; }
-  .direct li a { display: inline-flex; align-items: center; min-height: 2.75rem; overflow-wrap: anywhere; }
+  .direct .row { display: inline-flex; align-items: center; gap: var(--space-s); min-height: 2.75rem; overflow-wrap: anywhere; color: var(--fg); text-decoration: none; }
+  .direct a.row:hover { color: var(--accent); }
+  .direct .ico { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); color: var(--accent); }
+  .direct .ico :global(svg) { width: 1.125rem; height: 1.125rem; }
+  .direct .sub { padding-left: calc(2.25rem + var(--space-s)); }
   .direct .label { margin: 0; overflow-wrap: anywhere; }
   @media (min-width: 60rem) {
     .layout { grid-template-columns: 7fr 5fr; gap: var(--space-2xl); align-items: start; }

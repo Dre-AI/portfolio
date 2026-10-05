@@ -35,9 +35,12 @@ test('Header uses nav and the start-project CTA, with no legacy glow styling', (
 test('Footer renders the studio note, city, contact links and a computed year', () => {
   assert.match(footer, /studio\.footerNote/);
   assert.match(footer, /studio\.city/);
-  assert.match(footer, /mailto:\$\{founder\.email\}/);
-  assert.match(footer, /founder\.links\.linkedin/);
-  assert.match(footer, /founder\.links\.github/);
+  assert.match(footer, /<SocialLinks/);
+  const social = readFileSync('src/components/SocialLinks.astro', 'utf8');
+  assert.match(social, /mailto:\$\{founder\.email\}/);
+  assert.match(social, /founder\.links\.linkedin/);
+  assert.match(social, /founder\.links\.github/);
+  assert.doesNotMatch(social, /tel:|phone/i);
   assert.match(footer, /new Date\(\)\.getFullYear\(\)/);
   assert.match(footer, /studio\.name/);
   assert.doesNotMatch(footer, /tel:|phone/i);
@@ -49,9 +52,10 @@ test('Header stays on one line from 30rem and shows text links from 900px', () =
   assert.match(header, /nav a:not\(\.btn\)/);
 });
 
-test('Footer link labels come from studio data', () => {
-  assert.match(footer, /founder\.linkLabels\.linkedin/);
-  assert.match(footer, /founder\.linkLabels\.github/);
+test('Icon links are labelled from studio data for screen readers', () => {
+  const social = readFileSync('src/components/SocialLinks.astro', 'utf8');
+  for (const key of ['email', 'linkedin', 'github', 'booking']) assert.match(social, new RegExp(`founder\\.linkLabels\\.${key}`));
+  assert.match(social, /aria-label=\{link\.label\}/);
 });
 
 test('Footer renders the nav items so About stays reachable on small screens', () => {

@@ -1,4 +1,5 @@
 ---
+import { icon } from '../../lib/icons';
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -72,8 +73,8 @@ const blocks = [
         </section>
         {(item.liveUrl || item.repoUrl) && (
           <div class="actions">
-            {item.liveUrl && <a class="btn primary" href={item.liveUrl} rel="noopener">{ctas.visitLive}<span class="visually-hidden">: {item.title}</span></a>}
-            {item.repoUrl && <a class="btn ghost" href={item.repoUrl} rel="noopener">{ctas.viewCode}<span class="visually-hidden">: {item.title}</span></a>}
+            {item.liveUrl && <a class="btn primary" href={item.liveUrl} target="_blank" rel="noopener">{ctas.visitLive}<span class="visually-hidden">: {item.title}</span><Fragment set:html={icon('arrow-up-right')} /></a>}
+            {item.repoUrl && <a class="btn ghost" href={item.repoUrl} target="_blank" rel="noopener"><Fragment set:html={icon('github-logo')} />{ctas.viewCode}<span class="visually-hidden">: {item.title}</span></a>}
           </div>
         )}
       </div>
