@@ -105,6 +105,17 @@ export const sections = {
   moreBuilds: 'More builds',
   about: 'Who you work with',
   contact: contactCopy.heading,
+  case: {
+    brief: 'The brief',
+    approach: 'What I built',
+    result: 'Result',
+    stack: 'Stack',
+    ai: 'Where AI saved time',
+    back: 'All work',
+    coverAlt: 'Screenshot of the live site',
+    duration: 'Delivered in',
+    weeks: 'weeks',
+  },
 };
 
 // Header navigation. Hrefs are relative to the site base.
