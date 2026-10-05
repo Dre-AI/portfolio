@@ -19,6 +19,18 @@ test('the tools Derrick named are listed', () => {
   for (const name of ['Claude', 'Codex', 'Figma', 'Docker']) assert.ok(names.includes(name), `${name} missing`);
 });
 
+test('tool cards have a use line; stack chips are compact and cover the core stack', () => {
+  for (const g of toolGroups) for (const t of g.tools) {
+    if (!g.compact) assert.ok(t.use, `${t.name} needs a use line`);
+  }
+  const stack = toolGroups.filter((g) => g.compact).flatMap((g) => g.tools.map((t) => t.name));
+  for (const name of ['React', 'TypeScript', 'Laravel', 'Django REST', 'FastAPI', 'PostgreSQL', 'scikit-learn']) {
+    assert.ok(stack.includes(name), `${name} missing from the stack`);
+  }
+  const names = allTools.map((t) => t.name);
+  assert.equal(new Set(names).size, names.length, 'duplicate tool names');
+});
+
 test('every tool has exactly one icon source, and each one exists', () => {
   for (const t of allTools) {
     assert.ok(Boolean(t.brand) !== Boolean(t.glyph), `${t.name} needs a brand or a glyph, not both`);
@@ -35,6 +47,7 @@ test('Tools renders the data with visible names and hidden icons, after the proc
   assert.match(src, /toolGroups\.map/);
   assert.match(src, /toolsSection\.heading/);
   assert.match(src, /\{tool\.name\}/);
+  assert.match(src, /g\.compact/);
   assert.match(src, /brandIcon\(tool\.brand\)/);
   const home = read('src/pages/index.astro');
   assert.match(home, /<Pipeline \/>\s*<Tools \/>/);

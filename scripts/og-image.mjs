@@ -27,7 +27,7 @@ h1{font:800 92px/0.98 A;font-stretch:75%;letter-spacing:-.01em;text-transform:no
 </style></head><body><div class="c">
 <svg viewBox="34 40 188 176" height="64"><path fill="#eceff2" d="M34.5,40 H102.5 L142.5,160 V40 H162.5 A59,56 0 0 1 221.5,96 V160 A59,56 0 0 1 162.5,216 H114.5 L74.5,96 V216 H34.5 Z"/></svg>
 <h1>${escape(studio.headline)}</h1>
-<p class="meta"><b>${escape(studio.name)}</b><span class="dot"></span><span class="tag">${escape(studio.tag)}</span></p>
+<p class="meta"><b>${escape(studio.name)}</b><span class="dot"></span><span class="tag">${escape(studio.city)}</span></p>
 </div></body></html>`;
 
 const browser = await chromium.launch({ channel: 'chrome' });

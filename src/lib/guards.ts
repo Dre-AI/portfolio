@@ -1,7 +1,5 @@
-// Copy rules from CLAUDE.md, enforced by tests: no placeholders, no phone numbers, exact tag spelling.
+// Copy rules from CLAUDE.md, enforced by tests: no placeholders, no phone numbers, no retired #longliveAI tag.
 // Pure module: no Astro imports, so node --test can load it.
-
-export const LONG_LIVE_TAG = '#longliveAI';
 
 const PLACEHOLDER = /\[|\]|\bTODO\b|\bTBD\b|\blorem\b|\bX{2,}\b|\{\{/i;
 const PHONE = /(?<!\d)(?:\+\d[\d\s-]{8,14}\d|0[17]\d{8}|\(?\d{3,4}\)?[\s-]\d{3}[\s-]?\d{3,4})(?!\d)/;
@@ -23,8 +21,7 @@ function issuesFor({ path, text }: FoundString): string[] {
   const issues: string[] = [];
   if (PLACEHOLDER.test(withoutUrls)) issues.push(`${path}: placeholder`);
   if (PHONE.test(withoutUrls)) issues.push(`${path}: phone number`);
-  const tags = withoutUrls.match(TAG_LIKE) ?? [];
-  if (tags.some((tag) => tag !== LONG_LIVE_TAG)) issues.push(`${path}: tag must be ${LONG_LIVE_TAG}`);
+  if (withoutUrls.match(TAG_LIKE)) issues.push(`${path}: retired #longliveAI tag`);
   if (/[–—]/.test(withoutUrls)) issues.push(`${path}: em or en dash (use a hyphen)`);
   if ((withoutUrls.match(/·/g) ?? []).length > 1) issues.push(`${path}: more than one middle dot`);
   return issues;

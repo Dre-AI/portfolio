@@ -5,13 +5,12 @@ export const studio = {
   name: 'Ndiga Dee Creative Co.',
   shortName: 'Ndiga Dee',
   city: 'Nairobi, Kenya',
-  tag: '#longliveAI',
   headline: 'Creative work, engineered with AI.',
   subline:
     'Websites, brands and growth for ambitious businesses. Designed by a person, built faster with AI.',
-  heroLabels: ['Freelance design & development', '#longliveAI'],
+  heroLabels: ['Freelance design & development', 'Full-stack & AI'],
   address: { locality: 'Nairobi', country: 'KE' },
-  footerNote: 'Designed and built in Nairobi by Derrick, with AI. #longliveAI',
+  footerNote: 'Designed and built in Nairobi by Derrick, with AI.',
 };
 
 // Opening statement of the AI-benefits section; the four aiBenefits sit beside it.
@@ -28,7 +27,7 @@ export const heroBeats: { at: number; heading: string; text?: string; ctas?: ('s
   { at: 0, heading: studio.headline, text: studio.subline, ctas: ['startProject', 'seeWork'] },
   { at: 0.3, heading: 'Taste is human.', text: 'I make every call myself, and I care how it lands.' },
   { at: 0.6, heading: 'Speed is the machine’s.', text: 'AI drafts, explores and checks, so you see real options sooner and launch sooner.' },
-  { at: 0.85, heading: studio.name, text: studio.tag, ctas: ['startProject'] },
+  { at: 0.85, heading: studio.name, text: 'Let’s build what’s next.', ctas: ['startProject'] },
 ];
 
 // The core promise: AI shortens the time to finished work. Qualitative on purpose: no invented numbers.

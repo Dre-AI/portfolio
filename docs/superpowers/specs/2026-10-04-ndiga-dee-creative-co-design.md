@@ -13,7 +13,7 @@ Turn the personal portfolio into the site for **Ndiga Dee Creative Co.**, a foun
 - **Founder line:** Derrick Ndiga, Freelance Full-Stack & AI Developer. Ndiga Dee Creative Co. is the brand name used in the nav, footer, hero final beat and legal/contact details.
 - **Role of AI:** AI is the studio's *method*, not a service it sells. Every page should reinforce one benefit: **work is delivered in less time without cutting quality**, because AI handles drafting, code scaffolding, visual exploration and QA, and Derrick handles judgement, design and engineering.
 - **Headline direction:** "Creative work, engineered with AI." Final copy comes from the brand-voice pass in Phase 1.
-- **Signature tag:** `#longliveAI`. It appears in the hero mono label row, the manifesto close, the footer and the OG image. Always written exactly `#longliveAI`.
+- **Signature tag:** retired on 2026-10-05 at Derrick's request. `#longliveAI` no longer appears anywhere on the site; older mentions below are historical.
 - **Tone:** confident, plain, specific. No buzzword stacks.
 
 ### AI speed claims: honesty rule

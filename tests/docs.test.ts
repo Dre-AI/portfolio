@@ -7,7 +7,7 @@ const read = (p: string) => readFileSync(p, 'utf8');
 test('CLAUDE.md reflects the studio and the copy rules', () => {
   const doc = read('CLAUDE.md');
   assert.match(doc, /Ndiga Dee Creative Co\./);
-  assert.match(doc, /#longliveAI/);
+  assert.match(doc, /#longliveAI. tag is retired/);
   assert.match(doc, /Never add a phone number/);
   assert.match(doc, /2026-10-04-ndiga-dee-creative-co-design\.md/);
 });

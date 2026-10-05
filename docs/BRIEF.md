@@ -7,7 +7,7 @@ The site for **Ndiga Dee Creative Co.**, an AI-native creative studio in Nairobi
 
 ## Positioning
 - Services: Websites & Web Apps · Brand & Creative · Growth (SEO & Analytics).
-- AI is the method, not a product: work is finished sooner without cutting quality. Signature tag: `#longliveAI`.
+- AI is the method, not a product: work is finished sooner without cutting quality.
 - Tone: confident, plain, specific. No buzzword stacks.
 
 ## Look
@@ -23,4 +23,4 @@ Keton Consulting (client) · Lumora (studio build) · InsightForge (studio build
 Astro (static) · GSAP + ScrollTrigger · Lenis · canvas frame scrubber for the hero · Web3Forms + Cal.com for contact · custom domain at `/` (GitHub Pages until then).
 
 ## Quality
-Lighthouse 90+ mobile, WCAG AA, reduced-motion support, Organization + Person JSON-LD, sitemap, OG image with `#longliveAI`. No phone number.
+Lighthouse 90+ mobile, WCAG AA, reduced-motion support, Organization + Person JSON-LD, sitemap, OG image. No phone number.

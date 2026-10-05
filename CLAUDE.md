@@ -6,7 +6,7 @@ Source of truth: `docs/superpowers/specs/2026-10-04-ndiga-dee-creative-co-design
 - One phase per session (see `docs/PROMPTS.md`), from a written plan in `docs/superpowers/plans/`. Commit at the end of each phase.
 - All copy lives in `src/data/*.ts`. Never hard-code copy in components. Never publish `[brackets]`, `TODO` or `TBD`. `npm test` enforces this.
 - Never add a phone number anywhere on the site.
-- The tag is always written exactly `#longliveAI`.
+- The `#longliveAI` tag is retired (2026-10-05). Do not use it anywhere on the site.
 - AI speed claims stay qualitative unless Derrick supplies a real before/after. Never invent a metric.
 - Render work items through `publicView()` from `src/data/work.ts` so unapproved concepts stay anonymous.
 - Logo: the existing DN monogram in `brand/`. Do not design a new mark.

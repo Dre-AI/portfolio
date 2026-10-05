@@ -3,17 +3,16 @@ import assert from 'node:assert/strict';
 import { studio, manifesto, aiBenefits, founder, ctas, contactCopy, heroBeats } from '../src/data/studio.ts';
 import { services } from '../src/data/services.ts';
 import { processSection } from '../src/data/process.ts';
-import { findContentIssues, LONG_LIVE_TAG } from '../src/lib/guards.ts';
+import { findContentIssues } from '../src/lib/guards.ts';
 
 test('studio copy passes the copy guard', () => {
   assert.deepEqual(findContentIssues({ studio, aiBenefits, founder, ctas, contactCopy }), []);
 });
 
-test('studio name and tag are exact', () => {
+test('studio name is exact and the retired #longliveAI tag is gone', () => {
   assert.equal(studio.name, 'Ndiga Dee Creative Co.');
-  assert.equal(studio.tag, LONG_LIVE_TAG);
-  assert.ok(studio.heroLabels.includes(LONG_LIVE_TAG));
-  assert.deepEqual(studio.heroLabels, ['Freelance design & development', LONG_LIVE_TAG]);
+  assert.equal('tag' in studio, false);
+  assert.doesNotMatch(JSON.stringify({ studio, heroBeats }), /longlive/i);
 });
 
 test('founder line matches the spec', () => {

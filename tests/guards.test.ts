@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { collectStrings, findContentIssues, LONG_LIVE_TAG } from '../src/lib/guards.ts';
+import { collectStrings, findContentIssues } from '../src/lib/guards.ts';
 
 test('collectStrings walks nested objects and arrays with paths', () => {
   const found = collectStrings({ a: 'x', b: [{ c: 'y' }], n: 3 });
@@ -26,10 +26,10 @@ test('does not flag years, ranges or URLs', () => {
   assert.deepEqual(findContentIssues({ a: '2023 - 2025', b: 'https://dre-ai.github.io/Lumora/' }), []);
 });
 
-test('flags any misspelling of the tag', () => {
+test('flags the retired #longliveAI tag in any spelling', () => {
+  assert.equal(findContentIssues({ a: '#longliveAI' }).length, 1);
   assert.equal(findContentIssues({ a: '#LongLiveAI' }).length, 1);
-  assert.equal(findContentIssues({ a: '#longliveai' }).length, 1);
-  assert.deepEqual(findContentIssues({ a: `Built with care. ${LONG_LIVE_TAG}` }), []);
+  assert.deepEqual(findContentIssues({ a: 'Built with care, with AI.' }), []);
 });
 
 test('flags em and en dashes', () => {
@@ -51,11 +51,10 @@ test('flags lorem, XX% and {{x}} as placeholders', () => {
   }
 });
 
-test('flags hyphenated and suffixed misspellings of the tag', () => {
+test('flags hyphenated and suffixed forms of the retired tag', () => {
   assert.equal(findContentIssues({ a: '#long-live-ai' }).length, 1);
   assert.equal(findContentIssues({ a: '#longliveAIs' }).length, 1);
   assert.equal(findContentIssues({ a: 'long_live_AI' }).length, 1);
-  assert.deepEqual(findContentIssues({ a: `Yes ${LONG_LIVE_TAG}.` }), []);
 });
 
 test('does not flag long order numbers as phone numbers', () => {
