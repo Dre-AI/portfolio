@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Email signature | Ndiga Dee Creative Co.</title>
+<style>
+  :root { --ink: #0a0b0d; --surface: #111317; --fg: #eef1f4; --muted: #9aa3ad; --line: #2a2f36; --cyan: #7de3f0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ink); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { margin: 0 0 8px; font-size: 26px; letter-spacing: -0.01em; }
+  p.lead { margin: 0 0 28px; color: var(--muted); }
+  .stage { background: #ffffff; border-radius: 12px; padding: 24px; overflow-x: auto; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 20px 0 36px; }
+  button { font: 600 15px/1 system-ui, sans-serif; color: #06171a; background: var(--cyan); border: 0; border-radius: 999px; padding: 14px 22px; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+  #status { color: var(--muted); font-size: 14px; }
+  ol { padding-left: 20px; color: #c9cfd6; }
+  li { margin: 6px 0; }
+  li b { color: var(--fg); }
+  .note { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Email signature</h1>
+  <p class="lead">Derrick Ndiga's animated signature for Gmail. Copy it below, then paste it into Gmail's signature settings.</p>
+
+  <div class="stage">
+    <!-- SIGNATURE START: email-safe markup (tables, inline styles, absolute URLs) -->
+    <div id="signature">
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;">
+        <tr>
+          <td style="padding:0;">
+            <a href="https://dre-ai.github.io/portfolio/" style="text-decoration:none;"><img src="https://dre-ai.github.io/portfolio/signature/signature.gif" width="480" height="132" alt="Derrick Ndiga, Freelance Web Developer &amp; Digital Creative, Ndiga Dee Creative Co." style="display:block;border:0;width:480px;max-width:100%;height:auto;"></a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:10px 0 0 2px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:18px;color:#3a414b;">
+            <a href="https://dre-ai.github.io/portfolio/" style="color:#0b7285;text-decoration:none;font-weight:bold;">dre-ai.github.io/portfolio</a>
+            <span style="color:#9aa3ad;">&nbsp;|&nbsp;</span>
+            <a href="mailto:ndigaderrick6@gmail.com" style="color:#0b7285;text-decoration:none;">ndigaderrick6@gmail.com</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!-- SIGNATURE END -->
+  </div>
+
+  <div class="actions">
+    <button id="copy" type="button">Copy signature</button>
+    <span id="status" role="status" aria-live="polite"></span>
+  </div>
+
+  <ol>
+    <li>Press <b>Copy signature</b> above. If the button doesn't work in your browser, select the white box with your mouse and press Ctrl+C.</li>
+    <li>In Gmail on a computer, open the <b>gear icon</b> and choose <b>See all settings</b>.</li>
+    <li>On the <b>General</b> tab, scroll to <b>Signature</b>, choose <b>Create new</b> and give it a name.</li>
+    <li>Click in the signature box and paste with <b>Ctrl+V</b>.</li>
+    <li>Under <b>Signature defaults</b>, pick it for new emails and replies, then press <b>Save Changes</b> at the bottom of the page.</li>
+  </ol>
+  <p class="note">The image lives on this website, so the animation plays wherever Gmail shows images. Gmail on the phone uses the same signature once it's saved on the computer.</p>
+</main>
+<script>
+  (function () {
+    var btn = document.getElementById('copy');
+    var status = document.getElementById('status');
+    var sig = document.getElementById('signature');
+    btn.addEventListener('click', function () {
+      var html = sig.innerHTML.trim();
+      var text = 'Derrick Ndiga | Freelance Web Developer & Digital Creative | Ndiga Dee Creative Co.\ndre-ai.github.io/portfolio | ndigaderrick6@gmail.com';
+      if (navigator.clipboard && window.ClipboardItem) {
+        navigator.clipboard.write([new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([text], { type: 'text/plain' }),
+        })]).then(function () { status.textContent = 'Copied. Now paste it into Gmail.'; },
+                  function () { selectFallback(); });
+      } else {
+        selectFallback();
+      }
+    });
+    function selectFallback() {
+      var range = document.createRange();
+      range.selectNodeContents(sig);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      status.textContent = ok ? 'Copied. Now paste it into Gmail.' : 'Selected. Press Ctrl+C, then paste it into Gmail.';
+    }
+  })();
+</script>
+</body>
+</html>
